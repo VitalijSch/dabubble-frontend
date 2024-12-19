@@ -1,0 +1,50 @@
+@import './../../styles/mixins.scss';
+
+:host {
+    @include flex-layout(column, space-between, center, unset);
+    max-width: 1920px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 75px;
+
+    span,
+    a {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    span {
+        line-height: 24.55px;
+    }
+
+    a {
+        font-family: 'Figtree';
+        padding: 10px 15px;
+        line-height: 21.6px;
+        color: #797EF3;
+        border: 1px solid transparent;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            font-weight: 500;
+            color: #444DF2;
+            border-color: #ADB0D9;
+        }
+    }
+}
+
+header {
+    width: 100%;
+    @include flex-layout(unset, space-between, center, unset);
+
+    .create-account-container {
+        height: 100%;
+        @include flex-layout(column, space-between, flex-end, unset);
+    }
+}
+
+footer {
+    @include flex-layout(unset, center, center, 16px);
+}
