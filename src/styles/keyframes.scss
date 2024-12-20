@@ -1,0 +1,30 @@
+@keyframes fadeOutAndHide {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        display: none;
+        opacity: 0;
+    }
+}
+
+@keyframes moveFromRightToLeft {
+    from {
+        transform: translateX(30%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes moveFromLeftToRight {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}

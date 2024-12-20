@@ -1,0 +1,28 @@
+@import './../../../styles/mixins.scss';
+@import './../../../styles/keyframes.scss';
+
+:host {
+    @include flex-layout(unset, center, center, 0);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
+    animation: fadeOutAndHide 1s ease 3.5s forwards;
+}
+
+.intro-container {
+    @include flex-layout(unset, center, center, 50px);
+    transform: translateX(30%);
+    animation: moveFromRightToLeft 0.5s ease 1s forwards;
+
+    .logo-name-container {
+        overflow: hidden;
+
+        svg {
+            transform: translateX(-100%);
+            animation: moveFromLeftToRight 0.7s ease 1.5s forwards;
+        }
+    }
+}
