@@ -1,4 +1,5 @@
 @import './../../styles/mixins.scss';
+@import './../../styles/keyframes.scss';
 
 :host {
     @include flex-layout(column, space-between, center, unset);
@@ -37,7 +38,15 @@
 
 header {
     width: 100%;
-    @include flex-layout(unset, space-between, center, unset);
+    @include flex-layout(unset, flex-end, center, unset);
+
+    svg {
+        position: fixed;
+        top: 75px;
+        left: 75px;
+        z-index: -1;
+        animation: moveFromTopCenterToTopLeft 1s ease 3.5s forwards;
+    }
 
     .create-account-container {
         height: 100%;
