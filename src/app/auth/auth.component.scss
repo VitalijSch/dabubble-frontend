@@ -43,7 +43,7 @@ header {
         position: fixed;
         top: 75px;
         left: 75px;
-        z-index: -1;
+        z-index: 1;
         animation: moveFromTopCenterToTopLeft 1s ease 3.5s forwards;
     }
 
