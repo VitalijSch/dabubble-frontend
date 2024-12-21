@@ -70,7 +70,6 @@
     src: url('../assets/fonts/nunito/nunito-v26-latin-900.woff2') format('woff2');
 }
 
-
 /* figtree-300 - latin */
 @font-face {
     font-display: swap;
@@ -132,4 +131,58 @@
     font-style: normal;
     font-weight: 900;
     src: url('../assets/fonts/figtree/figtree-v6-latin-900.woff2') format('woff2');
+}
+
+/* open-sans-300 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-300.woff2') format('woff2');
+}
+
+/* open-sans-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-regular.woff2') format('woff2');
+}
+
+/* open-sans-500 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-500.woff2') format('woff2');
+}
+
+/* open-sans-600 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-600.woff2') format('woff2');
+}
+
+/* open-sans-700 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-700.woff2') format('woff2');
+}
+
+/* open-sans-800 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url('./../assets/fonts/open-sans/open-sans-v40-latin-800.woff2') format('woff2');
 }
