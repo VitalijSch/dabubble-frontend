@@ -1,4 +1,5 @@
-@import './../../../styles/mixins.scss';
+@import './../../../styles/mixins/mixins.scss';
+@import './../../../styles/mixins/form-utils.scss';
 
 :host {
     @include flex-layout(column, space-between, center, 30px);
@@ -11,97 +12,25 @@
     box-shadow: 0px 2px 10px 0px #00000014;
 
     h2 {
-        font-size: 46px;
-        font-weight: 700;
-        line-height: 55.2px;
-        color: #444DF2;
+        @include h2;
     }
 
     p {
-        font-size: 20px;
-        font-weight: 400;
-        line-height: 24px;
-        text-align: center;
+        @include p;
     }
 
     a {
-        font-size: 18px;
+        @include a;
+    }
+
+    span {
+        @include span;
         font-weight: 400;
-        line-height: 21.6px;
-        padding: 5px 15px;
-        color: #797EF3;
-        cursor: pointer;
-    }
-
-    span,
-    button {
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 24.55px;
-    }
-
-    input,
-    .google-button-container {
-        width: 100%;
-        height: 60px;
-        background-color: #ECEEFE;
-        border: 1px solid transparent;
-        border-radius: 100px;
     }
 }
 
 form {
-    width: 100%;
-    height: 100%;
-    @include flex-layout(column, space-between, center, unset);
-
-    .error-icon-input-container {
-        width: 100%;
-        @include flex-layout(column, unset, unset, 6px);
-
-        .icon-input-container {
-            position: relative;
-
-            &:has(input:focus) svg path {
-                fill: black;
-            }
-
-            svg {
-                position: absolute;
-                top: 50%;
-                left: 32px;
-                transform: translateY(-50%);
-            }
-
-            input {
-                padding: 18px 32px 18px 75px;
-                outline: none;
-                cursor: pointer;
-
-                &:hover {
-                    border-color: #686868;
-                }
-
-                &:focus {
-                    border-color: #535AF1;
-                }
-
-                &::placeholder {
-                    font-size: 18px;
-                    font-weight: 500;
-                    line-height: 21.6px;
-                    color: #686868;
-                }
-            }
-        }
-
-        small {
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 19.1px;
-            color: #ED1E79;
-        }
-    }
+    @include form;
 
     .forgot-password {
         font-weight: 400;
@@ -129,8 +58,11 @@ form {
 
 .google-button-container {
     @include flex-layout(unset, center, center, 20px);
+    @include button;
+    width: 100%;
     padding: 11px 32px;
-    cursor: pointer;
+    background-color: #ECEEFE;
+    border: 1px solid transparent;
 
     &:hover {
         border-color: #444DF2;
@@ -150,9 +82,7 @@ form {
     @include flex-layout(unset, center, center, 30px);
 
     button {
-        padding: 12px 25px;
-        border-radius: 25px;
-        cursor: pointer;
+        @include button;
 
         &:first-of-type {
             background-color: #444DF2;

@@ -1,0 +1,30 @@
+@import './mixins.scss';
+
+@mixin header-arrow {
+    position: relative;
+    width: 100%;
+
+    .arrow-container {
+        @include flex-layout(unset, center, center, unset);
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ECEEFE;
+        }
+
+        &:hover svg {
+            transform: scale(1.1);
+        }
+
+        &:hover svg path {
+            fill: #535AF1;
+        }
+    }
+}
