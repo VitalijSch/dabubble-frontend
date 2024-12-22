@@ -1,0 +1,79 @@
+@import './../../../styles/mixins/mixins.scss';
+@import './../../../styles/mixins/form-utils.scss';
+@import './../../../styles/mixins/arrow-back-utils.scss';
+
+:host {
+    @include flex-layout(column, space-between, center, 30px);
+    max-width: 606px;
+    max-height: 669px;
+    height: 100%;
+    padding: 40px 53px;
+    background-color: #FFFFFF;
+    border-radius: 30px;
+    box-shadow: 0px 2px 10px 0px #00000014;
+
+    h2 {
+        @include h2;
+    }
+
+    span {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 43.65px;
+        text-align: center;
+    }
+
+    p {
+        @include p;
+        line-height: 27.28px;
+        align-self:flex-start;
+    }
+
+    img {
+        cursor: pointer;
+
+        &:hover {
+            border-color: #E6E6E6 !important;
+        }
+
+        &:active {
+            border-color: #ECEEFE !important;
+        }
+    }
+
+    button {
+        @include button;
+        align-self: flex-end;
+        background-color: #444DF2;
+        color: #FFFFFF;
+        border: 1px solid transparent;
+
+        &:hover {
+            background-color: #797EF3;
+        }
+    }
+}
+
+header {
+    @include header-arrow;
+}
+
+.selected-avatar {
+    width: 168px;
+    height: 168px;
+    border: 8px solid transparent;
+    border-radius: 100px;
+    object-fit: cover;
+}
+
+.avatar-container {
+    @include flex-layout(unset, space-between, center, 18px);
+
+    .selectable-avatar {
+        width: 72px;
+        height: 72px;
+        border: 4px solid transparent;
+        border-radius: 41px;
+        object-fit: cover;
+    }
+}
