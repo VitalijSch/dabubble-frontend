@@ -8,24 +8,17 @@
     margin: 0 auto;
     padding: 75px;
 
-    span,
-    a {
-        font-size: 18px;
+    span {
+        @include span;
         font-weight: 400;
     }
 
-    span {
-        line-height: 24.55px;
-    }
-
     a {
+        @include a;
         font-family: 'Figtree';
         padding: 10px 15px;
-        line-height: 21.6px;
-        color: #797EF3;
         border: 1px solid transparent;
         border-radius: 30px;
-        cursor: pointer;
 
         &:hover {
             font-weight: 500;
