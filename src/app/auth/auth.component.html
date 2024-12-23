@@ -69,10 +69,12 @@
             </clipPath>
         </defs>
     </svg>
+    @if(router.url.includes('/login')) {
     <div class="create-account-container">
         <span>Neu bei DABubble?</span>
         <a routerLink="/auth/sign-in">Konto erstellen</a>
     </div>
+    }
 </header>
 
 <router-outlet></router-outlet>

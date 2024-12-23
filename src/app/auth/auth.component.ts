@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { IntroComponent } from "./intro/intro.component";
 
 @Component({
@@ -10,5 +10,5 @@ import { IntroComponent } from "./intro/intro.component";
   styleUrl: './auth.component.scss'
 })
 export class AuthComponent {
-
+  router: Router = inject(Router);
 }
