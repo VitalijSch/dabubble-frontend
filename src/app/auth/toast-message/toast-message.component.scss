@@ -1,0 +1,28 @@
+@import './../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(unset, flex-end, flex-end, unset);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    padding: 75px;
+    max-width: 1920px;
+    margin: 0 auto;
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
+.message {
+    width: fit-content;
+    height: fit-content;
+    padding: 50px;
+    background-color: #444DF2;
+    border-radius: 30px 30px 0 30px;
+    box-shadow: 0px 6px 10px 0px #00000033;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 49.1px;
+    color: #FFFFFF;
+}
