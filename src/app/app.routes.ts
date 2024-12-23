@@ -3,6 +3,7 @@ import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { ChooseAvatarComponent } from './auth/choose-avatar/choose-avatar.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -14,6 +15,7 @@ export const routes: Routes = [
             { path: 'login', component: LoginComponent },
             { path: 'sign-in', component: SignInComponent },
             { path: 'choose-avatar', component: ChooseAvatarComponent },
+            { path: 'forgot-password', component: ForgotPasswordComponent },
         ],
     },
 ];
