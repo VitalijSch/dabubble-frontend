@@ -44,40 +44,58 @@ form {
 
 .privacy-policy-container {
     width: 100%;
-    @include flex-layout(unset, unset, center, 8px);
+    height: 50px;
+    @include flex-layout(column, unset, unset, 6px);
 
-    .checkbox-container {
-        @include flex-layout(unset, center, center, unset);
-        width: 24px;
-        height: 24px;
-        border-radius: 38px;
-        cursor: pointer;
+    .error-checkbox-container {
+        width: 100%;
+        @include flex-layout(unset, unset, center, 8px);
 
-        &:hover {
-            background-color: #ECEEFE;
-        }
-    }
-
-    .privacy-policy {
-        font-family: 'Open Sans';
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 19.2px;
-
-        span {
-            font-family: 'Figtree';
-            font-size: 18px;
-            font-weight: 400;
-            line-height: 21.6px;
-            padding: 5px 15px;
-            color: #797EF3;
+        .checkbox-container {
+            @include flex-layout(unset, center, center, unset);
+            position: relative;
+            width: 24px;
+            height: 24px;
+            border-radius: 38px;
             cursor: pointer;
 
             &:hover {
                 background-color: #ECEEFE;
-                color: #444DF2;
-                border-radius: 30px;
+            }
+
+            &:hover svg path {
+                fill: #444DF2;
             }
         }
+
+        .privacy-policy {
+            font-family: 'Open Sans';
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 19.2px;
+
+            span {
+                font-family: 'Figtree';
+                font-size: 18px;
+                font-weight: 400;
+                line-height: 21.6px;
+                padding: 5px 15px;
+                color: #797EF3;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #ECEEFE;
+                    color: #444DF2;
+                    border-radius: 30px;
+                }
+            }
+        }
+    }
+
+    small {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 19.1px;
+        color: #ED1E79;
     }
 }

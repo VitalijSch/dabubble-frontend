@@ -7,6 +7,7 @@
 
     .error-icon-input-container {
         width: 100%;
+        height: 85px;
         @include flex-layout(column, unset, unset, 6px);
 
         .icon-input-container {
@@ -56,5 +57,10 @@
             line-height: 19.1px;
             color: #ED1E79;
         }
+    }
+
+    .inactive-button {
+        background-color: #686868;
+        color: #FFFFFF;
     }
 }
