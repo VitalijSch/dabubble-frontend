@@ -12,7 +12,7 @@ import { CreateUserService } from '../../servies/create-user/create-user.service
 })
 export class SignInComponent {
   signInForm!: FormGroup;
-  acceptTerms: boolean | null = null;
+  acceptTerms!: boolean;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
   private createUserService: CreateUserService = inject(CreateUserService);
@@ -20,31 +20,49 @@ export class SignInComponent {
 
   ngOnInit(): void {
     this.initializeSignInForm();
+    this.checkAndSetAcceptTerms();
   }
 
   private initializeSignInForm(): void {
     this.signInForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      name: [this.createUserService.userData().name, Validators.required],
+      email: [this.createUserService.userData().email, [Validators.required, Validators.email]],
+      password: [this.createUserService.userData().password, [Validators.required, Validators.minLength(8)]],
     });
   }
 
-  toggleAcceptTerms(value: null | boolean): void {
+  private checkAndSetAcceptTerms(): void {
+    if (this.isUserEmailNotEmpty()) {
+      this.setAcceptTerms(true);
+    }
+  }
+
+  private isUserEmailNotEmpty(): boolean {
+    return this.createUserService.userData().email !== '';
+  }
+
+  setAcceptTerms(value: boolean): void {
     this.acceptTerms = value;
   }
 
-  async createUser(): Promise<void> {
-    this.checkAcceptTerms();
-    if (this.acceptTerms) {
-      this.createUserService.setUserData(this.signInForm.value);
-      await this.router.navigate(['auth/choose-avatar']);
+  createUserAndNavigateToAvatarSelection(): void {
+    if (this.acceptTerms){
+      this.createUserData();
+      this.navigateToAvatarSelection();
+    } else {
+      this.rejectTerms();
     }
   }
 
-  private checkAcceptTerms(): void {
-    if(this.acceptTerms === null) {
-      this.acceptTerms = false;
-    }
+  private createUserData(): void {
+    this.createUserService.setUserData(this.signInForm.value);
+  }
+
+  private navigateToAvatarSelection(): void {
+    this.router.navigate(['auth/choose-avatar']);
+  }
+
+  private rejectTerms(): void {
+    this.acceptTerms = false;
   }
 }
