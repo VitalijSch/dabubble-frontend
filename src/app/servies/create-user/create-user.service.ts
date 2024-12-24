@@ -9,13 +9,23 @@ export class CreateUserService {
     name: '',
     email: '',
     password: '',
+    selectedAvatar: './../../../assets/avatars/avatar-0.png',
   });
 
   setUserData(userData: CreateUser): void {
-    this.userData.set(userData);
+    this.userData.set({
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      selectedAvatar: './../../../assets/avatars/avatar-0.png',
+    });
   }
 
   getUserData(): CreateUser {
     return this.userData();
+  }
+
+  setSelectedAvatar(avatar: number): void {
+    this.userData().selectedAvatar = `./../../../assets/avatars/avatar-${avatar}.png`;
   }
 }

@@ -11,9 +11,13 @@ import { CreateUserService } from '../../servies/create-user/create-user.service
   styleUrl: './choose-avatar.component.scss'
 })
 export class ChooseAvatarComponent {
-  private createUserService: CreateUserService = inject(CreateUserService);
+  createUserService: CreateUserService = inject(CreateUserService);
 
   ngOnInit(): void {
     console.log(this.createUserService.getUserData());
+  }
+
+  addUser(): void {
+    console.log(this.createUserService.getUserData())
   }
 }

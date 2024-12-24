@@ -1,6 +1,7 @@
 <header>
     <div class="arrow-container">
-        <svg routerLink="/auth/sign-in" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg routerLink="/auth/sign-in" width="40" height="40" viewBox="0 0 40 40" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_182_274" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                 height="24">
                 <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -16,18 +17,19 @@
     <h2>Wähle deinen Avatar</h2>
 </header>
 
-<img class="selected-avatar" src="./../../../assets/avatars/avatar-0.png" alt="avatar">
+<img class="selected-avatar" src="{{createUserService.userData().selectedAvatar}}" alt="avatar">
 
 <span>Frederick Beck</span>
 
 <p>Aus der Liste wählen</p>
 
 <div class="avatar-container">
-    @for (number of [1,2,3,4,5,6]; track $index) {
-    <img class="selectable-avatar" src="./../../../assets/avatars/avatar-{{number}}.png" alt="avatar">
+    @for (avatar of [1,2,3,4,5,6]; track $index) {
+    <img (click)="createUserService.setSelectedAvatar(avatar)" class="selectable-avatar"
+        src="./../../../assets/avatars/avatar-{{avatar}}.png" alt="avatar">
     }
 </div>
 
-<button>Weiter</button>
+<button (click)="addUser()">Weiter</button>
 
 <app-toast-message></app-toast-message>
