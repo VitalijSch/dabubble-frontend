@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CreateUserService } from '../../servies/create-user/create-user.service';
 
 @Component({
@@ -14,9 +14,9 @@ export class SignInComponent {
   signInForm!: FormGroup;
   acceptTerms: boolean | null = null;
 
-  createUserService: CreateUserService = inject(CreateUserService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private createUserService: CreateUserService = inject(CreateUserService);
+  private router: Router = inject(Router);
 
   ngOnInit(): void {
     this.initializeSignInForm();
@@ -34,10 +34,11 @@ export class SignInComponent {
     this.acceptTerms = value;
   }
 
-  createUser(): void {
+  async createUser(): Promise<void> {
     this.checkAcceptTerms();
     if (this.acceptTerms) {
-      console.log('drinnen')
+      this.createUserService.setUserData(this.signInForm.value);
+      await this.router.navigate(['auth/choose-avatar']);
     }
   }
 
