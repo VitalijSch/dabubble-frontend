@@ -17,7 +17,9 @@
     <h2>Wähle deinen Avatar</h2>
 </header>
 
-<img class="selected-avatar" src="{{createUserService.userData().selectedAvatar}}" alt="avatar">
+<input #fileInput (change)="uploadFileService.onFileSelected($event)" accept="image/png, image/jpeg, image/gif"
+    type="file" name="uploadAvatar" id="uploadAvatar">
+<img (click)="uploadFileService.onUploadButtonClick(fileInput)" class="selected-avatar" src="{{createUserService.userData().selectedAvatar}}" alt="avatar">
 
 <span>Frederick Beck</span>
 

@@ -9,6 +9,7 @@ export class CreateUserService {
     name: '',
     email: '',
     password: '',
+    isTermsAccepted: false,
     selectedAvatar: './../../../assets/avatars/avatar-0.png',
   });
 
@@ -17,6 +18,7 @@ export class CreateUserService {
       name: userData.name,
       email: userData.email,
       password: userData.password,
+      isTermsAccepted: userData.isTermsAccepted,
       selectedAvatar: './../../../assets/avatars/avatar-0.png',
     });
   }

@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CreateUserService } from '../../servies/create-user/create-user.service';
+import { CreateUserService } from '../../services/create-user/create-user.service';
+import { CreateUser } from '../../interfaces/create-user';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,46 +13,47 @@ import { CreateUserService } from '../../servies/create-user/create-user.service
 })
 export class SignInComponent {
   signInForm!: FormGroup;
-  acceptTerms!: boolean;
+  userData!: CreateUser;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
   private createUserService: CreateUserService = inject(CreateUserService);
   private router: Router = inject(Router);
 
+  constructor() {
+    this.userData = this.createUserService.userData();
+  }
+
   ngOnInit(): void {
     this.initializeSignInForm();
-    this.checkAndSetAcceptTerms();
   }
 
   private initializeSignInForm(): void {
     this.signInForm = this.formBuilder.group({
-      name: [this.createUserService.userData().name, Validators.required],
-      email: [this.createUserService.userData().email, [Validators.required, Validators.email]],
-      password: [this.createUserService.userData().password, [Validators.required, Validators.minLength(8)]],
+      name: [this.userData.name, Validators.required],
+      email: [this.userData.email, [Validators.required, Validators.email]],
+      password: [this.userData.password, [Validators.required, Validators.minLength(8)]],
+      isTermsAccepted: [this.userData.isTermsAccepted, Validators.requiredTrue],
     });
   }
 
-  private checkAndSetAcceptTerms(): void {
-    if (this.isUserEmailNotEmpty()) {
-      this.setAcceptTerms(true);
-    }
+  markAndToggleIsTermsAccepted(): void {
+    this.markTermsAccepted();
+    this.setIsTermsAccepted();
   }
 
-  private isUserEmailNotEmpty(): boolean {
-    return this.createUserService.userData().email !== '';
+  private markTermsAccepted(): void {
+    const isTermsAcceptedControl = this.signInForm.get('isTermsAccepted');
+    isTermsAcceptedControl?.markAsTouched();
   }
 
-  setAcceptTerms(value: boolean): void {
-    this.acceptTerms = value;
+  private setIsTermsAccepted(): void {
+    const currentValue = this.signInForm.get('isTermsAccepted')?.value;
+    this.signInForm.get('isTermsAccepted')?.setValue(!currentValue);
   }
 
   createUserAndNavigateToAvatarSelection(): void {
-    if (this.acceptTerms){
-      this.createUserData();
-      this.navigateToAvatarSelection();
-    } else {
-      this.rejectTerms();
-    }
+    this.createUserData();
+    this.navigateToAvatarSelection();
   }
 
   private createUserData(): void {
@@ -60,9 +62,5 @@ export class SignInComponent {
 
   private navigateToAvatarSelection(): void {
     this.router.navigate(['auth/choose-avatar']);
-  }
-
-  private rejectTerms(): void {
-    this.acceptTerms = false;
   }
 }

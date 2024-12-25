@@ -29,6 +29,10 @@
         align-self:flex-start;
     }
 
+    input[type='file'] {
+        display: none;
+    }
+
     img {
         cursor: pointer;
 
