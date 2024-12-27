@@ -19,7 +19,8 @@
 
 <input #fileInput (change)="uploadFileService.onFileSelected($event)" accept="image/png, image/jpeg, image/gif"
     type="file" name="uploadAvatar" id="uploadAvatar">
-<img (click)="uploadFileService.onUploadButtonClick(fileInput)" class="selected-avatar" src="{{uploadFileService.selectedFile}}" alt="avatar">
+<img (click)="uploadFileService.onUploadButtonClick(fileInput)" class="selected-avatar"
+    src="{{uploadFileService.selectedFile}}" alt="avatar">
 
 <span>Frederick Beck</span>
 
@@ -34,4 +35,4 @@
 
 <button (click)="addUser()">Weiter</button>
 
-<app-toast-message></app-toast-message>
+<app-toast-message [ngStyle]="{'z-index': toastMessageService.isToastMessageVisible ? '10' : '-1'}"></app-toast-message>

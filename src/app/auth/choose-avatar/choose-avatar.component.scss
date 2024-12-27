@@ -1,6 +1,7 @@
 @import './../../../styles/mixins/mixins.scss';
 @import './../../../styles/mixins/form-utils.scss';
 @import './../../../styles/mixins/arrow-back-utils.scss';
+@import './../../../styles/keyframes.scss';
 
 :host {
     @include flex-layout(column, space-between, center, 30px);
