@@ -1,7 +1,8 @@
 export interface CreateUser {
-    name: string;
+    username: string;
     email: string;
     password: string;
     isTermsAccepted: boolean;
-    selectedAvatar: string | ArrayBuffer;
+    uploaded_avatar?: File;
+    selected_avatar?: string;
 }

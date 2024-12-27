@@ -34,11 +34,11 @@
                 </g>
             </svg>
 
-            <input formControlName="name" placeholder="Name und Nachname" type="text" name="name" id="name">
+            <input formControlName="username" placeholder="Name und Nachname" type="text" name="username" id="username">
         </div>
 
-        @if(signInForm.get('name')?.invalid && signInForm.get('name')?.touched) {
-        @if(signInForm.get('name')?.hasError('required')) {
+        @if(signInForm.get('username')?.invalid && signInForm.get('username')?.touched) {
+        @if(signInForm.get('username')?.hasError('required')) {
         <small>Bitte geben Sie einen Namen ein.</small>
         }
         }

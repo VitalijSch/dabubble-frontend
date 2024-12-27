@@ -29,7 +29,7 @@ export class SignInComponent {
 
   private initializeSignInForm(): void {
     this.signInForm = this.formBuilder.group({
-      name: [this.userData.name, Validators.required],
+      username: [this.userData.username, Validators.required],
       email: [this.userData.email, [Validators.required, Validators.email]],
       password: [this.userData.password, [Validators.required, Validators.minLength(8)]],
       isTermsAccepted: [this.userData.isTermsAccepted, Validators.requiredTrue],

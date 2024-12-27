@@ -19,7 +19,7 @@
 
 <input #fileInput (change)="uploadFileService.onFileSelected($event)" accept="image/png, image/jpeg, image/gif"
     type="file" name="uploadAvatar" id="uploadAvatar">
-<img (click)="uploadFileService.onUploadButtonClick(fileInput)" class="selected-avatar" src="{{createUserService.userData().selectedAvatar}}" alt="avatar">
+<img (click)="uploadFileService.onUploadButtonClick(fileInput)" class="selected-avatar" src="{{uploadFileService.selectedFile}}" alt="avatar">
 
 <span>Frederick Beck</span>
 
@@ -27,7 +27,7 @@
 
 <div class="avatar-container">
     @for (avatar of [1,2,3,4,5,6]; track $index) {
-    <img (click)="createUserService.setSelectedAvatar(avatar)" class="selectable-avatar"
+    <img (click)="setAvatarAndUpdateFile(avatar)" class="selectable-avatar"
         src="./../../../assets/avatars/avatar-{{avatar}}.png" alt="avatar">
     }
 </div>

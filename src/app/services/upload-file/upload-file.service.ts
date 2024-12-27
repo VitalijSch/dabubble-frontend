@@ -5,7 +5,7 @@ import { CreateUserService } from '../create-user/create-user.service';
   providedIn: 'root'
 })
 export class UploadFileService {
-  selectedFile: File | null = null;
+  selectedFile: any = './../../../assets/avatars/avatar-0.png';
 
   private createUserService: CreateUserService = inject(CreateUserService);
 
@@ -15,21 +15,25 @@ export class UploadFileService {
 
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
-    const selectedFile = this.getSelectedFile(fileInput);
-    if (selectedFile) {
-      this.convertFileToDataUrl(selectedFile);
+    this.getSelectedFile(fileInput);
+    this.setUploadedAvatarFromSelectedFile();
+    if (this.selectedFile) {
+      this.convertFileToDataUrl(this.selectedFile);
     }
     this.resetFileInput(fileInput);
   }
 
-  getSelectedFile(fileInput: HTMLInputElement): File | null {
+  private getSelectedFile(fileInput: HTMLInputElement): void {
     if (fileInput.files && fileInput.files.length > 0) {
-      return fileInput.files[0];
+      this.selectedFile = fileInput.files[0];
     }
-    return null;
   }
 
-  convertFileToDataUrl(file: File): void {
+  private setUploadedAvatarFromSelectedFile(): void {
+    this.createUserService.userData().uploaded_avatar = this.selectedFile;
+  }
+
+  private convertFileToDataUrl(file: File): void {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.result) {
@@ -39,11 +43,11 @@ export class UploadFileService {
     reader.readAsDataURL(file);
   }
 
-  updateUserAvatar(dataUrl: string | ArrayBuffer): void {
-    this.createUserService.userData().selectedAvatar = dataUrl;
+  private updateUserAvatar(dataUrl: string | ArrayBuffer): void {
+    this.selectedFile = dataUrl;
   }
 
-  resetFileInput(fileInput: HTMLInputElement): void {
+  private resetFileInput(fileInput: HTMLInputElement): void {
     fileInput.value = '';
   }
 }

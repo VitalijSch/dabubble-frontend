@@ -5,21 +5,21 @@ import { CreateUser } from '../../interfaces/create-user';
   providedIn: 'root'
 })
 export class CreateUserService {
-  userData = signal<CreateUser>({
-    name: '',
+  initialUserData: CreateUser = {
+    username: '',
     email: '',
     password: '',
     isTermsAccepted: false,
-    selectedAvatar: './../../../assets/avatars/avatar-0.png',
-  });
+  };
+
+  userData = signal<CreateUser>(this.initialUserData);
 
   setUserData(userData: CreateUser): void {
     this.userData.set({
-      name: userData.name,
+      username: userData.username,
       email: userData.email,
       password: userData.password,
       isTermsAccepted: userData.isTermsAccepted,
-      selectedAvatar: './../../../assets/avatars/avatar-0.png',
     });
   }
 
@@ -27,7 +27,11 @@ export class CreateUserService {
     return this.userData();
   }
 
+  resetUserData(): void {
+    this.userData.set(this.initialUserData);
+  }
+
   setSelectedAvatar(avatar: number): void {
-    this.userData().selectedAvatar = `./../../../assets/avatars/avatar-${avatar}.png`;
+    this.userData().selected_avatar = `./../../../assets/avatars/avatar-${avatar}.png`;
   }
 }
