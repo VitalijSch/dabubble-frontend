@@ -10,5 +10,33 @@ import { IntroComponent } from "./intro/intro.component";
   styleUrl: './auth.component.scss'
 })
 export class AuthComponent {
+  isIntroPlayed: boolean = false;
+
   router: Router = inject(Router);
+
+  ngOnInit(): void {
+    this.handleIntroForLoginPage();
+  }
+
+  handleIntroForLoginPage(): void {
+    if (this.isLoginPage()) {
+      this.startIntro();
+      this.resetIntroAfterDelay(4500);
+    }
+  }
+
+  private isLoginPage(): boolean {
+    return this.router.url.includes('login')
+  }
+
+  private startIntro(): void {
+    this.isIntroPlayed = true;
+
+  }
+
+  private resetIntroAfterDelay(delay: number): void {
+    setTimeout(() => {
+      this.isIntroPlayed = false;
+    }, delay);
+  }
 }

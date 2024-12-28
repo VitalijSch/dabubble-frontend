@@ -37,6 +37,9 @@ header {
         top: 75px;
         left: 75px;
         z-index: 1;
+    }
+
+    .logo-animation {
         animation: moveFromTopCenterToTopLeft 1s ease 3.5s forwards;
     }
 

@@ -1,7 +1,10 @@
+@if(isIntroPlayed){
 <app-intro></app-intro>
+}
 
 <header>
-    <svg width="243" height="70" viewBox="0 0 243 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg [class.logo-animation]="isIntroPlayed" width="243" height="70" viewBox="0 0 243 70" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_2119_22165)">
             <path
                 d="M64.8308 0H32.6846C29.7769 0 27.4615 2.31538 27.4615 5.16923V31.7692H64.7769C67.6308 31.7692 69.9462 29.4538 69.9462 26.6V5.16923C70 2.31538 67.6846 0 64.8308 0Z"
