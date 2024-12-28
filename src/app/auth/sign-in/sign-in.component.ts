@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CreateUserService } from '../../services/create-user/create-user.service';
 import { CreateUser } from '../../interfaces/create-user';
+import { AccountsService } from '../../services/accounts/accounts.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,10 +15,12 @@ import { CreateUser } from '../../interfaces/create-user';
 export class SignInComponent {
   signInForm!: FormGroup;
   userData!: CreateUser;
+  isEmailExist: boolean = false;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
   private createUserService: CreateUserService = inject(CreateUserService);
   private router: Router = inject(Router);
+  private accountsService: AccountsService = inject(AccountsService);
 
   constructor() {
     this.userData = this.createUserService.userData();
@@ -34,6 +37,36 @@ export class SignInComponent {
       password: [this.userData.password, [Validators.required, Validators.minLength(8)]],
       isTermsAccepted: [this.userData.isTermsAccepted, Validators.requiredTrue],
     });
+  }
+
+  checkIfEmailExist(): void {
+    if (this.isEmailValid()) {
+      this.checkEmailExistence();
+    }
+  }
+
+  private isEmailValid(): boolean {
+    return this.signInForm.get('email')?.valid ?? false;
+  }
+
+  private checkEmailExistence(): void {
+    const email = this.getEmailFromForm();
+    this.accountsService.checkEmailExist(email).subscribe({
+      next: (response) => {
+        this.handleEmailExistenceResponse(response.exists);
+      },
+      error: (error) => {
+        console.error('Registrierungsfehler:', error);
+      },
+    });
+  }
+
+  private getEmailFromForm(): string {
+    return this.signInForm.get('email')?.value ?? '';
+  }
+
+  private handleEmailExistenceResponse(exists: boolean): void {
+    this.isEmailExist = exists;
   }
 
   markAndToggleIsTermsAccepted(): void {

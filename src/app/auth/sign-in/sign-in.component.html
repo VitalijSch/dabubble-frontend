@@ -58,7 +58,8 @@
                 </g>
             </svg>
 
-            <input formControlName="email" placeholder="beispielname@email.com" type="email" name="email" id="email">
+            <input (input)="checkIfEmailExist()" formControlName="email" placeholder="beispielname@email.com"
+                type="email" name="email" id="email">
         </div>
 
         @if(signInForm.get('email')?.invalid && signInForm.get('email')?.touched) {
@@ -67,6 +68,8 @@
         } @else if(signInForm.get('email')?.hasError('email')) {
         <small>*Diese E-Mail-Adresse ist leider ungültig.</small>
         }
+        } @else if(isEmailExist) {
+        <small>*Diese E-Mail-Adresse existiert bereits.</small>
         }
     </div>
 
@@ -124,5 +127,6 @@
         }
     </div>
 
-    <button [disabled]="signInForm.invalid" [class.inactive-button]="signInForm.invalid">Weiter</button>
+    <button [disabled]="signInForm.invalid || isEmailExist"
+        [class.inactive-button]="signInForm.invalid || isEmailExist">Weiter</button>
 </form>
