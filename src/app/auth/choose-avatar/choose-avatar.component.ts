@@ -28,7 +28,7 @@ export class ChooseAvatarComponent {
 
   private redirectToLoginIfNeeded(): void {
     if (this.isUserDataMissing()) {
-      this.router.navigate(['auth/login']);
+      this.router.navigate(['auth/sign-in']);
     }
   }
 
