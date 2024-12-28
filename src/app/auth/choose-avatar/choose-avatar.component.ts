@@ -23,10 +23,10 @@ export class ChooseAvatarComponent {
   private router: Router = inject(Router);
 
   ngOnInit(): void {
-    this.redirectToLoginIfNeeded();
+    this.redirectToLoginIfUserDataEmpty();
   }
 
-  private redirectToLoginIfNeeded(): void {
+  private redirectToLoginIfUserDataEmpty(): void {
     if (this.isUserDataMissing()) {
       this.router.navigate(['auth/sign-in']);
     }
