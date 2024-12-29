@@ -17,7 +17,7 @@ export const routes: Routes = [
             { path: 'sign-in', component: SignInComponent },
             { path: 'choose-avatar', component: ChooseAvatarComponent },
             { path: 'forgot-password', component: ForgotPasswordComponent },
-            { path: 'reset-password', component: ResetPasswordComponent },
+            { path: 'reset-password/:id', component: ResetPasswordComponent },
         ],
     },
 ];

@@ -17,4 +17,8 @@ export class AccountsService {
   registerUser(data: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/create-user/`, data);
   }
+
+  sendPasswordResetEmail(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-reset-email/`, email);
+  }
 }
