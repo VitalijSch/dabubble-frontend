@@ -33,6 +33,10 @@
         line-height: 49.1px;
         color: #FFFFFF;
     }
+
+    .send-email {
+        @include flex-layout(unset, center, center, 28px);
+    }
 }
 
 .show {
