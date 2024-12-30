@@ -21,4 +21,8 @@ export class AccountsService {
   sendPasswordResetEmail(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/send-reset-email/`, email);
   }
+
+  deletePasswordResetEmail(token: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/delete-reset-email/`, {token});
+  }
 }
