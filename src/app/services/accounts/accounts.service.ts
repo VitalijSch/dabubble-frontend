@@ -11,7 +11,7 @@ export class AccountsService {
   private http: HttpClient = inject(HttpClient);
 
   checkEmailExist(email: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/check-email/?email=${email}`);
+    return this.http.post(`${this.apiUrl}/check-email/`, {email});
   }
 
   registerUser(data: FormData): Observable<any> {
@@ -24,5 +24,13 @@ export class AccountsService {
 
   deletePasswordResetEmail(token: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/delete-reset-email/`, {token});
+  }
+
+  getPasswordResetEmail(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get-reset-email/?token=${token}`);
+  }
+
+  changePassword(email: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/delete-reset-email/`, {email, newPassword});
   }
 }

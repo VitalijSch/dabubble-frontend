@@ -16,6 +16,7 @@ import { AccountsService } from '../../services/accounts/accounts.service';
 })
 export class ResetPasswordComponent {
   resetPasswordForm!: FormGroup;
+  email: string = '';
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
 
@@ -26,7 +27,7 @@ export class ResetPasswordComponent {
 
   ngOnInit(): void {
     this.initializeResetPasswordForm();
-    this.deletePasswordResetEmail();
+    this.handlePasswordResetProcess();
   }
 
   private initializeResetPasswordForm(): void {
@@ -39,25 +40,44 @@ export class ResetPasswordComponent {
     )
   }
 
-  private deletePasswordResetEmail(): void {
+  private handlePasswordResetProcess(): void {
     const token = this.getTokenFromRoute();
-    if (token) {
-      this.deleteToken(token);
+    if (!token) {
+      this.navigateToLogin();
+      return;
     }
+
+    this.deletePasswordResetToken(token);
+    this.fetchEmailForPasswordReset(token);
   }
 
   private getTokenFromRoute(): string | null {
     return this.route.snapshot.paramMap.get('id');
   }
 
-  private deleteToken(token: string): void {
+  private navigateToLogin(): void {
+    this.router.navigate(['auth/login']);
+  }
+
+  private deletePasswordResetToken(token: string): void {
     this.accountsService.deletePasswordResetEmail(token).subscribe({
-      error: (error) => this.navigateToLogin(),
+      error: (error) => console.log(error),
     });
   }
 
-  private navigateToLogin(): void {
-    this.router.navigate(['auth/login']);
+  private fetchEmailForPasswordReset(token: string): void {
+    this.accountsService.getPasswordResetEmail(token).subscribe({
+      next: (response) => {
+        this.setEmail(response.email);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private setEmail(email: string): void {
+    this.email = email;
   }
 
   resetPassword(): void {
