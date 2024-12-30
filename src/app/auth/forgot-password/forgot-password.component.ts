@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ToastMessageComponent } from '../toast-message/toast-message.component';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastMessageService } from '../../services/toast-message/toast-message.service';
 import { AccountsService } from '../../services/accounts/accounts.service';
@@ -14,28 +14,27 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
-  resetPasswordForm!: FormGroup;
+  resetPasswordEmailForm!: FormGroup;
   isEmailExist: boolean = false;
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
 
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private router: Router = inject(Router);
   private accountsService: AccountsService = inject(AccountsService);
 
   ngOnInit(): void {
-    this.initializeSignInForm();
+    this.initializeResetPasswordEmailForm();
   }
 
-  private initializeSignInForm(): void {
-    this.resetPasswordForm = this.formBuilder.group({
+  private initializeResetPasswordEmailForm(): void {
+    this.resetPasswordEmailForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
   sendPasswordResetEmail(): void {
     this.showToastMessage();
-    this.accountsService.sendPasswordResetEmail(this.resetPasswordForm.value).subscribe({
+    this.accountsService.sendPasswordResetEmail(this.resetPasswordEmailForm.value).subscribe({
       next: () => {
         this.displayToastMessage();
       },
@@ -60,7 +59,7 @@ export class ForgotPasswordComponent {
   }
 
   private isEmailValid(): boolean {
-    return this.resetPasswordForm.get('email')?.valid ?? false;
+    return this.resetPasswordEmailForm.get('email')?.valid ?? false;
   }
 
   private checkEmailExistence(): void {
@@ -76,7 +75,7 @@ export class ForgotPasswordComponent {
   }
 
   private getEmailFromForm(): string {
-    return this.resetPasswordForm.get('email')?.value ?? '';
+    return this.resetPasswordEmailForm.get('email')?.value ?? '';
   }
 
   private handleEmailExistenceResponse(exists: boolean): void {
