@@ -37,4 +37,8 @@ export class AccountsService {
   loginUser(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login-user/`, {email, password});
   }
+
+  loginGuest(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/login-guest/`);
+  }
 }

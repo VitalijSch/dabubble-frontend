@@ -61,4 +61,19 @@ export class LoginComponent {
       this.isAuthenticated = true;
     }, 4000);
   }
+
+  loginGuest(): void {
+    this.accountsService.loginGuest().subscribe({
+      next: (response) => this.handleLoginGuestSuccess(response),
+      error: (error) => this.handleLoginGuestError(error),
+    });
+  }
+
+  private handleLoginGuestSuccess(response: any): void {
+    console.log(response);
+  }
+
+  private handleLoginGuestError(error: any): void {
+    console.error(error);
+  }
 }
