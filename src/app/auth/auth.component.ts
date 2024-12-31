@@ -26,7 +26,7 @@ export class AuthComponent {
   }
 
   private isLoginPage(): boolean {
-    return this.router.url.includes('login')
+    return this.router.url.includes('login');
   }
 
   private startIntro(): void {

@@ -2,7 +2,7 @@
 
 <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
 
-<form>
+<form [formGroup]="loginForm" (ngSubmit)="loginUser()">
     <div class="error-icon-input-container">
         <div class="icon-input-container">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,10 +17,16 @@
                 </g>
             </svg>
 
-            <input placeholder="beispielname@email.com" type="email" name="email" id="email">
+            <input formControlName="email" placeholder="beispielname@email.com" type="email" name="email" id="email">
         </div>
 
+        @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        @if(loginForm.get('email')?.hasError('required')) {
+        <small>Bitte geben Sie eine E-Mail-Adresse ein.</small>
+        } @else if(loginForm.get('email')?.hasError('email')) {
         <small>*Diese E-Mail-Adresse ist leider ungültig.</small>
+        }
+        }
     </div>
 
     <div class="error-icon-input-container">
@@ -37,10 +43,19 @@
                 </g>
             </svg>
 
-            <input placeholder="Passwort" type="password" name="password" id="password">
+            <input formControlName="password" placeholder="Passwort" type="password" name="password" id="password">
         </div>
 
+        @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        @if(loginForm.get('password')?.hasError('required')) {
+        <small>Bitte geben Sie ein Passwort ein.</small>
+        } @else if(loginForm.get('password')?.hasError('minlength')) {
+        <small>Das Passwort muss mindestens 8 Zeichen lang sein.</small>
+        }
+        }
+        @if(isAuthenticated === false) {
         <small>Falsches Passwort oder E-Mail.. Bitte noch einmal versuchen.</small>
+        }
     </div>
 
     <a routerLink="/auth/forgot-password" class="forgot-password">Passwort vergessen?</a>
@@ -71,7 +86,7 @@
     </div>
 
     <div class="button-container">
-        <button>Anmelden</button>
-        <button>Gäste-Login</button>
+        <button [disabled]="loginForm.invalid">Anmelden</button>
+        <button type="button">Gäste-Login</button>
     </div>
 </form>

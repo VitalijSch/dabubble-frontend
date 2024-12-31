@@ -65,12 +65,14 @@ export class ChooseAvatarComponent {
 
   private registerUser(): void {
     this.accountsService.registerUser(this.createFormData()).subscribe({
-      next: () => {
-        this.resetUserData();
-        this.displayToastMessage();
-      },
-      error: (error) => console.error('Registrierungsfehler:', error)
+      next: () => this.handleRegisterSuccess(),
+      error: (error) => this.handleRegisterError(error),
     });
+  }
+
+  private handleRegisterSuccess(): void {
+    this.resetUserData();
+    this.displayToastMessage();
   }
 
   private createFormData(): FormData {
@@ -106,5 +108,9 @@ export class ChooseAvatarComponent {
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
+  }
+
+  private handleRegisterError(error: any): void {
+    console.error(error);
   }
 }

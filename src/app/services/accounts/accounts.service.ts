@@ -33,4 +33,8 @@ export class AccountsService {
   changePassword(email: string, newPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/change-reset-password/`, {email, newPassword});
   }
+
+  loginUser(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login-user/`, {email, password});
+  }
 }

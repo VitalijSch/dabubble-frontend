@@ -43,13 +43,21 @@ export class ForgotPasswordComponent {
 
   private sendPasswordResetEmail(): void {
     this.accountsService.sendPasswordResetEmail(this.resetPasswordEmailForm.value).subscribe({
-      next: () => this.displayToastMessage(),
-      error: (error) => console.error('Registrierungsfehler:', error)
+      next: () => this.handlePasswordResetEmailSuccess(),
+      error: (error) => this.handlePasswordResetEmailError(error),
     });
+  }
+
+  private handlePasswordResetEmailSuccess(): void {
+    this.displayToastMessage();
   }
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
+  }
+
+  private handlePasswordResetEmailError(error: any): void {
+    console.error(error);
   }
 
   checkIfEmailExist(): void {
@@ -65,8 +73,8 @@ export class ForgotPasswordComponent {
   private checkEmailExistence(): void {
     const email = this.getEmailFromForm();
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => this.handleEmailExistenceResponse(response.exists),
-      error: (error) => console.error('Registrierungsfehler:', error)
+      next: (response) => this.handleEmailExistenceSuccess(response),
+      error: (error) => this.handleEmailExistenceError(error),
     });
   }
 
@@ -74,7 +82,15 @@ export class ForgotPasswordComponent {
     return this.resetPasswordEmailForm.get('email')?.value ?? '';
   }
 
+  private handleEmailExistenceSuccess(response: any): void {
+    this.handleEmailExistenceResponse(response.exists);
+  }
+
   private handleEmailExistenceResponse(exists: boolean): void {
     this.isEmailExist = exists;
+  }
+
+  private handleEmailExistenceError(error: any): void {
+    console.error(error);
   }
 }

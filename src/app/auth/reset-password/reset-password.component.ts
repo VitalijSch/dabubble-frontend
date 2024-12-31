@@ -46,7 +46,6 @@ export class ResetPasswordComponent {
       this.navigateToLogin();
       return;
     }
-
     this.deletePasswordResetToken(token);
     this.fetchEmailForPasswordReset(token);
   }
@@ -61,19 +60,31 @@ export class ResetPasswordComponent {
 
   private deletePasswordResetToken(token: string): void {
     this.accountsService.deletePasswordResetEmail(token).subscribe({
-      error: (error) => console.log(error),
+      error: (error) => this.handlePasswordResetTokenError(error),
     });
+  }
+
+  private handlePasswordResetTokenError(error: any): void {
+    console.error(error);
   }
 
   private fetchEmailForPasswordReset(token: string): void {
     this.accountsService.getPasswordResetEmail(token).subscribe({
-      next: (response) => this.setEmail(response.email),
-      error: (error) => console.log(error)
+      next: (response) => this.handleEmailForPasswordResetSuccess(response),
+      error: (error) => this.handleEmailForPasswordResetError(error),
     });
+  }
+
+  private handleEmailForPasswordResetSuccess(response: any): void {
+    this.setEmail(response.email);
   }
 
   private setEmail(email: string): void {
     this.email = email;
+  }
+
+  private handleEmailForPasswordResetError(error: any): void {
+    console.error(error);
   }
 
   submitPasswordReset(): void {
@@ -88,12 +99,20 @@ export class ResetPasswordComponent {
   private sendPasswordChangeRequest(): void {
     const newPassword = this.resetPasswordForm.get('newPassword')?.value;
     this.accountsService.changePassword(this.email, newPassword).subscribe({
-      next: () => this.displayToastMessage(),
-      error: (error) => console.log(error)
+      next: () => this.handlePasswordChangeRequestSuccess(),
+      error: (error) => this.handlePasswordChangeRequestError(error),
     });
+  }
+
+  private handlePasswordChangeRequestSuccess(): void {
+    this.displayToastMessage();
   }
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
+  }
+
+  private handlePasswordChangeRequestError(error: any): void {
+    console.error(error);
   }
 }
