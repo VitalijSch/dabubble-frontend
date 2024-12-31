@@ -31,7 +31,6 @@ export class AuthComponent {
 
   private startIntro(): void {
     this.isIntroPlayed = true;
-
   }
 
   private resetIntroAfterDelay(delay: number): void {

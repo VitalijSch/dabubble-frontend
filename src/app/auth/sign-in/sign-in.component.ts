@@ -23,11 +23,15 @@ export class SignInComponent {
   private accountsService: AccountsService = inject(AccountsService);
 
   constructor() {
-    this.userData = this.createUserService.userData();
+    this.userData = this.fetchUserData();
   }
 
   ngOnInit(): void {
     this.initializeSignInForm();
+  }
+
+  private fetchUserData(): any {
+    return this.createUserService.userData();
   }
 
   private initializeSignInForm(): void {
@@ -52,12 +56,8 @@ export class SignInComponent {
   private checkEmailExistence(): void {
     const email = this.getEmailFromForm();
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => {
-        this.handleEmailExistenceResponse(response.exists);
-      },
-      error: (error) => {
-        console.error('Registrierungsfehler:', error);
-      },
+      next: (response) => this.handleEmailExistenceResponse(response.exists),
+      error: (error) => console.error('Registrierungsfehler:', error)
     });
   }
 

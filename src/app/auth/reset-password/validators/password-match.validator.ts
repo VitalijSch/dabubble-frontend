@@ -4,6 +4,5 @@ export const passwordsMatchValidator: ValidatorFn = (control: AbstractControl): 
   const formGroup = control as FormGroup;
   const newPassword = formGroup.get('newPassword')?.value;
   const confirmedPassword = formGroup.get('confirmedPassword')?.value;
-    
   return newPassword === confirmedPassword ? null : { passwordsMismatch: true };
 };

@@ -9,14 +9,18 @@ export class ToastMessageService {
 
   private router: Router = inject(Router);
 
+  handleToastMessage(): void {
+    setTimeout(() => {
+      this.setToastMessageVisibility(false);
+      this.navigateToLogin();
+    }, 2000);
+  }
+
   setToastMessageVisibility(value: boolean): void {
     this.isToastMessageVisible = value;
   }
 
-  handleToastMessage(): void {
-    setTimeout(() => {
-      this.setToastMessageVisibility(false);
-      this.router.navigate(['auth/login']);
-    }, 2000);
+  private navigateToLogin(): void {
+    this.router.navigate(['auth/login']);
   }
 }

@@ -17,30 +17,49 @@ export class UploadFileService {
     const fileInput = event.target as HTMLInputElement;
     this.getSelectedFile(fileInput);
     this.setUploadedAvatarFromSelectedFile();
-    if (this.selectedFile) {
-      this.convertFileToDataUrl(this.selectedFile);
-    }
+    this.convertSelectedFileToDataUrl();
     this.resetFileInput(fileInput);
   }
 
   private getSelectedFile(fileInput: HTMLInputElement): void {
-    if (fileInput.files && fileInput.files.length > 0) {
-      this.selectedFile = fileInput.files[0];
+    if (this.hasSelectedFile(fileInput)) {
+      this.assignSelectedFile(fileInput);
     }
+  }
+
+  private hasSelectedFile(fileInput: HTMLInputElement): boolean {
+    return fileInput.files !== null && fileInput.files.length > 0;
+  }
+
+  private assignSelectedFile(fileInput: HTMLInputElement): void {
+    this.selectedFile = fileInput.files![0];
   }
 
   private setUploadedAvatarFromSelectedFile(): void {
     this.createUserService.userData().uploaded_avatar = this.selectedFile;
   }
 
+  private convertSelectedFileToDataUrl(): void {
+    if (this.selectedFile) {
+      this.convertFileToDataUrl(this.selectedFile);
+    }
+  }
+
   private convertFileToDataUrl(file: File): void {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        this.updateUserAvatar(reader.result);
-      }
-    };
+    const reader = this.createFileReader(() => this.handleFileReaderLoad(reader.result));
     reader.readAsDataURL(file);
+  }
+
+  private createFileReader(onLoadCallback: () => void): FileReader {
+    const reader = new FileReader();
+    reader.onload = onLoadCallback;
+    return reader;
+  }
+
+  private handleFileReaderLoad(result: string | ArrayBuffer | null): void {
+    if (result) {
+      this.updateUserAvatar(result);
+    }
   }
 
   private updateUserAvatar(dataUrl: string | ArrayBuffer): void {

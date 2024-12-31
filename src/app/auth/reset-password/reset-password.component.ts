@@ -67,12 +67,8 @@ export class ResetPasswordComponent {
 
   private fetchEmailForPasswordReset(token: string): void {
     this.accountsService.getPasswordResetEmail(token).subscribe({
-      next: (response) => {
-        this.setEmail(response.email);
-      },
-      error: (error) => {
-        console.log(error);
-      }
+      next: (response) => this.setEmail(response.email),
+      error: (error) => console.log(error)
     });
   }
 
@@ -80,7 +76,24 @@ export class ResetPasswordComponent {
     this.email = email;
   }
 
-  resetPassword(): void {
+  submitPasswordReset(): void {
+    this.showToastMessage();
+    this.sendPasswordChangeRequest();
+  }
 
+  private showToastMessage(): void {
+    this.toastMessageService.setToastMessageVisibility(true);
+  }
+
+  private sendPasswordChangeRequest(): void {
+    const newPassword = this.resetPasswordForm.get('newPassword')?.value;
+    this.accountsService.changePassword(this.email, newPassword).subscribe({
+      next: () => this.displayToastMessage(),
+      error: (error) => console.log(error)
+    });
+  }
+
+  private displayToastMessage(): void {
+    this.toastMessageService.handleToastMessage();
   }
 }

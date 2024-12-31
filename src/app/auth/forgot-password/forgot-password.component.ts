@@ -32,20 +32,20 @@ export class ForgotPasswordComponent {
     });
   }
 
-  sendPasswordResetEmail(): void {
+  sendResetEmailWithNotification(): void {
     this.showToastMessage();
-    this.accountsService.sendPasswordResetEmail(this.resetPasswordEmailForm.value).subscribe({
-      next: () => {
-        this.displayToastMessage();
-      },
-      error: (error) => {
-        console.error('Registrierungsfehler:', error);
-      }
-    });
+    this.sendPasswordResetEmail();
   }
 
   private showToastMessage(): void {
     this.toastMessageService.setToastMessageVisibility(true);
+  }
+
+  private sendPasswordResetEmail(): void {
+    this.accountsService.sendPasswordResetEmail(this.resetPasswordEmailForm.value).subscribe({
+      next: () => this.displayToastMessage(),
+      error: (error) => console.error('Registrierungsfehler:', error)
+    });
   }
 
   private displayToastMessage(): void {
@@ -65,12 +65,8 @@ export class ForgotPasswordComponent {
   private checkEmailExistence(): void {
     const email = this.getEmailFromForm();
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => {
-        this.handleEmailExistenceResponse(response.exists);
-      },
-      error: (error) => {
-        console.error('Registrierungsfehler:', error);
-      },
+      next: (response) => this.handleEmailExistenceResponse(response.exists),
+      error: (error) => console.error('Registrierungsfehler:', error)
     });
   }
 

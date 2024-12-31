@@ -31,6 +31,6 @@ export class AccountsService {
   }
 
   changePassword(email: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/delete-reset-email/`, {email, newPassword});
+    return this.http.post(`${this.apiUrl}/change-reset-password/`, {email, newPassword});
   }
 }

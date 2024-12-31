@@ -28,7 +28,7 @@ export class ChooseAvatarComponent {
 
   private redirectToLoginIfUserDataEmpty(): void {
     if (this.isUserDataMissing()) {
-      this.router.navigate(['auth/sign-in']);
+      this.navigateToSignIn();
     }
   }
 
@@ -37,9 +37,17 @@ export class ChooseAvatarComponent {
     return user.email === '';
   }
 
+  private navigateToSignIn(): void {
+    this.router.navigate(['auth/sign-in']);
+  }
+
   setAvatarAndUpdateFile(avatar: number): void {
-    this.createUserService.setSelectedAvatar(avatar);
+    this.setAvatar(avatar);
     this.updateSelectedFileFromUserData();
+  }
+
+  private setAvatar(avatar: number): void {
+    this.createUserService.setSelectedAvatar(avatar);
   }
 
   private updateSelectedFileFromUserData(): void {
@@ -61,24 +69,14 @@ export class ChooseAvatarComponent {
         this.resetUserData();
         this.displayToastMessage();
       },
-      error: (error) => {
-        console.error('Registrierungsfehler:', error);
-      }
+      error: (error) => console.error('Registrierungsfehler:', error)
     });
   }
-
-  private resetUserData(): void {
-    this.createUserService.resetUserData();
-  }
-
-  private displayToastMessage(): void {
-    this.toastMessageService.handleToastMessage();
-  }  
 
   private createFormData(): FormData {
     const formData = new FormData();
     this.appendUserData(formData);
-    this.appendAvatarData(formData);
+    this.appendAvatarToFormDataIfPresent(formData);
     return formData;
   }
 
@@ -89,16 +87,24 @@ export class ChooseAvatarComponent {
     formData.append('password', user.password);
   }
 
-  private appendAvatarData(formData: FormData): void {
+  private appendAvatarToFormDataIfPresent(formData: FormData): void {
     const user = this.createUserService.getUserData();
-    if (this.isAvatarFromAssets() && user.selected_avatar) {
+    if (this.isSelectedAvatarFromAssets() && user.selected_avatar) {
       formData.append('selected_avatar', user.selected_avatar);
     } else if (user.uploaded_avatar) {
       formData.append('uploaded_avatar', user.uploaded_avatar);
     }
   }
 
-  private isAvatarFromAssets(): boolean {
+  private isSelectedAvatarFromAssets(): boolean {
     return this.uploadFileService.selectedFile.includes('assets');
+  }
+
+  private resetUserData(): void {
+    this.createUserService.resetUserData();
+  }
+
+  private displayToastMessage(): void {
+    this.toastMessageService.handleToastMessage();
   }
 }
