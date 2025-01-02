@@ -1,0 +1,9 @@
+@import './../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(unset, space-between, center, unset);
+}
+
+.icon-input-container {
+    
+}
