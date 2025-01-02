@@ -83,7 +83,7 @@ export class ForgotPasswordComponent {
   }
 
   private handleEmailExistenceSuccess(response: any): void {
-    this.handleEmailExistenceResponse(response.exists);
+    this.handleEmailExistenceResponse(response.isEmailExist);
   }
 
   private handleEmailExistenceResponse(exists: boolean): void {
