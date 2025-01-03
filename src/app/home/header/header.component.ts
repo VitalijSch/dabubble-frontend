@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +9,23 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-@ViewChild('search') searchField!: ElementRef;
+  @ViewChild('search') searchField!: ElementRef;
 
-focusInputField(): void {
-  this.searchField.nativeElement.focus();
-}
+  userService: UserService = inject(UserService);
+
+  ngOnInit(): void {
+    console.log(this.userService.userData)
+  }
+
+  focusInputField(): void {
+    this.searchField.nativeElement.focus();
+  }
+
+  getAvatar(): string {
+    const user = this.userService.userData.user;
+    if(user.selected_avatar) {
+      return user.selected_avatar;
+    }
+    return `http://localhost:8000${user.uploaded_avatar!}`;
+  }
 }

@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountsService } from '../../services/accounts/accounts.service';
+import { UserService } from '../../services/user/user.service';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +19,8 @@ export class LoginComponent {
 
   private formBuilder: FormBuilder = inject(FormBuilder);
   private accountsService: AccountsService = inject(AccountsService);
+  private userService: UserService = inject(UserService);
+  private router: Router = inject(Router);
 
   ngOnInit(): void {
     this.initializeLoginForm();
@@ -39,7 +43,16 @@ export class LoginComponent {
   }
 
   private handleLoginSuccess(response: any): void {
-    console.log(response);
+    this.setUserData(response);
+    this.navigateToHome();
+  }
+
+  private setUserData(response: User): void {
+    this.userService.userData = response;
+  }
+
+  private navigateToHome(): void {
+    this.router.navigate(['home/new-message']);
   }
 
   private handleLoginError(error: any): void {
