@@ -68,7 +68,10 @@
 </svg>
 
 <div class="icon-input-container">
-    <svg width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <input #search placeholder="Devspace durchsuchen" type="text" name="search" id="search">
+
+    <svg (click)="focusInputField()" width="35" height="36" viewBox="0 0 35 36" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0_210_964" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="35" height="36">
             <rect y="0.5" width="35" height="35" fill="#D9D9D9" />
         </mask>
@@ -78,17 +81,16 @@
                 fill="#686868" />
         </g>
     </svg>
-
-    <input placeholder="Devspace durchsuchen" type="search" name="search" id="search">
 </div>
 
 <div class="user-data-container">
     <span>Frederick Beck</span>
 
     <div class="avatar-container">
+        <img src="./../../../assets/avatars/avatar-3.png" alt="avatar">
         <div class="user-status"></div>
     </div>
-    
+
     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0_103274_15791" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="30"
             height="30">
