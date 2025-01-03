@@ -1,10 +1,11 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
+import { MyProfileMenuComponent } from "./my-profile-menu/my-profile-menu.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [MyProfileMenuComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
