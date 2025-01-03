@@ -1,0 +1,7 @@
+<div (click)="$event.stopPropagation()" class="profile-menu-container">
+    @if(profileService.isCurrentViewProfile) {
+    <app-profile></app-profile>
+    } @else {
+    <app-menu></app-menu>
+    }
+</div>

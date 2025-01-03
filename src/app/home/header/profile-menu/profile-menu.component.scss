@@ -1,0 +1,19 @@
+@import './../../../../styles/mixins/mixins.scss';
+
+:host {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: rgb(0, 0, 0, 0.3);
+
+    .profile-menu-container {
+        @include flex-layout(unset, flex-end, unset, unset);
+        max-width: 1920px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 115px 20px 0 0;
+    }
+}

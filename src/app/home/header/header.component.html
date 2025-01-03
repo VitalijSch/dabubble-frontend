@@ -83,7 +83,7 @@
     </svg>
 </div>
 
-<div class="user-data-container">
+<div (click)="profileService.toggleShowProfileMenu()" class="user-data-container">
     <span>{{userService.userData.user.username}}</span>
 
     <div class="avatar-container">
@@ -104,4 +104,6 @@
     </svg>
 </div>
 
-<app-my-profile-menu></app-my-profile-menu>
+@if(profileService.showProfileMenu) {
+<app-profile-menu (click)="profileService.handleViewSwitch()"></app-profile-menu>
+}

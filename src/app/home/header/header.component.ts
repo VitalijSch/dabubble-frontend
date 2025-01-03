@@ -1,11 +1,12 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
-import { MyProfileMenuComponent } from "./my-profile-menu/my-profile-menu.component";
+import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
+import { ProfileService } from '../../services/profile/profile.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MyProfileMenuComponent],
+  imports: [ProfileMenuComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -13,6 +14,7 @@ export class HeaderComponent {
   @ViewChild('search') searchField!: ElementRef;
 
   userService: UserService = inject(UserService);
+  profileService: ProfileService = inject(ProfileService);
 
   ngOnInit(): void {
     console.log(this.userService.userData)

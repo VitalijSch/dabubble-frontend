@@ -1,18 +1,6 @@
-@import './../../../../styles/mixins/mixins.scss';
+@import './../../../../../styles/mixins/mixins.scss';
 
 :host {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    padding: 115px 20px 0px 0;
-    background-color: rgb(0, 0, 0, 0.3);
-    @include flex-layout(unset, flex-end, unset, unset);
-}
-
-.my-profile-menu-container {
     @include flex-layout(column, center, center, 20px);
     width: 282px;
     height: 181px;
@@ -28,7 +16,7 @@
         font-weight: 600;
         line-height: 32.74px;
         cursor: pointer;
-        
+
         &:hover {
             background-color: #ECEEFE;
             color: #535AF1;
