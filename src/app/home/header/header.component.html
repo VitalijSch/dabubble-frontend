@@ -84,12 +84,14 @@
 </div>
 
 <div (click)="profileService.toggleShowProfileMenu()" class="user-data-container">
+    @if(userService.userData) {
     <span>{{userService.userData.user.username}}</span>
 
     <div class="avatar-container">
         <img src="{{getAvatar()}}" alt="avatar">
         <div class="user-status"></div>
     </div>
+    }
 
     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0_103274_15791" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="30"

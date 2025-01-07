@@ -11,7 +11,7 @@ export class AccountsService {
   private http: HttpClient = inject(HttpClient);
 
   checkEmailExist(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/check-email/`, {email});
+    return this.http.post(`${this.apiUrl}/check-email/`, { email });
   }
 
   registerUser(data: FormData): Observable<any> {
@@ -23,7 +23,7 @@ export class AccountsService {
   }
 
   deletePasswordResetEmail(token: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/delete-reset-email/`, {token});
+    return this.http.post(`${this.apiUrl}/delete-reset-email/`, { token });
   }
 
   getPasswordResetEmail(token: string): Observable<any> {
@@ -31,11 +31,19 @@ export class AccountsService {
   }
 
   changePassword(email: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/change-reset-password/`, {email, newPassword});
+    return this.http.post(`${this.apiUrl}/change-reset-password/`, { email, newPassword });
   }
 
   loginUser(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login-user/`, {email, password});
+    return this.http.post(`${this.apiUrl}/login-user/`, { email, password }, { withCredentials: true });
+  }
+
+  checkUserLogged(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/check-user-logged/`, { withCredentials: true });
+  }
+
+  logoutUser(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/logout-user/`, {}, { withCredentials: true });
   }
 
   loginGuest(): Observable<any> {
