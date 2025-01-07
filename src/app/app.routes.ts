@@ -9,6 +9,8 @@ import { HomeComponent } from './home/home.component';
 import { NewMessageComponent } from './home/new-message/new-message.component';
 import { ChannelComponent } from './home/channel/channel.component';
 import { MessageComponent } from './home/message/message.component';
+import { ImprintComponent } from './auth/imprint/imprint.component';
+import { PrivacyPolicyComponent } from './auth/privacy-policy/privacy-policy.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -22,6 +24,8 @@ export const routes: Routes = [
             { path: 'choose-avatar', component: ChooseAvatarComponent },
             { path: 'forgot-password', component: ForgotPasswordComponent },
             { path: 'reset-password/:id', component: ResetPasswordComponent },
+            { path: 'imprint', component: ImprintComponent },
+            { path: 'privacy-policy', component: PrivacyPolicyComponent },
         ],
     },
     { path: 'home', redirectTo: 'home/new-message', pathMatch: 'full' },
