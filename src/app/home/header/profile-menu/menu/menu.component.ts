@@ -11,18 +11,36 @@ import { Router } from '@angular/router';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-  profileService: ProfileService = inject(ProfileService);
-
+  private profileService: ProfileService = inject(ProfileService);
   private accountsService: AccountsService = inject(AccountsService);
   private router: Router = inject(Router);
 
-  logoutUser(): void {
+  logoutUser(event: Event): void {
     this.accountsService.logoutUser().subscribe({
-      next: (response) => this.navigateToLogin(),
+      next: () => this.handleLogoutSuccess(event),
     })
+  }
+
+  private handleLogoutSuccess(event: Event): void {
+    this.handleEvent(event);
+    this.handleViewSwtich();
+    this.navigateToLogin()
+  }
+
+  private handleEvent(event: Event): void {
+    event.stopPropagation();
+  }
+
+  private handleViewSwtich(): void {
+    this.profileService.handleViewSwitch()
   }
 
   private navigateToLogin(): void {
     this.router.navigate(['auth/login']);
+  }
+
+  toggleProfileViewState(event: Event): void {
+    this.handleEvent(event);
+    this.profileService.toggleIsCurrentViewProfile()
   }
 }

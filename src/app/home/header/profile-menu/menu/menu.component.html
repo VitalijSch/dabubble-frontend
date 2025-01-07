@@ -1,2 +1,4 @@
-<span (click)="profileService.toggleIsCurrentViewProfile()">Profile</span>
-<span (click)="logoutUser()">Log out</span>
+<div (click)="$event.stopPropagation()" class="menu-container">
+    <span (click)="toggleProfileViewState($event)">Profile</span>
+    <span (click)="logoutUser($event)">Log out</span>
+</div>
