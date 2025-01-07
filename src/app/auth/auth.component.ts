@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { IntroComponent } from "./intro/intro.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [RouterOutlet, IntroComponent, RouterModule],
+  imports: [RouterOutlet, IntroComponent, RouterModule, CommonModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
 })

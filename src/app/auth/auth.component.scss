@@ -1,7 +1,7 @@
 @import './../../styles/mixins/mixins.scss';
 @import './../../styles/keyframes.scss';
 
-:host {
+.auth-container {
     @include flex-layout(column, space-between, center, unset);
     max-width: 1920px;
     height: 100vh;
