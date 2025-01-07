@@ -1,0 +1,41 @@
+@import './../../../styles/mixins/mixins.scss';
+@import './../../../styles/mixins/arrow-back-utils.scss';
+
+:host {
+    max-width: 1000px;
+    max-height: 769px;
+    border-radius: 30px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 10px 0px #00000014;
+    padding: 50px 60px;
+    overflow: hidden;
+
+    header {
+        @include header-arrow;
+        margin-bottom: 16px;
+    }
+
+    .scroll-container {
+        @include flex-layout(column, unset, unset, 16px);
+        height: 100%;
+        overflow: auto;
+        padding-bottom: 50px;
+
+        &::-webkit-scrollbar {
+            width: 0;
+        }
+    }
+
+    h2, h3, h4 {
+        @include h2;
+    }
+
+    h3, h4 {
+        font-size: 40px;
+    }
+
+    p {
+        @include p;
+        font-size: 24px;
+    }
+}
