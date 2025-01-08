@@ -56,7 +56,7 @@ export class SignInComponent {
   private checkEmailExistence(): void {
     const email = this.getEmailFromForm();
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => this.handleEmailExistenceSuccess(response),
+      next: (response) => this.handleEmailExistenceResponse(response),
       error: (error) => this.handleEmailExistenceError(error),
     });
   }
@@ -65,12 +65,8 @@ export class SignInComponent {
     return this.signInForm.get('email')?.value ?? '';
   }
 
-  private handleEmailExistenceSuccess(response: any): void {
-    this.handleEmailExistenceResponse(response.isEmailExist)
-  }
-
-  private handleEmailExistenceResponse(exists: boolean): void {
-    this.isEmailExist = exists;
+  private handleEmailExistenceResponse(response: any): void {
+    this.isEmailExist = response.isEmailExist;
   }
 
   private handleEmailExistenceError(error: any): void {

@@ -1,0 +1,80 @@
+@import './../../../../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(column, unset, unset, 40px);
+    width: 100%;
+}
+
+.info-container {
+    @include flex-layout(column, unset, unset, 15px);
+    width: 100%;
+
+    .name-edit-container {
+        @include flex-layout(unset, space-between, center, unset);
+
+        span {
+
+            &:first-of-type {
+                font-size: 32px;
+                font-weight: 700;
+                line-height: 43.65px;
+            }
+
+            &:last-of-type {
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 24.55px;
+                color: #535AF1;
+                cursor: pointer;
+
+                &:hover {
+                    font-weight: 700;
+                    color: #444DF2;
+                }
+            }
+        }
+    }
+
+    .status-container {
+        @include flex-layout(unset, unset, center, 15px);
+
+        .status {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #92C83E;
+        }
+
+        span {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 27.28px;
+            color: #92C83E;
+        }
+    }
+}
+
+.mail-container {
+    @include flex-layout(unset, unset, unset, 20px);
+    width: 100%;
+
+    .data-container {
+        @include flex-layout(column, unset, unset, 20px);
+
+        span {
+
+            &:first-of-type {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 27.28px;
+            }
+
+            &:last-of-type {
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 21.6px;
+                color: #1381FF;
+            }
+        }
+    }
+}

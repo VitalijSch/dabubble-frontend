@@ -1,0 +1,68 @@
+@import './../../../../../../styles/mixins/mixins.scss';
+
+:host {
+    width: 100%;
+}
+
+form {
+
+    small {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 19.1px;
+        color: #ED1E79;
+    }
+}
+
+.input-container {
+    @include flex-layout(column, unset, unset, 7px);
+    height: 117px;
+
+    .headline-container {
+        @include flex-layout(unset, unset, center, 20px);
+
+        span {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 27.28px;
+        }
+    }
+
+    input {
+        height: 53px;
+        padding: 15px 20px;
+        border: 1px solid #ADB0D9;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 21.6px;
+        color: #686868;
+    }
+}
+
+.button-container {
+    @include flex-layout(unset, center, center, 32px);
+    margin-top: 18px;
+
+    button {
+        width: fit-content;
+        height: 49px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        border: 1px solid transparent;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 24.55px;
+
+        &:first-of-type {
+            border-color: #797EF3;
+            background-color: #FFFFFF;
+            color: #444DF2;
+        }
+
+        &:last-of-type {
+            background-color: #444DF2;
+            color: #FFFFFF;
+        }
+    }
+}
