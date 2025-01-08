@@ -52,9 +52,6 @@ export class HeaderComponent {
 
   getAvatar(): string {
     const user = this.userService.userData.user;
-    if (user.selected_avatar) {
-      return user.selected_avatar;
-    }
-    return `http://localhost:8000${user.uploaded_avatar!}`;
+    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 }

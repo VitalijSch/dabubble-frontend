@@ -7,5 +7,6 @@ export interface User {
         email: string;
         selected_avatar: string | null;
         uploaded_avatar: string | null;
+        is_online: boolean;
     }
 }

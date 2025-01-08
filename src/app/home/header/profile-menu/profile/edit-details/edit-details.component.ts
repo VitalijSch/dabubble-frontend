@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { User } from '../../../../../interfaces/user';
 import { UserService } from '../../../../../services/user/user.service';
 import { AccountsService } from '../../../../../services/accounts/accounts.service';
+import { ProfileService } from '../../../../../services/profile/profile.service';
+import { UploadFileService } from '../../../../../services/upload-file/upload-file.service';
 
 @Component({
   selector: 'app-edit-details',
@@ -16,9 +18,12 @@ export class EditDetailsComponent {
   userData!: User;
   isEmailExist: boolean = false;
 
+  profileService: ProfileService = inject(ProfileService);
+
   private formBuilder: FormBuilder = inject(FormBuilder);
   private userService: UserService = inject(UserService);
   private accountsService: AccountsService = inject(AccountsService);
+  private uploadFileService: UploadFileService = inject(UploadFileService);
 
   constructor() {
     this.userData = this.userService.userData;
@@ -47,14 +52,23 @@ export class EditDetailsComponent {
 
   private checkEmailExistence(): void {
     const email = this.getEmailFromForm();
-    this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => this.handleEmailExistenceResponse(response),
-      error: (error) => this.handleEmailExistenceError(error),
-    });
+    if (!this.isEmailChanged(email)) return;
+    this.validateEmailExistence(email);
   }
 
   private getEmailFromForm(): string {
     return this.editUserForm.get('email')?.value ?? '';
+  }
+
+  private isEmailChanged(email: string): boolean {
+    return email !== this.userData.user.email;
+  }
+
+  private validateEmailExistence(email: string): void {
+    this.accountsService.checkEmailExist(email).subscribe({
+      next: (response) => this.handleEmailExistenceResponse(response),
+      error: (error) => this.handleEmailExistenceError(error),
+    });
   }
 
   private handleEmailExistenceResponse(response: any): void {
@@ -65,7 +79,30 @@ export class EditDetailsComponent {
     console.error(error);
   }
 
-  editUser(): void {
+  toggleShowEditDetails(event: Event): void {
+    this.stopEventPropagation(event);
+    this.updateEditDetailsState();
+    this.updateAvatarFile();
+  }
+  
+  private stopEventPropagation(event: Event): void {
+    event.stopPropagation();
+  }
+  
+  private updateEditDetailsState(): void {
+    this.profileService.toggleShowEditDetails();
+  }
+  
+  private updateAvatarFile(): void {
+    this.uploadFileService.selectedFile = this.resolveAvatar();
+  }
+  
+  private resolveAvatar(): string {
+    const user = this.userService.userData.user;
+    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
+  }
 
+  editUser(): void {
+    console.log('drinnen')
   }
 }

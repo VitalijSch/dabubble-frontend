@@ -37,6 +37,13 @@ form {
         font-weight: 500;
         line-height: 21.6px;
         color: #686868;
+        outline: none;
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            border-color: #535AF1;
+        }
     }
 }
 
@@ -47,22 +54,28 @@ form {
     button {
         width: fit-content;
         height: 49px;
-        padding: 12px 25px;
+        @include button;
         border-radius: 50px;
         border: 1px solid transparent;
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 24.55px;
 
         &:first-of-type {
-            border-color: #797EF3;
-            background-color: #FFFFFF;
-            color: #444DF2;
+            background-color: #444DF2;
+            color: #FFFFFF;
+
+            &:hover {
+                background-color: #797EF3;
+            }
         }
 
         &:last-of-type {
-            background-color: #444DF2;
-            color: #FFFFFF;
+            background-color: transparent;
+            color: #444DF2;
+            border: 1px solid #797EF3;
+
+            &:hover {
+                background-color: #444DF2;
+                color: #FFFFFF;
+            }
         }
     }
 }

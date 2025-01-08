@@ -42,13 +42,21 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: #92C83E;
+            background-color: #686868;
         }
 
         span {
             font-size: 20px;
             font-weight: 400;
             line-height: 27.28px;
+            color: #686868;
+        }
+
+        .online-status {
+            background-color: #92C83E;
+        }
+
+        .online-span {
             color: #92C83E;
         }
     }

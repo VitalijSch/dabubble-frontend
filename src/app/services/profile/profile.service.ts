@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class ProfileService {
   showProfileMenu: boolean = false;
   isCurrentViewProfile: boolean = false;
+  showEditDetails: boolean = false;
 
   handleViewSwitch(): void {
     if (!this.isCurrentViewProfile) {
@@ -21,5 +22,9 @@ export class ProfileService {
 
   toggleIsCurrentViewProfile(): void {
     this.isCurrentViewProfile = !this.isCurrentViewProfile;
+  }
+
+  toggleShowEditDetails(): void {
+    this.showEditDetails = !this.showEditDetails;
   }
 }
