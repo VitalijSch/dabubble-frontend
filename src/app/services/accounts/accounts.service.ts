@@ -38,6 +38,10 @@ export class AccountsService {
     return this.http.post(`${this.apiUrl}/login-user/`, { email, password }, { withCredentials: true });
   }
 
+  refreshAccessToken(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/token/refresh/`, {}, { withCredentials: true });
+  }
+
   checkUserLogged(): Observable<any> {
     return this.http.get(`${this.apiUrl}/check-user-logged/`, { withCredentials: true });
   }
