@@ -10,6 +10,10 @@ export class AccountsService {
 
   private http: HttpClient = inject(HttpClient);
 
+  ngOnInit(): void {
+    this.refreshAccessToken();
+  }
+
   checkEmailExist(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/check-email/`, { email });
   }
@@ -34,23 +38,19 @@ export class AccountsService {
     return this.http.post(`${this.apiUrl}/change-reset-password/`, { email, newPassword });
   }
 
+  loginGuest(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/login-guest/`, { withCredentials: true });
+  }
+
   loginUser(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login-user/`, { email, password }, { withCredentials: true });
+    return this.http.post(`${this.apiUrl}/token/`, { email, password }, { withCredentials: true });
   }
 
   refreshAccessToken(): Observable<any> {
     return this.http.post(`${this.apiUrl}/token/refresh/`, {}, { withCredentials: true });
   }
 
-  checkUserLogged(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/check-user-logged/`, { withCredentials: true });
-  }
-
   logoutUser(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout-user/`, {}, { withCredentials: true });
-  }
-
-  loginGuest(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/login-guest/`);
   }
 }

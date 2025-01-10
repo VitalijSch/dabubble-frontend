@@ -27,7 +27,7 @@ export class ProfileComponent {
   }
 
   private getAvatar(): string {
-    const user = this.userService.userData.user;
+    const user = this.userService.userData;
     return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 

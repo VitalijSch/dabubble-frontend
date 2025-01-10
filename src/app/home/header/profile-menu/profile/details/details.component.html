@@ -1,14 +1,14 @@
 <div class="info-container">
     <div class="name-edit-container">
-        <span>{{userService.userData.user.username}}</span>
+        <span>{{userService.userData.username}}</span>
 
         <span (click)="profileService.toggleShowEditDetails()">Bearbeiten</span>
     </div>
 
     <div class="status-container">
-        <div [class.online-status]="userService.userData.user.is_online" class="status"></div>
+        <div [class.online-status]="userService.userData.is_online" class="status"></div>
 
-        <span [class.online-span]="userService.userData.user.is_online">{{getUserOnlineStatus()}}</span>
+        <span [class.online-span]="userService.userData.is_online">{{getUserOnlineStatus()}}</span>
     </div>
 </div>
 
@@ -27,6 +27,6 @@
     <div class="data-container">
         <span>E-Mail-Adresse</span>
 
-        <span>{{userService.userData.user.email}}</span>
+        <span>{{userService.userData.email}}</span>
     </div>
 </div>

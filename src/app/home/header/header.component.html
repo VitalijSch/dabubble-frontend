@@ -85,11 +85,11 @@
 
 <div (click)="profileService.toggleShowProfileMenu()" class="user-data-container">
     @if(userService.userData) {
-    <span>{{userService.userData.user.username}}</span>
+    <span>{{userService.userData.username}}</span>
 
     <div class="avatar-container">
         <img src="{{getAvatar()}}" alt="avatar">
-        <div class="user-status"></div>
+        <div [class.online-status]="userService.userData.is_online" class="user-status"></div>
     </div>
     }
 

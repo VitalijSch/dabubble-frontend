@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { UserService } from '../../services/user/user.service';
-import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-login',
@@ -47,8 +46,8 @@ export class LoginComponent {
     this.navigateToHome();
   }
 
-  private setUserData(response: User): void {
-    this.userService.userData = response;
+  private setUserData(response: any): void {
+    this.userService.userData = response.user;
   }
 
   private navigateToHome(): void {
@@ -83,7 +82,7 @@ export class LoginComponent {
   }
 
   private handleLoginGuestSuccess(response: any): void {
-    console.log(response);
+    (response);
   }
 
   private handleLoginGuestError(error: any): void {

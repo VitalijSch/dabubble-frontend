@@ -4,7 +4,6 @@ import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ProfileService } from '../../services/profile/profile.service';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { Router } from '@angular/router';
-import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-header',
@@ -27,14 +26,14 @@ export class HeaderComponent {
   }
 
   checkAuth(): void {
-    this.accountsService.checkUserLogged().subscribe({
+    this.accountsService.refreshAccessToken().subscribe({
       next: (response) => this.setUserData(response),
       error: (error) => this.handleCheckLoggedError(error),
     });
   }
 
-  private setUserData(response: User): void {
-    this.userService.userData = response;
+  private setUserData(response: any): void {
+    this.userService.userData = response.user;
   }
 
   private handleCheckLoggedError(error: any): void {
@@ -51,7 +50,7 @@ export class HeaderComponent {
   }
 
   getAvatar(): string {
-    const user = this.userService.userData.user;
+    const user = this.userService.userData;
     return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 }

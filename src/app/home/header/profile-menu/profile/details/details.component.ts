@@ -14,6 +14,6 @@ export class DetailsComponent {
   profileService: ProfileService = inject(ProfileService);
 
   getUserOnlineStatus(): string {
-    return this.userService.userData.user.is_online ? 'Online' : 'Offline';
+    return this.userService.userData.is_online ? 'Online' : 'Offline';
   }
 }

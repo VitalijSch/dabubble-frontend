@@ -35,8 +35,8 @@ export class EditDetailsComponent {
 
   private initializeSignInForm(): void {
     this.editUserForm = this.formBuilder.group({
-      username: [this.userData.user.username, Validators.required],
-      email: [this.userData.user.email, [Validators.required, Validators.email]],
+      username: [this.userData.username, Validators.required],
+      email: [this.userData.email, [Validators.required, Validators.email]],
     });
   }
 
@@ -61,7 +61,7 @@ export class EditDetailsComponent {
   }
 
   private isEmailChanged(email: string): boolean {
-    return email !== this.userData.user.email;
+    return email !== this.userData.email;
   }
 
   private validateEmailExistence(email: string): void {
@@ -98,7 +98,7 @@ export class EditDetailsComponent {
   }
   
   private resolveAvatar(): string {
-    const user = this.userService.userData.user;
+    const user = this.userService.userData;
     return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 
