@@ -6,6 +6,7 @@ import { CreateUserService } from '../create-user/create-user.service';
 })
 export class UploadFileService {
   selectedFile: any = './../../../assets/avatars/avatar-0.png';
+  uploadedFile!: File;
 
   private createUserService: CreateUserService = inject(CreateUserService);
 
@@ -46,8 +47,13 @@ export class UploadFileService {
   }
 
   private convertFileToDataUrl(file: File): void {
+    this.setUploadedFile(file);
     const reader = this.createFileReader(() => this.handleFileReaderLoad(reader.result));
     reader.readAsDataURL(file);
+  }
+
+  private setUploadedFile(file: File): void {
+    this.uploadedFile = file;
   }
 
   private createFileReader(onLoadCallback: () => void): FileReader {

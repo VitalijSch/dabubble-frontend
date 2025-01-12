@@ -48,7 +48,7 @@
         @if(editUserForm.get('email')?.invalid && editUserForm.get('email')?.touched) {
         @if(editUserForm.get('email')?.hasError('required')) {
         <small>Bitte geben Sie eine E-Mail-Adresse ein.</small>
-        } @else if(editUserForm.get('email')?.hasError('email')) {
+        } @else if(editUserForm.get('email')?.hasError('email') || editUserForm.get('email')?.hasError('invalidEmail')) {
         <small>*Diese E-Mail-Adresse ist leider ungültig.</small>
         }
         } @else if(isEmailExist) {

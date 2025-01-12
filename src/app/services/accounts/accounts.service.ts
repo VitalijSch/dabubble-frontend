@@ -50,6 +50,10 @@ export class AccountsService {
     return this.http.post(`${this.apiUrl}/token/refresh/`, {}, { withCredentials: true });
   }
 
+  updateUser(data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/`, data, { withCredentials: true });
+  }
+
   logoutUser(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout-user/`, {}, { withCredentials: true });
   }
