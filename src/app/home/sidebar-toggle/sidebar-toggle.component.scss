@@ -1,0 +1,39 @@
+@import './../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(unset, unset, center, 10px);
+    position: absolute;
+    top: 90%;
+    left: -20px;
+    padding: 14px 23px;
+    background-color: #FFFFFF;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 4px 4px 7px 0px #00000033;
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    
+    cursor: pointer;
+
+    &:hover>svg {
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    &:hover svg rect,
+    &:hover svg path {
+        stroke: #444DF2;
+    }
+
+    &:hover span {
+        color: #535AF1;
+    }
+
+    span {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 24px;
+    }
+
+    svg {
+        transform: rotate(90deg);
+    }
+}

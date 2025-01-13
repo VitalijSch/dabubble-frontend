@@ -1,6 +1,6 @@
 <div class="icon-headline-container">
-    <div (click)="toggleCloseChannels()" class="flex-container">
-        @if(closeChannels) {
+    <div (click)="toggleIsChannelHidden()" class="flex-container">
+        @if(isChannelHidden) {
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_105280_19295" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="30"
                 height="30">
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<div [class.d-none]="closeChannels" class="flex-channels">
+<div [class.d-none]="isChannelHidden" class="flex-channels">
     <div class="channels-container">
         <div class="flex-container">
             <div class="icon-container">

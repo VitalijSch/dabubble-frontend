@@ -11,4 +11,5 @@
 .main-container {
     @include flex-layout(unset, space-between, unset, unset);
     height: 100%;
+    position: relative;
 }

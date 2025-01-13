@@ -1,5 +1,8 @@
 <app-header></app-header>
 <div class="main-container">
+    @if(!sidebarToggleService.isSidebarHidden) {
     <app-sidebar></app-sidebar>
+    }
+    <app-sidebar-toggle></app-sidebar-toggle>
     <router-outlet></router-outlet>
 </div>

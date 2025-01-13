@@ -9,11 +9,11 @@ import { UserService } from '../../../services/user/user.service';
   styleUrl: './direct-messages.component.scss'
 })
 export class DirectMessagesComponent {
-  closeDirectMessages: boolean = false;
+  isDirectMessagesHidden: boolean = false;
 
   userService: UserService = inject(UserService);
 
-  toggleCloseDirectMessages(): void {
-    this.closeDirectMessages = !this.closeDirectMessages;
+  toggleIsDirectMessagesHidden(): void {
+    this.isDirectMessagesHidden = !this.isDirectMessagesHidden;
   }
 }
