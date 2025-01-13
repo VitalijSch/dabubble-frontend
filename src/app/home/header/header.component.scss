@@ -2,6 +2,10 @@
 
 :host {
     @include flex-layout(unset, space-between, center, unset);
+
+    .logo {
+        margin-left: 25px;
+    }
 }
 
 .icon-input-container {

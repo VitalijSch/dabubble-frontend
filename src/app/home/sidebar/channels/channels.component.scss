@@ -1,0 +1,112 @@
+@import './../../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(column, unset, unset, 25px);
+    width: 100%;
+    padding: 25px 0;
+
+    .flex-container {
+        @include flex-layout(unset, unset, center, 15px);
+        cursor: pointer;
+
+        &:hover>svg {
+            transform: scale(1.1);
+        }
+
+        &:hover svg path {
+            fill: #444DF2;
+        }
+    }
+}
+
+.icon-headline-container {
+    @include flex-layout(unset, space-between, center, unset);
+
+    .flex-container {
+
+        &:hover span {
+            color: #444DF2
+        }
+
+        &:active span {
+            color: #000000;
+        }
+
+        .headline-container {
+            @include flex-layout(unset, unset, center, 10px);
+
+            span {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 27.28px;
+            }
+        }
+    }
+
+    .create-new-channel-container {
+        @include flex-layout(unset, center, center, unset);
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ECEEFE;
+        }
+
+        &:hover svg {
+            transform: scale(1.3);
+        }
+
+        &:hover svg path {
+            fill: #444DF2;
+        }
+
+        &:active svg path {
+            fill: #000000;
+        }
+    }
+}
+
+.channels-container {
+    @include flex-layout(column, unset, unset, 13px);
+    margin-left: 25px;
+
+    .flex-container {
+        width: fit-content;
+        padding: 4px 20px;
+        border-radius: 20px;
+
+        &:hover {
+            background-color: #ECEEFE
+        }
+
+        &:active span {
+            color: #535AF1;
+        }
+
+        .icon-container {
+            @include flex-layout(unset, center, center, unset);
+            width: 24px;
+            height: 24px;
+        }
+
+        span {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 24.55px;
+        }
+    }
+}
+
+.add-channel-container {
+    margin-left: 45px;
+
+    &:hover span {
+        color: #444DF2
+    }
+
+    &:active span {
+        color: #000000;
+    }
+}

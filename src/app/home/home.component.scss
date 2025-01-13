@@ -1,7 +1,14 @@
+@import './../../styles/mixins/mixins.scss';
+
 :host {
-    display: block;
+    @include flex-layout(column, unset, unset, 20px);
     max-width: 1920px;
     height: 100vh;
     margin: 0 auto;
     padding: 25px 20px;
+}
+
+.main-container {
+    @include flex-layout(unset, space-between, unset, unset);
+    height: 100%;
 }
