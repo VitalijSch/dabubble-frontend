@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ChannelsComponent } from "./channels/channels.component";
-import { NewMessagesComponent } from "./new-messages/new-messages.component";
+import { DirectMessagesComponent } from "./direct-messages/direct-messages.component";
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [ChannelsComponent, NewMessagesComponent],
+  imports: [ChannelsComponent, DirectMessagesComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

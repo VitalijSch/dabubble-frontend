@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './channels.component.scss'
 })
 export class ChannelsComponent {
+  closeChannels: boolean = false;
 
+  toggleCloseChannels(): void {
+    this.closeChannels = !this.closeChannels;
+  }
 }

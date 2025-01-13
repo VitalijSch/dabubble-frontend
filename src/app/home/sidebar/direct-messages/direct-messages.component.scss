@@ -7,6 +7,7 @@
 
 .icon-headline-container {
     @include flex-layout(unset, unset, center, 15px);
+    width: fit-content;
     cursor: pointer;
 
     &:hover>svg {
@@ -38,7 +39,7 @@
 
 .users-container {
     @include flex-layout(column, unset, unset, 20px);
-    margin-left: 45px;
+    margin-left: 25px;
 
     .flex-container {
         @include flex-layout(unset, unset, center, 15px);

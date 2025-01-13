@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewMessagesComponent } from './new-messages.component';
+import { DirectMessagesComponent } from './direct-messages.component';
 
-describe('NewMessagesComponent', () => {
-  let component: NewMessagesComponent;
-  let fixture: ComponentFixture<NewMessagesComponent>;
+describe('DirectMessagesComponent', () => {
+  let component: DirectMessagesComponent;
+  let fixture: ComponentFixture<DirectMessagesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewMessagesComponent]
+      imports: [DirectMessagesComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(NewMessagesComponent);
+    fixture = TestBed.createComponent(DirectMessagesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

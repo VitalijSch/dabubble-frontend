@@ -68,45 +68,49 @@
     }
 }
 
-.channels-container {
-    @include flex-layout(column, unset, unset, 13px);
-    margin-left: 25px;
+.flex-channels {
+    @include flex-layout(column, unset, unset, 25px);
 
-    .flex-container {
-        width: fit-content;
-        padding: 4px 20px;
-        border-radius: 20px;
+    .channels-container {
+        @include flex-layout(column, unset, unset, 13px);
+        margin-left: 25px;
 
-        &:hover {
-            background-color: #ECEEFE
+        .flex-container {
+            width: fit-content;
+            padding: 4px 20px;
+            border-radius: 20px;
+
+            &:hover {
+                background-color: #ECEEFE
+            }
+
+            &:active span {
+                color: #535AF1;
+            }
+
+            .icon-container {
+                @include flex-layout(unset, center, center, unset);
+                width: 24px;
+                height: 24px;
+            }
+
+            span {
+                font-size: 18px;
+                font-weight: 400;
+                line-height: 24.55px;
+            }
+        }
+    }
+
+    .add-channel-container {
+        margin-left: 45px;
+
+        &:hover span {
+            color: #444DF2
         }
 
         &:active span {
-            color: #535AF1;
+            color: #000000;
         }
-
-        .icon-container {
-            @include flex-layout(unset, center, center, unset);
-            width: 24px;
-            height: 24px;
-        }
-
-        span {
-            font-size: 18px;
-            font-weight: 400;
-            line-height: 24.55px;
-        }
-    }
-}
-
-.add-channel-container {
-    margin-left: 45px;
-
-    &:hover span {
-        color: #444DF2
-    }
-
-    &:active span {
-        color: #000000;
     }
 }
