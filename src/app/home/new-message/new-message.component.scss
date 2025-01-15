@@ -1,0 +1,46 @@
+@import './../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(column, space-between, unset, unset);
+    flex: 1;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+header {
+    @include flex-layout(column, unset, unset, 20px);
+    padding: 32px 45px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 10px 0px #00000014;
+
+    span {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32.74px;
+    }
+
+    input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 1px solid #ADB0D9;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24.55px;
+        outline: none;
+        cursor: pointer;
+
+        &::placeholder {
+            color: #686868;
+        }
+
+        &:hover {
+            border-color: #797EF3;
+        }
+
+        &:focus {
+            border-color: #535AF1;
+        }
+    }
+}

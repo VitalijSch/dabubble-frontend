@@ -9,7 +9,7 @@
 }
 
 .main-container {
-    @include flex-layout(unset, space-between, unset, unset);
+    @include flex-layout(unset, space-between, unset, 20px);
     height: 100%;
     position: relative;
 }
