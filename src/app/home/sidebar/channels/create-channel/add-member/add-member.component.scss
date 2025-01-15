@@ -1,0 +1,80 @@
+@import './../../../../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(column, space-between, unset, unset);
+    max-width: 710px;
+    width: 100%;
+    max-height: 279px;
+    height: 100%;
+    padding: 40px;
+    border-radius: 30px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 6px 10px 0px #00000033;
+}
+
+header {
+    @include flex-layout(unset, space-between, center, unset);
+
+    span {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32.74px;
+    }
+
+    .icon-container {
+        @include flex-layout(unset, center, center, unset);
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ECEEFE;
+        }
+
+        &:hover svg {
+            transform: scale(1.1);
+        }
+
+        &:hover svg path {
+            fill: #535AF1;
+        }
+    }
+}
+
+form {
+    @include flex-layout(column, flex-end, unset, 20px);
+
+    .input-container {
+        @include flex-layout(unset, unset, center, 20px);
+
+        input {
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 24.55px;
+
+            span {
+                color: #535AF1;
+            }
+        }
+    }
+
+    button {
+        @include button;
+        width: fit-content;
+        background-color: #444DF2;
+        color: #FFFFFF;
+        border: unset;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #797EF3;
+        }
+    }
+}
