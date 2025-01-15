@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ChannelService } from '../../../../../services/channel/channel.service';
 
 @Component({
   selector: 'app-add-member',
@@ -11,5 +12,5 @@ import { Component } from '@angular/core';
   },
 })
 export class AddMemberComponent {
-
+  channelService: ChannelService = inject(ChannelService);
 }

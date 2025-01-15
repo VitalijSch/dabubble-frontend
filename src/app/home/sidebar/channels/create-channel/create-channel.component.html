@@ -1,4 +1,5 @@
-<!-- <div (click)="$event.stopPropagation()" class="create-channel-container">
+@if(!channelService.showAddMember) {
+<div (click)="$event.stopPropagation()" class="create-channel-container">
     <header>
         <span>Channel erstellen</span>
 
@@ -21,7 +22,7 @@
         Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum Beispiel.
     </p>
 
-    <form>
+    <form [formGroup]="channelForm" (ngSubmit)="addChannelData()">
         <label for="name">Channel-Name</label>
         <div class="input-container">
             <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,14 +37,16 @@
                 </g>
             </svg>
 
-            <input placeholder="z.B. Kooperationsprojekte" type="text" name="name" id="name">
+            <input formControlName="name" placeholder="z.B. Kooperationsprojekte" type="text" name="name" id="name">
         </div>
 
         <label for="description">Beschreibung <span>(optional)</span></label>
-        <input placeholder="Dein Text hier" type="description" name="description" id="description">
+        <input formControlName="description" placeholder="Dein Text hier" type="description" name="description"
+            id="description">
 
-        <button>Erstellen</button>
+        <button [disabled]="channelForm.get('name')?.invalid">Erstellen</button>
     </form>
-</div> -->
-
+</div>
+} @else {
 <app-add-member></app-add-member>
+}
