@@ -51,7 +51,8 @@ export class LoginComponent {
   }
 
   private navigateToHome(): void {
-    this.router.navigate(['home/new-message']);
+    const userId = this.userService.userData.id;
+    this.router.navigate([`home/${userId}/new-message`]);
   }
 
   private handleLoginError(error: any): void {
@@ -82,7 +83,7 @@ export class LoginComponent {
   }
 
   private handleLoginGuestSuccess(response: any): void {
-    (response);
+
   }
 
   private handleLoginGuestError(error: any): void {

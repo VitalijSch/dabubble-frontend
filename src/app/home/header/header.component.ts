@@ -3,7 +3,7 @@ import { UserService } from '../../services/user/user.service';
 import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ProfileService } from '../../services/profile/profile.service';
 import { AccountsService } from '../../services/accounts/accounts.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -15,20 +15,32 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   @ViewChild('search') searchField!: ElementRef;
 
+  id: string | null = null;
+
   userService: UserService = inject(UserService);
   profileService: ProfileService = inject(ProfileService);
 
   private accountsService: AccountsService = inject(AccountsService);
   private router: Router = inject(Router);
+  private route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.checkAuth();
   }
 
   checkAuth(): void {
-    this.accountsService.refreshAccessToken().subscribe({
-      next: (response) => this.setUserData(response),
-      error: (error) => this.handleCheckLoggedError(error),
+    this.a();
+    if (this.id) {
+      this.accountsService.refreshAccessToken(this.id).subscribe({
+        next: (response) => this.setUserData(response),
+        error: (error) => this.handleCheckLoggedError(error),
+      });
+    }
+  }
+
+  private a(): void {
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('id');
     });
   }
 

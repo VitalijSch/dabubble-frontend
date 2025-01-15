@@ -28,9 +28,9 @@ export const routes: Routes = [
             { path: 'privacy-policy', component: PrivacyPolicyComponent },
         ],
     },
-    { path: 'home', redirectTo: 'home/new-message', pathMatch: 'full' },
+    { path: 'home/:id', redirectTo: 'home/:id/new-message', pathMatch: 'full' },
     {
-        path: 'home',
+        path: 'home/:id',
         component: HomeComponent,
         children: [
             { path: 'new-message', component: NewMessageComponent },
