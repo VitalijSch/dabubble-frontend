@@ -26,7 +26,24 @@ export class AddMemberComponent {
   private initializeMemberSelectionForm(): void {
     this.memberSelectionForm = this.formBuilder.group({
       selectedOption: '',
+      search: '',
     });
+  }
+
+  isInvalidSelection(): boolean {
+    return this.isSelectionEmpty() || (this.isChooseMembersSelected() && this.isSearchFieldEmpty());
+  }
+
+  private isSelectionEmpty(): boolean {
+    return !this.memberSelectionForm.get('selectedOption')?.value
+  }
+
+  isChooseMembersSelected(): boolean {
+    return this.memberSelectionForm.get('selectedOption')?.value === 'chooseMembers'
+  }
+
+  private isSearchFieldEmpty(): boolean {
+    return this.memberSelectionForm.get('search')?.value === '';
   }
 
   createChannel(): void {

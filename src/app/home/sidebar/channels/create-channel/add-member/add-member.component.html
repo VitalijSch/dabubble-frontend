@@ -29,6 +29,11 @@
         <label for="chooseMembers">Bestimmte Leute hinzufügen</label>
     </div>
 
-    <button [disabled]="!memberSelectionForm.get('selectedOption')?.value"
-        [class.inactive-button]="!memberSelectionForm.get('selectedOption')?.value">Erstellen</button>
+    @if(isChooseMembersSelected()) {
+    <div class="search-container">
+        <input formControlName="search" placeholder="Name eingeben" type="text" name="search" id="search">
+    </div>
+    }
+
+    <button [disabled]="isInvalidSelection()" [class.inactive-button]="isInvalidSelection()">Erstellen</button>
 </form>
