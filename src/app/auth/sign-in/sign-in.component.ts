@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CreateUserService } from '../../services/create-user/create-user.service';
 import { CreateUser } from '../../interfaces/create-user';
 import { AccountsService } from '../../services/accounts/accounts.service';
+import { fullEmailValidator } from './validators/email.validator';
 
 @Component({
   selector: 'app-sign-in',
@@ -37,7 +38,7 @@ export class SignInComponent {
   private initializeSignInForm(): void {
     this.signInForm = this.formBuilder.group({
       username: [this.userData.username, Validators.required],
-      email: [this.userData.email, [Validators.required, Validators.email]],
+      email: [this.userData.email, [Validators.required, Validators.email, , fullEmailValidator()]],
       password: [this.userData.password, [Validators.required, Validators.minLength(8)]],
       isTermsAccepted: [this.userData.isTermsAccepted, Validators.requiredTrue],
     });

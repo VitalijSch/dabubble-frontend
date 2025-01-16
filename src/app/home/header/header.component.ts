@@ -29,7 +29,7 @@ export class HeaderComponent {
   }
 
   checkAuth(): void {
-    this.a();
+    this.fetchIdFromRoute();
     if (this.id) {
       this.accountsService.refreshAccessToken(this.id).subscribe({
         next: (response) => this.setUserData(response),
@@ -38,7 +38,7 @@ export class HeaderComponent {
     }
   }
 
-  private a(): void {
+  private fetchIdFromRoute(): void {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
     });

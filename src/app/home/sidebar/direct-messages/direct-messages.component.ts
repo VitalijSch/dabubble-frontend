@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { AccountsService } from '../../../services/accounts/accounts.service';
 import { User } from '../../../interfaces/user';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-direct-messages',
@@ -13,25 +14,53 @@ import { User } from '../../../interfaces/user';
 export class DirectMessagesComponent {
   users: User[] = [];
   isDirectMessagesHidden: boolean = false;
+  id: number = 0;
 
   userService: UserService = inject(UserService);
   accountsService: AccountsService = inject(AccountsService);
 
+  private route: ActivatedRoute = inject(ActivatedRoute);
+
   ngOnInit(): void {
+    this.fetchIdFromRoute();
     this.userList();
   }
 
   private userList(): void {
     this.accountsService.getUsers().subscribe({
       next: (response) => {
-        this.users = response.users
+        const users = response.users;
+        this.users = this.sortUsersById(users);
       },
       error: (error) => console.error(error)
     })
   }
 
+  private fetchIdFromRoute(): void {
+    this.route.paramMap.subscribe(params => {
+      this.id = Number(params.get('id'));
+
+    });
+  }
+
+  private sortUsersById(users: User[]): User[] {
+    return users.sort((a, b) => {
+      if (a.id === this.id) {
+        return -1;
+      } else if (b.id === this.id) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   getAvatar(user: User): string {
     return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
+  }
+
+  getUsername(user: User): string {
+    return user.id === this.id ? `${user.username} (Du)` : user.username;
   }
 
   toggleIsDirectMessagesHidden(): void {

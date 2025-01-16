@@ -85,7 +85,7 @@
     </div>
 
     <div class="button-container">
-        <button [disabled]="loginForm.invalid">Anmelden</button>
+        <button [disabled]="loginForm.invalid" [class.inactive-button]="loginForm.invalid">Anmelden</button>
         <button (click)="loginGuest()" type="button">Gäste-Login</button>
     </div>
 </form>

@@ -23,7 +23,13 @@ export class ChooseAvatarComponent {
   private router: Router = inject(Router);
 
   ngOnInit(): void {
+    this.setDefaultUserSelectedAvatar();
     this.redirectToLoginIfUserDataEmpty();
+  }
+
+  private setDefaultUserSelectedAvatar(): void {
+    const user = this.createUserService.getUserData();
+    user.selected_avatar = this.uploadFileService.selectedFile;
   }
 
   private redirectToLoginIfUserDataEmpty(): void {

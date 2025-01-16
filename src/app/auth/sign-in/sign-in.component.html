@@ -65,7 +65,7 @@
         @if(signInForm.get('email')?.invalid && signInForm.get('email')?.touched) {
         @if(signInForm.get('email')?.hasError('required')) {
         <small>Bitte geben Sie eine E-Mail-Adresse ein.</small>
-        } @else if(signInForm.get('email')?.hasError('email')) {
+        } @else if(signInForm.get('email')?.hasError('email') || signInForm.get('email')?.hasError('invalidEmail')) {
         <small>*Diese E-Mail-Adresse ist leider ungültig.</small>
         }
         } @else if(isEmailExist) {

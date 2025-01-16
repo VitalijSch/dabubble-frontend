@@ -44,7 +44,8 @@
         <input formControlName="description" placeholder="Dein Text hier" type="description" name="description"
             id="description">
 
-        <button [disabled]="channelForm.get('name')?.invalid">Erstellen</button>
+        <button [disabled]="channelForm.get('name')?.invalid"
+            [class.inactive-button]="channelForm.get('name')?.invalid">Erstellen</button>
     </form>
 </div>
 } @else {

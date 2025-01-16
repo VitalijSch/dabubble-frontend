@@ -17,16 +17,18 @@
     </div>
 </header>
 
-<form>
+<form [formGroup]="memberSelectionForm" (ngSubmit)="createChannel()">
     <div class="input-container">
-        <input type="radio" name="allMembers" id="allMembers">
+        <input value="allMembers" formControlName="selectedOption" type="radio" name="selectedOption" id="allMembers">
         <label for="allMembers">Alle Mitglieder von <span>OfficeTeam</span> hinzufügen</label>
     </div>
 
     <div class="input-container">
-        <input type="radio" name="chooseMembers" id="chooseMembers">
+        <input value="chooseMembers" formControlName="selectedOption" type="radio" name="selectedOption"
+            id="chooseMembers">
         <label for="chooseMembers">Bestimmte Leute hinzufügen</label>
     </div>
 
-    <button>Erstellen</button>
+    <button [disabled]="!memberSelectionForm.get('selectedOption')?.value"
+        [class.inactive-button]="!memberSelectionForm.get('selectedOption')?.value">Erstellen</button>
 </form>

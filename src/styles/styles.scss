@@ -18,3 +18,8 @@ router-outlet {
 .d-none {
     display: none !important;
 }
+
+.inactive-button {
+    background-color: #686868 !important;
+    color: #FFFFFF !important;
+}
