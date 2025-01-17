@@ -20,7 +20,7 @@
 <form [formGroup]="memberSelectionForm" (ngSubmit)="createChannel()">
     <div class="input-container">
         <input value="allMembers" formControlName="selectedOption" type="radio" name="selectedOption" id="allMembers">
-        <label for="allMembers">Alle Mitglieder von <span>OfficeTeam</span> hinzufügen</label>
+        <label for="allMembers">Alle Mitglieder von <span>{{channelService.channel.name}}</span> hinzufügen</label>
     </div>
 
     <div class="input-container">
@@ -31,7 +31,55 @@
 
     @if(isChooseMembersSelected()) {
     <div class="search-container">
-        <input formControlName="search" placeholder="Name eingeben" type="text" name="search" id="search">
+        <input #searchInput (input)="selectMembers()" formControlName="search" placeholder="Name eingeben" type="text"
+            name="search" id="search">
+
+        @if(foundMembers.length > 0) {
+        <div class="found-members-container">
+            @for (member of foundMembers; track $index) {
+            <div (click)="addMemberToChannel(member)" class="flex-container">
+                <div class="avatar-container">
+                    <img src="{{getAvatar(member)}}" alt="avatar">
+                    <div [class.online-status]="member.is_online" class="user-status"></div>
+                </div>
+
+                <span>{{member.username}}</span>
+            </div>
+            }
+        </div>
+        }
+
+        @if(isSearchFieldEmpty()) {
+        <div [class.d-none]="isSearchInputFocused()" (click)="focusSearchField()" class="selected-members-container">
+            @for (member of channelService.channel.members; track $index) {
+            <div class="member-flex-container">
+                <img src="{{getAvatar(member)}}" alt="avatar">
+
+                <span>{{member.username}}</span>
+
+                <svg (click)="deleteMemberFromChannel(member, $event)" width="30" height="31" viewBox="0 0 30 31" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_528_8671)">
+                        <mask id="mask0_528_8671" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
+                            width="24" height="25">
+                            <rect x="8" y="8.3999" width="24" height="24" fill="#D9D9D9" />
+                        </mask>
+                        <g mask="url(#mask0_528_8671)">
+                            <path
+                                d="M15 16.45L11.325 20.125C11.1875 20.2625 11.0125 20.3313 10.8 20.3313C10.5875 20.3313 10.4125 20.2625 10.275 20.125C10.1375 19.9875 10.0688 19.8125 10.0688 19.6C10.0688 19.3875 10.1375 19.2125 10.275 19.075L13.95 15.4L10.275 11.725C10.1375 11.5875 10.0688 11.4125 10.0688 11.2C10.0688 10.9875 10.1375 10.8125 10.275 10.675C10.4125 10.5375 10.5875 10.4688 10.8 10.4688C11.0125 10.4688 11.1875 10.5375 11.325 10.675L15 14.35L18.675 10.675C18.8125 10.5375 18.9875 10.4688 19.2 10.4688C19.4125 10.4688 19.5875 10.5375 19.725 10.675C19.8625 10.8125 19.9313 10.9875 19.9313 11.2C19.9313 11.4125 19.8625 11.5875 19.725 11.725L16.05 15.4L19.725 19.075C19.8625 19.2125 19.9313 19.3875 19.9313 19.6C19.9313 19.8125 19.8625 19.9875 19.725 20.125C19.5875 20.2625 19.4125 20.3313 19.2 20.3313C18.9875 20.3313 18.8125 20.2625 18.675 20.125L15 16.45Z"
+                                fill="black" />
+                        </g>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_528_8671">
+                            <rect y="0.399902" width="30" height="30" rx="15" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            }
+        </div>
+        }
     </div>
     }
 

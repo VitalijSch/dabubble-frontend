@@ -43,7 +43,7 @@
 </div>
 
 <div [class.d-none]="isDirectMessagesHidden" class="users-container">
-    @for (user of users; track $index) {
+    @for (user of userService.users; track $index) {
     <div class="flex-container">
         <div class="avatar-container">
             <img src="{{getAvatar(user)}}" alt="avatar">

@@ -12,7 +12,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './direct-messages.component.scss'
 })
 export class DirectMessagesComponent {
-  users: User[] = [];
   isDirectMessagesHidden: boolean = false;
   id: number = 0;
 
@@ -26,24 +25,29 @@ export class DirectMessagesComponent {
     this.userList();
   }
 
-  private userList(): void {
-    this.accountsService.getUsers().subscribe({
-      next: (response) => {
-        const users = response.users;
-        this.users = this.sortUsersById(users);
-      },
-      error: (error) => console.error(error)
-    })
-  }
-
   private fetchIdFromRoute(): void {
     this.route.paramMap.subscribe(params => {
       this.id = Number(params.get('id'));
-
     });
   }
 
-  private sortUsersById(users: User[]): User[] {
+  private userList(): void {
+    this.accountsService.getUsers().subscribe({
+      next: (response) => this.initializeUserList(response),
+      error: (error) => console.error(error),
+    })
+  }
+
+  private initializeUserList(response: any): void {
+    const users = response.users;
+    this.assignUsersToService(users);
+  }
+  
+  private assignUsersToService(users: User[]): void {
+    this.userService.users = this.sortUsersByCurrentUserId(users);
+  }
+  
+  private sortUsersByCurrentUserId(users: User[]): User[] {
     return users.sort((a, b) => {
       if (a.id === this.id) {
         return -1;
@@ -53,7 +57,7 @@ export class DirectMessagesComponent {
         return 0;
       }
     });
-  }
+  }  
 
   getAvatar(user: User): string {
     return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;

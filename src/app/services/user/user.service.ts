@@ -5,5 +5,6 @@ import { User } from '../../interfaces/user';
   providedIn: 'root'
 })
 export class UserService {
+  users: User[] = [];
   userData!: User;
 }

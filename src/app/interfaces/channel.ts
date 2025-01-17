@@ -1,8 +1,8 @@
-import { Member } from "./member";
+import { User } from "./user";
 
 export interface Channel {
     name: string;
     description?: string;
     creator: string;
-    members?: Member[];
+    members: User[];
 }

@@ -7,7 +7,8 @@ import { Channel } from '../../interfaces/channel';
 export class ChannelService {
   channel: Channel = {
     name: '',
-    creator: ''
+    creator: '',
+    members: [],
   }
 
   showChannel: boolean = false;
