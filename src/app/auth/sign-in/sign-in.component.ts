@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CreateUserService } from '../../services/create-user/create-user.service';
-import { CreateUser } from '../../interfaces/create-user';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { fullEmailValidator } from './validators/email.validator';
+import { UserService } from '../../services/user/user.service';
+import { NewUser } from '../../interfaces/new-user';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,32 +15,27 @@ import { fullEmailValidator } from './validators/email.validator';
 })
 export class SignInComponent {
   signInForm!: FormGroup;
-  userData!: CreateUser;
   isEmailExist: boolean = false;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private createUserService: CreateUserService = inject(CreateUserService);
+  private userService: UserService = inject(UserService);
   private router: Router = inject(Router);
   private accountsService: AccountsService = inject(AccountsService);
-
-  constructor() {
-    this.userData = this.fetchUserData();
-  }
 
   ngOnInit(): void {
     this.initializeSignInForm();
   }
 
-  private fetchUserData(): any {
-    return this.createUserService.userData();
+  get newUser(): NewUser {
+    return this.userService.newUser;
   }
 
   private initializeSignInForm(): void {
     this.signInForm = this.formBuilder.group({
-      username: [this.userData.username, Validators.required],
-      email: [this.userData.email, [Validators.required, Validators.email, , fullEmailValidator()]],
-      password: [this.userData.password, [Validators.required, Validators.minLength(8)]],
-      isTermsAccepted: [this.userData.isTermsAccepted, Validators.requiredTrue],
+      username: [this.newUser.username, Validators.required],
+      email: [this.newUser.email, [Validators.required, Validators.email, , fullEmailValidator()]],
+      password: [this.newUser.password, [Validators.required, Validators.minLength(8)]],
+      isTermsAccepted: [this.newUser.isTermsAccepted, Validators.requiredTrue],
     });
   }
 
@@ -55,23 +50,11 @@ export class SignInComponent {
   }
 
   private checkEmailExistence(): void {
-    const email = this.getEmailFromForm();
+    const email = this.signInForm.get('email')?.value;
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => this.handleEmailExistenceResponse(response),
-      error: (error) => this.handleEmailExistenceError(error),
+      next: (response) => this.isEmailExist = response.isEmailExist,
+      error: (error) => console.error(error),
     });
-  }
-
-  private getEmailFromForm(): string {
-    return this.signInForm.get('email')?.value ?? '';
-  }
-
-  private handleEmailExistenceResponse(response: any): void {
-    this.isEmailExist = response.isEmailExist;
-  }
-
-  private handleEmailExistenceError(error: any): void {
-    console.error(error);
   }
 
   markAndToggleIsTermsAccepted(): void {
@@ -80,22 +63,21 @@ export class SignInComponent {
   }
 
   private markTermsAccepted(): void {
-    const isTermsAcceptedControl = this.signInForm.get('isTermsAccepted');
-    isTermsAcceptedControl?.markAsTouched();
+    this.signInForm.get('isTermsAccepted')?.markAsTouched();
   }
 
   private setIsTermsAccepted(): void {
-    const currentValue = this.signInForm.get('isTermsAccepted')?.value;
-    this.signInForm.get('isTermsAccepted')?.setValue(!currentValue);
+    const isTermsAccepted = this.signInForm.get('isTermsAccepted')?.value;
+    this.signInForm.get('isTermsAccepted')?.setValue(!isTermsAccepted);
   }
 
   createUserAndNavigateToAvatarSelection(): void {
-    this.createUserData();
+    this.setUserDataFromForm();
     this.navigateToAvatarSelection();
   }
 
-  private createUserData(): void {
-    this.createUserService.setUserData(this.signInForm.value);
+  private setUserDataFromForm(): void {
+    this.userService.newUser = this.signInForm.value;
   }
 
   private navigateToAvatarSelection(): void {

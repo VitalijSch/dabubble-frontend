@@ -18,7 +18,6 @@ export class CreateChannelComponent {
   channelForm!: FormGroup;
 
   channelService: ChannelService = inject(ChannelService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
   private userService: UserService = inject(UserService);
 
@@ -35,19 +34,32 @@ export class CreateChannelComponent {
 
   addChannelData(): void {
     this.showAddMember();
-    this.setChannelData();
-    console.log(this.channelService.channel)
+    this.updateChannelName();
+    this.updateChannelDescriptionIfNotEmpty();
+    this.updateChannelCreator();
   }
 
   private showAddMember(): void {
     this.channelService.toggleShowAddMember();
   }
 
-  private setChannelData(): void {
+  private updateChannelName(): void {
     this.channelService.channel.name = this.channelForm.get('name')?.value;
-    if (this.channelForm.get('description')?.value !== '') {
-      this.channelService.channel.description = this.channelForm.get('description')?.value;
-    }
-    this.channelService.channel.creator = this.userService.userData.username;
+  }
+
+  private updateChannelDescriptionIfNotEmpty(): void {
+    if (this.isDescriptionNotEmpty()) this.updateChannelDescription();
+  }
+
+  private isDescriptionNotEmpty(): boolean {
+    return this.channelForm.get('description')?.value !== '';
+  }
+
+  private updateChannelDescription(): void {
+    this.channelService.channel.description = this.channelForm.get('description')?.value;
+  }
+
+  private updateChannelCreator(): void {
+    this.channelService.channel.creator = this.userService.user.id;
   }
 }

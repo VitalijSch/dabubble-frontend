@@ -14,8 +14,8 @@ export class AccountsService {
     return this.http.post(`${this.apiUrl}/check-email/`, { email });
   }
 
-  registerUser(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create-user/`, data);
+  registerUser(user: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create-user/`, user);
   }
 
   sendPasswordResetEmail(email: string): Observable<any> {
@@ -46,8 +46,8 @@ export class AccountsService {
     return this.http.post(`${this.apiUrl}/token/refresh/`, {'id': userId}, { withCredentials: true });
   }
 
-  updateUser(data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/`, data, { withCredentials: true });
+  updateUser(userData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/`, userData, { withCredentials: true });
   }
 
   getUsers(): Observable<any> {

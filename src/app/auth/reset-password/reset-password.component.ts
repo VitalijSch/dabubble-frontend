@@ -17,9 +17,9 @@ import { AccountsService } from '../../services/accounts/accounts.service';
 export class ResetPasswordComponent {
   resetPasswordForm!: FormGroup;
   email: string = '';
+  token: string = '';
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
   private accountsService: AccountsService = inject(AccountsService);
   private route: ActivatedRoute = inject(ActivatedRoute);
@@ -27,64 +27,55 @@ export class ResetPasswordComponent {
 
   ngOnInit(): void {
     this.initializeResetPasswordForm();
+    this.getTokenFromRoute();
     this.handlePasswordResetProcess();
   }
 
   private initializeResetPasswordForm(): void {
-    this.resetPasswordForm = this.formBuilder.group(
-      {
-        newPassword: ['', [Validators.required, Validators.minLength(8)]],
-        confirmedPassword: ['', [Validators.required, Validators.minLength(8)]]
-      },
+    this.resetPasswordForm = this.formBuilder.group({
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmedPassword: ['', [Validators.required, Validators.minLength(8)]]
+    },
       { validators: passwordsMatchValidator }
     )
   }
 
+  private getTokenFromRoute(): void {
+    this.token = this.route.snapshot.paramMap.get('id') ?? '';
+  }
+
   private handlePasswordResetProcess(): void {
-    const token = this.getTokenFromRoute();
-    if (!token) {
+    if (this.isTokenInvalid()) {
       this.navigateToLogin();
       return;
     }
-    this.deletePasswordResetToken(token);
-    this.fetchEmailForPasswordReset(token);
+    this.processPasswordReset();
   }
 
-  private getTokenFromRoute(): string | null {
-    return this.route.snapshot.paramMap.get('id');
+  private isTokenInvalid(): boolean {
+    return this.token === null;
   }
 
   private navigateToLogin(): void {
     this.router.navigate(['auth/login']);
   }
 
-  private deletePasswordResetToken(token: string): void {
-    this.accountsService.deletePasswordResetEmail(token).subscribe({
-      error: (error) => this.handlePasswordResetTokenError(error),
+  private processPasswordReset(): void {
+    this.deletePasswordResetToken();
+    this.fetchEmailForPasswordReset();
+  }
+
+  private deletePasswordResetToken(): void {
+    this.accountsService.deletePasswordResetEmail(this.token).subscribe({
+      error: (error) => console.error(error),
     });
   }
 
-  private handlePasswordResetTokenError(error: any): void {
-    console.error(error);
-  }
-
-  private fetchEmailForPasswordReset(token: string): void {
-    this.accountsService.getPasswordResetEmail(token).subscribe({
-      next: (response) => this.handleEmailForPasswordResetSuccess(response),
-      error: (error) => this.handleEmailForPasswordResetError(error),
+  private fetchEmailForPasswordReset(): void {
+    this.accountsService.getPasswordResetEmail(this.token).subscribe({
+      next: (response) => this.email = response.email,
+      error: (error) => console.error(error),
     });
-  }
-
-  private handleEmailForPasswordResetSuccess(response: any): void {
-    this.setEmail(response.email);
-  }
-
-  private setEmail(email: string): void {
-    this.email = email;
-  }
-
-  private handleEmailForPasswordResetError(error: any): void {
-    console.error(error);
   }
 
   submitPasswordReset(): void {
@@ -99,20 +90,12 @@ export class ResetPasswordComponent {
   private sendPasswordChangeRequest(): void {
     const newPassword = this.resetPasswordForm.get('newPassword')?.value;
     this.accountsService.changePassword(this.email, newPassword).subscribe({
-      next: () => this.handlePasswordChangeRequestSuccess(),
-      error: (error) => this.handlePasswordChangeRequestError(error),
+      next: () => this.displayToastMessage(),
+      error: (error) => console.error(error),
     });
-  }
-
-  private handlePasswordChangeRequestSuccess(): void {
-    this.displayToastMessage();
   }
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
-  }
-
-  private handlePasswordChangeRequestError(error: any): void {
-    console.error(error);
   }
 }

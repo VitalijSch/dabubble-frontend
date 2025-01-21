@@ -3,6 +3,7 @@ import { ChannelService } from '../../../../../services/channel/channel.service'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../../../services/user/user.service';
 import { User } from '../../../../../interfaces/user';
+import { ChannelsService } from '../../../../../services/channels/channels.service';
 
 @Component({
   selector: 'app-add-member',
@@ -16,16 +17,27 @@ import { User } from '../../../../../interfaces/user';
 })
 export class AddMemberComponent {
   memberSelectionForm!: FormGroup;
+
   @ViewChild('searchInput') searchInput!: ElementRef;
+
   foundMembers: User[] = [];
 
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private channelsService: ChannelsService = inject(ChannelsService);
 
   ngOnInit(): void {
     this.initializeMemberSelectionForm();
+    this.resetChannelMembers();
+  }
+
+  get user(): User {
+    return this.userService.user;
+  }
+
+  get users(): User[] {
+    return this.userService.users;
   }
 
   private initializeMemberSelectionForm(): void {
@@ -33,6 +45,10 @@ export class AddMemberComponent {
       selectedOption: '',
       search: '',
     });
+  }
+
+  private resetChannelMembers(): void {
+    this.channelService.channel.members = [];
   }
 
   isInvalidSelection(): boolean {
@@ -59,7 +75,6 @@ export class AddMemberComponent {
     this.resetFoundMembers();
     if (!this.isSearchFieldEmpty()) {
       this.filterUsersBySearchTerm();
-      this.removeCurrentUserFromFoundMembers();
     }
   }
 
@@ -68,21 +83,15 @@ export class AddMemberComponent {
   }
 
   private filterUsersBySearchTerm(): void {
-    const users = this.userService.users;
     const value = this.memberSelectionForm.get('search')?.value;
-    this.foundMembers = users.filter(user => this.normalizeSearchTerm(user.username).startsWith(this.normalizeSearchTerm(value)));
+    this.foundMembers = this.users.filter(user =>
+      this.normalizeSearchTerm(user.username).startsWith(this.normalizeSearchTerm(value)) &&
+      user.id !== this.user.id
+    );
   }
 
   private normalizeSearchTerm(value: string): string {
     return value.trim().toLowerCase();
-  }
-
-  private removeCurrentUserFromFoundMembers(): void {
-    const currentUserId = this.userService.userData.id;
-    const index = this.foundMembers.findIndex(member => member.id === currentUserId);
-    if (index !== -1) {
-      this.foundMembers.splice(index, 1);
-    }
   }
 
   addMemberToChannel(member: User): void {
@@ -111,23 +120,30 @@ export class AddMemberComponent {
     this.stopEventPropagation(event);
     this.removeMember(member);
   }
-  
+
   private stopEventPropagation(event: Event): void {
     event.stopPropagation();
   }
-  
+
   private removeMember(member: User): void {
     const index = this.channelService.channel.members.findIndex(channelMember => channelMember.id === member.id);
-    if (index !== -1) {
-      this.channelService.channel.members.splice(index, 1);
-    }
-  }
-
-  getAvatar(user: User): string {
-    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
+    if (index === -1) return;
+    this.channelService.channel.members.splice(index, 1);
   }
 
   createChannel(): void {
-    console.log('Test');
+    this.channelsService.createChannel(this.channelService.channel).subscribe({
+      next: (response) => this.handleCreateChannelSuccess(response),
+      error: (error) => console.error(error),
+    })
+  }
+
+  private handleCreateChannelSuccess(response: any): void {
+    this.toggleShowChannel();
+    this.resetChannelMembers();
+  }
+
+  private toggleShowChannel(): void {
+    this.channelService.toggleShowChannel();
   }
 }

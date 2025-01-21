@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class SidebarToggleService {
   isSidebarHidden: boolean = false;
 
-  toggleIsChannelHidden(): void {
+  toggleIsSidebarHidden(): void {
     this.isSidebarHidden = !this.isSidebarHidden;
   }
 }

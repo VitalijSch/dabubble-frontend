@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { ToastMessageComponent } from '../toast-message/toast-message.component';
 import { Router, RouterModule } from '@angular/router';
-import { CreateUserService } from '../../services/create-user/create-user.service';
 import { UploadFileService } from '../../services/upload-file/upload-file.service';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { ToastMessageService } from '../../services/toast-message/toast-message.service';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user/user.service';
+import { NewUser } from '../../interfaces/new-user';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -15,10 +16,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './choose-avatar.component.scss'
 })
 export class ChooseAvatarComponent {
-  createUserService: CreateUserService = inject(CreateUserService);
+  formData = new FormData();
+
   uploadFileService: UploadFileService = inject(UploadFileService);
   toastMessageService: ToastMessageService = inject(ToastMessageService);
-
+  private userService: UserService = inject(UserService);
   private accountsService: AccountsService = inject(AccountsService);
   private router: Router = inject(Router);
 
@@ -27,9 +29,12 @@ export class ChooseAvatarComponent {
     this.redirectToLoginIfUserDataEmpty();
   }
 
+  get newUser(): NewUser {
+    return this.userService.newUser;
+  }
+
   private setDefaultUserSelectedAvatar(): void {
-    const user = this.createUserService.getUserData();
-    user.selected_avatar = this.uploadFileService.selectedFile;
+    this.newUser.selected_avatar = this.uploadFileService.selectedFile;
   }
 
   private redirectToLoginIfUserDataEmpty(): void {
@@ -39,8 +44,7 @@ export class ChooseAvatarComponent {
   }
 
   private isUserDataMissing(): boolean {
-    const user = this.createUserService.getUserData();
-    return user.email === '';
+    return this.newUser.email === '';
   }
 
   private navigateToSignIn(): void {
@@ -53,15 +57,16 @@ export class ChooseAvatarComponent {
   }
 
   private setAvatar(avatar: number): void {
-    this.createUserService.setSelectedAvatar(avatar);
+    this.userService.setSelectedAvatar(avatar);
   }
 
   private updateSelectedFileFromUserData(): void {
-    this.uploadFileService.selectedFile = this.createUserService.userData().selected_avatar;
+    this.uploadFileService.selectedFile = this.newUser.selected_avatar;
   }
 
   addUser(): void {
     this.showToastMessage();
+    this.createFormData();
     this.registerUser();
   }
 
@@ -69,54 +74,49 @@ export class ChooseAvatarComponent {
     this.toastMessageService.setToastMessageVisibility(true);
   }
 
+  private createFormData(): void {
+    this.appendUserData();
+    this.appendSelectedAvatar();
+    this.appendUploadedAvatar();
+  }
+
+  private appendUserData(): void {
+    this.formData.append('username', this.newUser.username);
+    this.formData.append('email', this.newUser.email);
+    this.formData.append('password', this.newUser.password);
+  }
+
+  private appendSelectedAvatar(): void {
+    if (!this.isUploadedAvatarAnString()) return;
+    this.formData.append('selected_avatar', this.newUser.selected_avatar);
+  }
+
+  private appendUploadedAvatar(): void {
+    if (this.isUploadedAvatarAnString()) return;
+    this.formData.append('uploaded_avatar', this.newUser.uploaded_avatar);
+  }
+
+  private isUploadedAvatarAnString(): boolean {
+    return typeof this.newUser.uploaded_avatar === 'string';
+  }
+
   private registerUser(): void {
-    this.accountsService.registerUser(this.createFormData()).subscribe({
-      next: () => this.handleRegisterSuccess(),
-      error: (error) => this.handleRegisterError(error),
+    this.accountsService.registerUser(this.formData).subscribe({
+      next: () => this.handleRegisterUserSuccess(),
+      error: (error) => console.error(error),
     });
   }
 
-  private handleRegisterSuccess(): void {
-    this.resetUserData();
+  private handleRegisterUserSuccess(): void {
     this.displayToastMessage();
-  }
-
-  private createFormData(): FormData {
-    const formData = new FormData();
-    this.appendUserData(formData);
-    this.appendAvatarToFormDataIfPresent(formData);
-    return formData;
-  }
-
-  private appendUserData(formData: FormData): void {
-    const user = this.createUserService.getUserData();
-    formData.append('username', user.username);
-    formData.append('email', user.email);
-    formData.append('password', user.password);
-  }
-
-  private appendAvatarToFormDataIfPresent(formData: FormData): void {
-    const user = this.createUserService.getUserData();
-    if (this.isSelectedAvatarFromAssets() && user.selected_avatar) {
-      formData.append('selected_avatar', user.selected_avatar);
-    } else if (user.uploaded_avatar) {
-      formData.append('uploaded_avatar', user.uploaded_avatar);
-    }
-  }
-
-  private isSelectedAvatarFromAssets(): boolean {
-    return this.uploadFileService.selectedFile.includes('assets');
-  }
-
-  private resetUserData(): void {
-    this.createUserService.resetUserData();
+    this.resetNewUser();
   }
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
   }
 
-  private handleRegisterError(error: any): void {
-    console.error(error);
+  private resetNewUser(): void {
+    this.userService.resetNewUser();
   }
 }

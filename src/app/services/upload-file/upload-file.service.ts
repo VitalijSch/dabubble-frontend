@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CreateUserService } from '../create-user/create-user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ export class UploadFileService {
   selectedFile: any = './../../../assets/avatars/avatar-0.png';
   uploadedFile!: File;
 
-  private createUserService: CreateUserService = inject(CreateUserService);
+  private userService: UserService = inject(UserService);
 
   onUploadButtonClick(fileInput: HTMLInputElement): void {
     fileInput.click();
@@ -37,7 +37,7 @@ export class UploadFileService {
   }
 
   private setUploadedAvatarFromSelectedFile(): void {
-    this.createUserService.userData().uploaded_avatar = this.selectedFile;
+    this.userService.newUser.uploaded_avatar = this.selectedFile;
   }
 
   private convertSelectedFileToDataUrl(): void {

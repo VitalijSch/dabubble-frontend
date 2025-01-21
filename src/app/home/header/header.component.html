@@ -84,12 +84,12 @@
 </div>
 
 <div (click)="profileService.toggleShowProfileMenu()" class="user-data-container">
-    @if(userService.userData) {
-    <span>{{userService.userData.username}}</span>
+    @if(userService.user) {
+    <span>{{userService.user.username}}</span>
 
     <div class="avatar-container">
-        <img src="{{getAvatar()}}" alt="avatar">
-        <div [class.online-status]="userService.userData.is_online" class="user-status"></div>
+        <img src="{{userService.getAvatar(userService.user)}}" alt="avatar">
+        <div [class.online-status]="userService.user.is_online" class="user-status"></div>
     </div>
     }
 

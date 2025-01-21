@@ -22,13 +22,8 @@ export class ProfileComponent {
     this.getAvatarFile();
   }
 
-  getAvatarFile(): void {
-    this.uploadFileService.selectedFile = this.getAvatar();
-  }
-
-  private getAvatar(): string {
-    const user = this.userService.userData;
-    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
+  private getAvatarFile(): void {
+    this.uploadFileService.selectedFile = this.userService.getAvatar(this.userService.user);
   }
 
   getNameOfProfileHeader(): string {
@@ -37,11 +32,15 @@ export class ProfileComponent {
 
   toggleProfileViewState(event: Event): void {
     this.handleEvent(event);
-    this.profileService.toggleIsCurrentViewProfile()
+    this.toggleShowCurrentViewProfile();
   }
 
   private handleEvent(event: Event): void {
     event.stopPropagation();
+  }
+
+  private toggleShowCurrentViewProfile(): void {
+    this.profileService.toggleShowCurrentViewProfile()
   }
 
   onUploadButtonClick(fileInput: HTMLInputElement): void {

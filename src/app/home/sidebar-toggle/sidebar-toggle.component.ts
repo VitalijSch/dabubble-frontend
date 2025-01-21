@@ -8,7 +8,7 @@ import { SidebarToggleService } from '../../services/sidebar-toggle/sidebar-togg
   templateUrl: './sidebar-toggle.component.html',
   styleUrl: './sidebar-toggle.component.scss',
   host: {
-    '(click)': 'sidebarToggleService.toggleIsChannelHidden()'
+    '(click)': 'sidebarToggleService.toggleIsSidebarHidden()'
   },
 })
 export class SidebarToggleComponent {

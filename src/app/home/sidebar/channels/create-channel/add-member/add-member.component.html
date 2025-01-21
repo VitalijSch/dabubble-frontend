@@ -39,7 +39,7 @@
             @for (member of foundMembers; track $index) {
             <div (click)="addMemberToChannel(member)" class="flex-container">
                 <div class="avatar-container">
-                    <img src="{{getAvatar(member)}}" alt="avatar">
+                    <img src="{{userService.getAvatar(member)}}" alt="avatar">
                     <div [class.online-status]="member.is_online" class="user-status"></div>
                 </div>
 
@@ -49,11 +49,11 @@
         </div>
         }
 
-        @if(isSearchFieldEmpty()) {
+        @if(channelService.channel.members.length > 0) {
         <div [class.d-none]="isSearchInputFocused()" (click)="focusSearchField()" class="selected-members-container">
             @for (member of channelService.channel.members; track $index) {
             <div class="member-flex-container">
-                <img src="{{getAvatar(member)}}" alt="avatar">
+                <img src="{{userService.getAvatar(member)}}" alt="avatar">
 
                 <span>{{member.username}}</span>
 

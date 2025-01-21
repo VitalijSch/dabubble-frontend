@@ -5,23 +5,27 @@ import { Injectable } from '@angular/core';
 })
 export class ProfileService {
   showProfileMenu: boolean = false;
-  isCurrentViewProfile: boolean = false;
+  showCurrentViewProfile: boolean = false;
   showEditDetails: boolean = false;
 
   handleViewSwitch(): void {
-    if (!this.isCurrentViewProfile) {
+    if (this.isCurrentViewProfileHide()) {
       this.toggleShowProfileMenu();
     } else {
-      this.toggleIsCurrentViewProfile();
+      this.toggleShowCurrentViewProfile();
     }
+  }
+
+  private isCurrentViewProfileHide(): boolean {
+    return !this.showCurrentViewProfile;
   }
 
   toggleShowProfileMenu(): void {
     this.showProfileMenu = !this.showProfileMenu;
   }
 
-  toggleIsCurrentViewProfile(): void {
-    this.isCurrentViewProfile = !this.isCurrentViewProfile;
+  toggleShowCurrentViewProfile(): void {
+    this.showCurrentViewProfile = !this.showCurrentViewProfile;
   }
 
   toggleShowEditDetails(): void {

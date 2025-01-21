@@ -17,7 +17,6 @@ export class ToastMessageComponent {
   }
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
-
   private router: Router = inject(Router);
 
   getMessageForRoute(): string {

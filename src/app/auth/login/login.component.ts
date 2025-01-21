@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AccountsService } from '../../services/accounts/accounts.service';
 import { UserService } from '../../services/user/user.service';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,10 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.initializeLoginForm();
+  }
+
+  get user(): User {
+    return this.userService.user;
   }
 
   private initializeLoginForm(): void {
@@ -47,46 +52,36 @@ export class LoginComponent {
   }
 
   private setUserData(response: any): void {
-    this.userService.userData = response.user;
+    this.userService.user = response.user;
   }
 
   private navigateToHome(): void {
-    const userId = this.userService.userData.id;
-    this.router.navigate([`home/${userId}/new-message`]);
+    this.router.navigate([`home/${this.user.id}/new-message`]);
   }
 
   private handleLoginError(error: any): void {
     console.error(error);
-    this.authenticateWithDelay();
+    this.toggleAuthenticationMessage();
   }
 
-  private authenticateWithDelay(): void {
-    this.setIsAuthenticatedFalse();
-    this.startAuthenticationTimer();
+  private toggleAuthenticationMessage(): void {
+    this.showAuthenticationMessage();
+    setTimeout(() => {
+      this.hideAuthenticationMessage();
+    }, 4000);
   }
 
-  private setIsAuthenticatedFalse(): void {
+  private showAuthenticationMessage(): void {
     this.isAuthenticated = false;
   }
 
-  private startAuthenticationTimer(): void {
-    setTimeout(() => {
-      this.isAuthenticated = true;
-    }, 4000);
+  private hideAuthenticationMessage(): void {
+    this.isAuthenticated = true;
   }
 
   loginGuest(): void {
     this.accountsService.loginGuest().subscribe({
-      next: (response) => this.handleLoginGuestSuccess(response),
-      error: (error) => this.handleLoginGuestError(error),
+      error: (error) => console.error(error),
     });
-  }
-
-  private handleLoginGuestSuccess(response: any): void {
-
-  }
-
-  private handleLoginGuestError(error: any): void {
-    console.error(error);
   }
 }

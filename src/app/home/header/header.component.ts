@@ -19,7 +19,6 @@ export class HeaderComponent {
 
   userService: UserService = inject(UserService);
   profileService: ProfileService = inject(ProfileService);
-
   private accountsService: AccountsService = inject(AccountsService);
   private router: Router = inject(Router);
   private route: ActivatedRoute = inject(ActivatedRoute);
@@ -45,7 +44,7 @@ export class HeaderComponent {
   }
 
   private setUserData(response: any): void {
-    this.userService.userData = response.user;
+    this.userService.user = response.user;
   }
 
   private handleCheckLoggedError(error: any): void {
@@ -59,10 +58,5 @@ export class HeaderComponent {
 
   focusInputField(): void {
     this.searchField.nativeElement.focus();
-  }
-
-  getAvatar(): string {
-    const user = this.userService.userData;
-    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 }

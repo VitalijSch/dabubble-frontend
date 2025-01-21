@@ -3,6 +3,7 @@ import { ProfileService } from '../../../../services/profile/profile.service';
 import { AccountsService } from '../../../../services/accounts/accounts.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../services/user/user.service';
+import { User } from '../../../../interfaces/user';
 
 @Component({
   selector: 'app-menu',
@@ -17,9 +18,12 @@ export class MenuComponent {
   private accountsService: AccountsService = inject(AccountsService);
   private router: Router = inject(Router);
 
+  get user(): User {
+    return this.userService.user;
+  }
+
   logoutUser(event: Event): void {
-    const userId = this.userService.userData.id;
-    this.accountsService.logoutUser(userId.toString()).subscribe({
+    this.accountsService.logoutUser(this.user.id.toString()).subscribe({
       next: () => this.handleLogoutSuccess(event),
     })
   }
@@ -44,6 +48,10 @@ export class MenuComponent {
 
   toggleProfileViewState(event: Event): void {
     this.handleEvent(event);
-    this.profileService.toggleIsCurrentViewProfile()
+    this.toggleShowCurrentViewProfile();
+  }
+
+  private toggleShowCurrentViewProfile(): void {
+    this.profileService.toggleShowCurrentViewProfile()
   }
 }

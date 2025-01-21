@@ -18,7 +18,6 @@ export class ForgotPasswordComponent {
   isEmailExist: boolean = false;
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
   private accountsService: AccountsService = inject(AccountsService);
 
@@ -42,55 +41,22 @@ export class ForgotPasswordComponent {
   }
 
   private sendPasswordResetEmail(): void {
-    this.accountsService.sendPasswordResetEmail(this.resetPasswordEmailForm.value).subscribe({
-      next: () => this.handlePasswordResetEmailSuccess(),
-      error: (error) => this.handlePasswordResetEmailError(error),
+    const email = this.resetPasswordEmailForm.value;
+    this.accountsService.sendPasswordResetEmail(email).subscribe({
+      next: () => this.displayToastMessage(),
+      error: (error) => console.error(error),
     });
-  }
-
-  private handlePasswordResetEmailSuccess(): void {
-    this.displayToastMessage();
   }
 
   private displayToastMessage(): void {
     this.toastMessageService.handleToastMessage();
   }
 
-  private handlePasswordResetEmailError(error: any): void {
-    console.error(error);
-  }
-
-  checkIfEmailExist(): void {
-    if (this.isEmailValid()) {
-      this.checkEmailExistence();
-    }
-  }
-
-  private isEmailValid(): boolean {
-    return this.resetPasswordEmailForm.get('email')?.valid ?? false;
-  }
-
-  private checkEmailExistence(): void {
-    const email = this.getEmailFromForm();
+  checkEmailExistence(): void {
+    const email = this.resetPasswordEmailForm.get('email')?.value;
     this.accountsService.checkEmailExist(email).subscribe({
-      next: (response) => this.handleEmailExistenceSuccess(response),
-      error: (error) => this.handleEmailExistenceError(error),
+      next: (response) => this.isEmailExist = response.isEmailExist,
+      error: (error) => console.error(error),
     });
-  }
-
-  private getEmailFromForm(): string {
-    return this.resetPasswordEmailForm.get('email')?.value ?? '';
-  }
-
-  private handleEmailExistenceSuccess(response: any): void {
-    this.handleEmailExistenceResponse(response.isEmailExist);
-  }
-
-  private handleEmailExistenceResponse(exists: boolean): void {
-    this.isEmailExist = exists;
-  }
-
-  private handleEmailExistenceError(error: any): void {
-    console.error(error);
   }
 }

@@ -19,10 +19,9 @@ export class AuthComponent {
     this.handleIntroForLoginPage();
   }
 
-  handleIntroForLoginPage(): void {
+  private handleIntroForLoginPage(): void {
     if (this.isLoginPage()) {
-      this.startIntro();
-      this.resetIntroAfterDelay(4500);
+      this.playAndResetIntro();
     }
   }
 
@@ -30,13 +29,18 @@ export class AuthComponent {
     return this.router.url.includes('login');
   }
 
-  private startIntro(): void {
+  private playAndResetIntro(): void {
+    this.playIntro();
+    setTimeout(() => {
+      this.resetIntro();
+    }, 4500);
+  }
+
+  private playIntro(): void {
     this.isIntroPlayed = true;
   }
 
-  private resetIntroAfterDelay(delay: number): void {
-    setTimeout(() => {
-      this.isIntroPlayed = false;
-    }, delay);
+  private resetIntro(): void {
+    this.isIntroPlayed = false;
   }
 }

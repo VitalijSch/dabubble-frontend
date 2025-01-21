@@ -17,7 +17,6 @@ export class DirectMessagesComponent {
 
   userService: UserService = inject(UserService);
   accountsService: AccountsService = inject(AccountsService);
-
   private route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
@@ -33,14 +32,9 @@ export class DirectMessagesComponent {
 
   private userList(): void {
     this.accountsService.getUsers().subscribe({
-      next: (response) => this.initializeUserList(response),
+      next: (response) => this.assignUsersToService(response.users),
       error: (error) => console.error(error),
     })
-  }
-
-  private initializeUserList(response: any): void {
-    const users = response.users;
-    this.assignUsersToService(users);
   }
   
   private assignUsersToService(users: User[]): void {
@@ -57,10 +51,6 @@ export class DirectMessagesComponent {
         return 0;
       }
     });
-  }  
-
-  getAvatar(user: User): string {
-    return user.selected_avatar ? user.selected_avatar : `http://localhost:8000${user.uploaded_avatar!}`;
   }
 
   getUsername(user: User): string {
