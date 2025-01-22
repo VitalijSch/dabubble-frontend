@@ -87,17 +87,17 @@ export class ChooseAvatarComponent {
   }
 
   private appendSelectedAvatar(): void {
-    if (!this.isUploadedAvatarAnString()) return;
+    if (!this.isUploadedFileUndefined()) return;
     this.formData.append('selected_avatar', this.newUser.selected_avatar);
   }
 
   private appendUploadedAvatar(): void {
-    if (this.isUploadedAvatarAnString()) return;
+    if (this.isUploadedFileUndefined()) return;
     this.formData.append('uploaded_avatar', this.newUser.uploaded_avatar);
   }
 
-  private isUploadedAvatarAnString(): boolean {
-    return typeof this.newUser.uploaded_avatar === 'string';
+  private isUploadedFileUndefined(): boolean {
+    return this.uploadFileService.uploadedFile === undefined;
   }
 
   private registerUser(): void {

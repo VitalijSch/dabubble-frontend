@@ -119,9 +119,13 @@ export class EditDetailsComponent {
   }
 
   private appendUserAvatar(formData: FormData): void {
-    if (this.uploadFileService.uploadedFile === undefined) return;
+    if (this.isUploadedFileUndefined()) return;
     this.appendUserSelected_avatar(formData);
     this.appendUserUploaded_avatar(formData);
+  }
+
+  private isUploadedFileUndefined(): boolean {
+    return this.uploadFileService.uploadedFile === undefined;
   }
 
   private appendUserSelected_avatar(formData: FormData): void {
