@@ -49,8 +49,13 @@
     }
 }
 
-.channels-new-messages-container {
+.channels-direct-messages-container {
     @include flex-layout(column, unset, center, unset);
     width: 100%;
     flex: 1;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
 }

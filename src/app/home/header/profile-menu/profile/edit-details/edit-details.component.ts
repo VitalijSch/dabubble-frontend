@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../../../../interfaces/user';
 import { UserService } from '../../../../../services/user/user.service';
-import { AccountsService } from '../../../../../services/accounts/accounts.service';
 import { ProfileService } from '../../../../../services/profile/profile.service';
 import { UploadFileService } from '../../../../../services/upload-file/upload-file.service';
 import { fullEmailValidator } from './validators/email.validator';
+import { AccountsApiService } from '../../../../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-edit-details',
@@ -22,7 +22,7 @@ export class EditDetailsComponent {
   profileService: ProfileService = inject(ProfileService);
   private formBuilder: FormBuilder = inject(FormBuilder);
   private userService: UserService = inject(UserService);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private uploadFileService: UploadFileService = inject(UploadFileService);
 
   ngOnInit(): void {
@@ -61,7 +61,7 @@ export class EditDetailsComponent {
   }
 
   private validateEmailExistence(email: string): void {
-    this.accountsService.checkEmailExist(email).subscribe({
+    this.accountsApiService.checkEmailExist(email).subscribe({
       next: (response) => this.isEmailExist = response.isEmailExist,
       error: (error) => console.error(error),
     });
@@ -87,7 +87,7 @@ export class EditDetailsComponent {
 
   editUser(): void {
     const userData = this.createFormData();
-    this.accountsService.updateUser(userData).subscribe({
+    this.accountsApiService.updateUser(userData).subscribe({
       next: (response) => this.handleEditUserSuccess(response),
       error: (error) => console.error(error),
     })

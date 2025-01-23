@@ -2,8 +2,8 @@ import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ProfileService } from '../../services/profile/profile.service';
-import { AccountsService } from '../../services/accounts/accounts.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +19,7 @@ export class HeaderComponent {
 
   userService: UserService = inject(UserService);
   profileService: ProfileService = inject(ProfileService);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private router: Router = inject(Router);
   private route: ActivatedRoute = inject(ActivatedRoute);
 
@@ -30,7 +30,7 @@ export class HeaderComponent {
   checkAuth(): void {
     this.fetchIdFromRoute();
     if (this.id) {
-      this.accountsService.refreshAccessToken(this.id).subscribe({
+      this.accountsApiService.refreshAccessToken(this.id).subscribe({
         next: (response) => this.setUserData(response),
         error: (error) => this.handleCheckLoggedError(error),
       });

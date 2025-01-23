@@ -75,4 +75,8 @@ export class UploadFileService {
   private resetFileInput(fileInput: HTMLInputElement): void {
     fileInput.value = '';
   }
+
+  resetSelectedFile(): void {
+    this.selectedFile = './../../../assets/avatars/avatar-0.png';
+  }
 }

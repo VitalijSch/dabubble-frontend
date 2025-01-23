@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
-import { AccountsService } from '../../../services/accounts/accounts.service';
 import { User } from '../../../interfaces/user';
 import { ActivatedRoute } from '@angular/router';
+import { AccountsApiService } from '../../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-direct-messages',
@@ -16,7 +16,7 @@ export class DirectMessagesComponent {
   id: number = 0;
 
   userService: UserService = inject(UserService);
-  accountsService: AccountsService = inject(AccountsService);
+  accountsApiService: AccountsApiService = inject(AccountsApiService);
   private route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class DirectMessagesComponent {
   }
 
   private userList(): void {
-    this.accountsService.getUsers().subscribe({
+    this.accountsApiService.getUsers().subscribe({
       next: (response) => this.assignUsersToService(response.users),
       error: (error) => console.error(error),
     })

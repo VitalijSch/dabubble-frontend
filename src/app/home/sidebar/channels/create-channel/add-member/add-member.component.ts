@@ -3,7 +3,8 @@ import { ChannelService } from '../../../../../services/channel/channel.service'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../../../services/user/user.service';
 import { User } from '../../../../../interfaces/user';
-import { ChannelsService } from '../../../../../services/channels/channels.service';
+import { Channel } from '../../../../../interfaces/channel';
+import { ChannelsApiService } from '../../../../../services/channels-api/channels-api.service';
 
 @Component({
   selector: 'app-add-member',
@@ -25,7 +26,7 @@ export class AddMemberComponent {
   channelService: ChannelService = inject(ChannelService);
   userService: UserService = inject(UserService);
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private channelsService: ChannelsService = inject(ChannelsService);
+  private channelsApiService: ChannelsApiService = inject(ChannelsApiService);
 
   ngOnInit(): void {
     this.initializeMemberSelectionForm();
@@ -94,14 +95,25 @@ export class AddMemberComponent {
     return value.trim().toLowerCase();
   }
 
-  addMemberToChannel(member: User): void {
+  addMemberAndReset(member: User): void {
     this.addMember(member);
+    this.addMembersIdsToMembersPk();
+    this.addCurrentUserToMembersPk();
     this.resetSearchField();
     this.resetFoundMembers();
   }
 
   private addMember(member: User): void {
     this.channelService.channel.members?.push(member);
+  }
+
+  private addMembersIdsToMembersPk(): void {
+    this.channelService.channel.membersPk = this.channelService.channel.members.map(member => member.id);
+  }
+
+  private addCurrentUserToMembersPk(): void {
+    const index = this.channelService.channel.membersPk.findIndex(members => members === this.userService.user.id);
+    if (index === -1) this.channelService.channel.membersPk.push(this.userService.user.id);
   }
 
   private resetSearchField(): void {
@@ -132,15 +144,27 @@ export class AddMemberComponent {
   }
 
   createChannel(): void {
-    this.channelsService.createChannel(this.channelService.channel).subscribe({
+    this.addAllUsersToChannel();
+    this.channelsApiService.createChannel(this.channelService.channel).subscribe({
       next: (response) => this.handleCreateChannelSuccess(response),
       error: (error) => console.error(error),
     })
   }
 
-  private handleCreateChannelSuccess(response: any): void {
+  private addAllUsersToChannel(): void {
+    if (this.isChooseMembersSelected()) return;
+    this.channelService.channel.membersPk = this.userService.users.map(user => user.id);
+  }
+
+  private handleCreateChannelSuccess(response: Channel[]): void {
+    this.getChannels(response);
     this.toggleShowChannel();
     this.resetChannelMembers();
+    console.log(this.channelService.channels)
+  }
+
+  private getChannels(response: Channel[]): void {
+    this.channelService.channels = response;
   }
 
   private toggleShowChannel(): void {

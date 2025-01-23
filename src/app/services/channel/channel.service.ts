@@ -5,10 +5,13 @@ import { Channel } from '../../interfaces/channel';
   providedIn: 'root'
 })
 export class ChannelService {
+  channels: Channel[] = [];
+
   channel: Channel = {
     name: '',
     members: [],
-    creator: ''
+    creator: 0,
+    membersPk: []
   }
 
   showChannel: boolean = false;

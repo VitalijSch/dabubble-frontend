@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { ProfileService } from '../../../../services/profile/profile.service';
-import { AccountsService } from '../../../../services/accounts/accounts.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../services/user/user.service';
 import { User } from '../../../../interfaces/user';
+import { AccountsApiService } from '../../../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +15,7 @@ import { User } from '../../../../interfaces/user';
 export class MenuComponent {
   private profileService: ProfileService = inject(ProfileService);
   private userService: UserService = inject(UserService);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private router: Router = inject(Router);
 
   get user(): User {
@@ -23,7 +23,7 @@ export class MenuComponent {
   }
 
   logoutUser(event: Event): void {
-    this.accountsService.logoutUser(this.user.id.toString()).subscribe({
+    this.accountsApiService.logoutUser(this.user.id.toString()).subscribe({
       next: () => this.handleLogoutSuccess(event),
     })
   }

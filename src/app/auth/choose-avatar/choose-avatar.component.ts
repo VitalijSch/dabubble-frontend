@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { ToastMessageComponent } from '../toast-message/toast-message.component';
 import { Router, RouterModule } from '@angular/router';
 import { UploadFileService } from '../../services/upload-file/upload-file.service';
-import { AccountsService } from '../../services/accounts/accounts.service';
 import { ToastMessageService } from '../../services/toast-message/toast-message.service';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
 import { NewUser } from '../../interfaces/new-user';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -21,7 +21,7 @@ export class ChooseAvatarComponent {
   uploadFileService: UploadFileService = inject(UploadFileService);
   toastMessageService: ToastMessageService = inject(ToastMessageService);
   private userService: UserService = inject(UserService);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private router: Router = inject(Router);
 
   ngOnInit(): void {
@@ -101,7 +101,7 @@ export class ChooseAvatarComponent {
   }
 
   private registerUser(): void {
-    this.accountsService.registerUser(this.formData).subscribe({
+    this.accountsApiService.registerUser(this.formData).subscribe({
       next: () => this.handleRegisterUserSuccess(),
       error: (error) => console.error(error),
     });

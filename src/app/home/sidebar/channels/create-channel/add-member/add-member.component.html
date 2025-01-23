@@ -37,7 +37,7 @@
         @if(foundMembers.length > 0) {
         <div class="found-members-container">
             @for (member of foundMembers; track $index) {
-            <div (click)="addMemberToChannel(member)" class="flex-container">
+            <div (click)="addMemberAndReset(member)" class="flex-container">
                 <div class="avatar-container">
                     <img src="{{userService.getAvatar(member)}}" alt="avatar">
                     <div [class.online-status]="member.is_online" class="user-status"></div>

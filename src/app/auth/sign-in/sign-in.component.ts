@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AccountsService } from '../../services/accounts/accounts.service';
 import { fullEmailValidator } from './validators/email.validator';
 import { UserService } from '../../services/user/user.service';
 import { NewUser } from '../../interfaces/new-user';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,7 +20,7 @@ export class SignInComponent {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private userService: UserService = inject(UserService);
   private router: Router = inject(Router);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
 
   ngOnInit(): void {
     this.initializeSignInForm();
@@ -51,7 +51,7 @@ export class SignInComponent {
 
   private checkEmailExistence(): void {
     const email = this.signInForm.get('email')?.value;
-    this.accountsService.checkEmailExist(email).subscribe({
+    this.accountsApiService.checkEmailExist(email).subscribe({
       next: (response) => this.isEmailExist = response.isEmailExist,
       error: (error) => console.error(error),
     });

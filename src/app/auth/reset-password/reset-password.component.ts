@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { passwordsMatchValidator } from './validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { ToastMessageService } from '../../services/toast-message/toast-message.service';
-import { AccountsService } from '../../services/accounts/accounts.service';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,7 +21,7 @@ export class ResetPasswordComponent {
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private route: ActivatedRoute = inject(ActivatedRoute);
   private router: Router = inject(Router);
 
@@ -66,13 +66,13 @@ export class ResetPasswordComponent {
   }
 
   private deletePasswordResetToken(): void {
-    this.accountsService.deletePasswordResetEmail(this.token).subscribe({
+    this.accountsApiService.deletePasswordResetEmail(this.token).subscribe({
       error: (error) => console.error(error),
     });
   }
 
   private fetchEmailForPasswordReset(): void {
-    this.accountsService.getPasswordResetEmail(this.token).subscribe({
+    this.accountsApiService.getPasswordResetEmail(this.token).subscribe({
       next: (response) => this.email = response.email,
       error: (error) => console.error(error),
     });
@@ -89,7 +89,7 @@ export class ResetPasswordComponent {
 
   private sendPasswordChangeRequest(): void {
     const newPassword = this.resetPasswordForm.get('newPassword')?.value;
-    this.accountsService.changePassword(this.email, newPassword).subscribe({
+    this.accountsApiService.changePassword(this.email, newPassword).subscribe({
       next: () => this.displayToastMessage(),
       error: (error) => console.error(error),
     });

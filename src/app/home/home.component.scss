@@ -6,10 +6,11 @@
     height: 100vh;
     margin: 0 auto;
     padding: 25px 20px;
+    overflow: hidden;
 }
 
 .main-container {
     @include flex-layout(unset, space-between, unset, 20px);
-    height: 100%;
+    height: calc(100% - 90px);
     position: relative;
 }

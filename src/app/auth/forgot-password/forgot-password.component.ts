@@ -3,8 +3,8 @@ import { ToastMessageComponent } from '../toast-message/toast-message.component'
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastMessageService } from '../../services/toast-message/toast-message.service';
-import { AccountsService } from '../../services/accounts/accounts.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -19,7 +19,7 @@ export class ForgotPasswordComponent {
 
   toastMessageService: ToastMessageService = inject(ToastMessageService);
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
 
   ngOnInit(): void {
     this.initializeResetPasswordEmailForm();
@@ -42,7 +42,7 @@ export class ForgotPasswordComponent {
 
   private sendPasswordResetEmail(): void {
     const email = this.resetPasswordEmailForm.value;
-    this.accountsService.sendPasswordResetEmail(email).subscribe({
+    this.accountsApiService.sendPasswordResetEmail(email).subscribe({
       next: () => this.displayToastMessage(),
       error: (error) => console.error(error),
     });
@@ -54,7 +54,7 @@ export class ForgotPasswordComponent {
 
   checkEmailExistence(): void {
     const email = this.resetPasswordEmailForm.get('email')?.value;
-    this.accountsService.checkEmailExist(email).subscribe({
+    this.accountsApiService.checkEmailExist(email).subscribe({
       next: (response) => this.isEmailExist = response.isEmailExist,
       error: (error) => console.error(error),
     });

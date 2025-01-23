@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AccountsService } from '../../services/accounts/accounts.service';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../interfaces/user';
+import { AccountsApiService } from '../../services/accounts-api/accounts-api.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginComponent {
   isAuthenticated!: boolean;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
-  private accountsService: AccountsService = inject(AccountsService);
+  private accountsApiService: AccountsApiService = inject(AccountsApiService);
   private userService: UserService = inject(UserService);
   private router: Router = inject(Router);
 
@@ -40,7 +40,7 @@ export class LoginComponent {
   loginUser(): void {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
-    this.accountsService.loginUser(email, password).subscribe({
+    this.accountsApiService.loginUser(email, password).subscribe({
       next: (response) => this.handleLoginSuccess(response),
       error: (error) => this.handleLoginError(error),
     });
@@ -80,7 +80,7 @@ export class LoginComponent {
   }
 
   loginGuest(): void {
-    this.accountsService.loginGuest().subscribe({
+    this.accountsApiService.loginGuest().subscribe({
       error: (error) => console.error(error),
     });
   }
