@@ -1,0 +1,39 @@
+@import './../../../styles/mixins/mixins.scss';
+
+:host {
+    @include flex-layout(column, space-between, unset, unset);
+    width: 100%;
+}
+
+header {
+    @include flex-layout(unset, space-between, center, unset);
+    padding: 25px 45px;
+
+    .left-container {
+        @include flex-layout(unset, unset, center, 10px);
+
+        span {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 32.74px;
+        }
+    }
+
+    .right-container {
+        @include flex-layout(unset, unset, center, 10px);
+
+        img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border: 2px solid #FFFFFF;
+            border-radius: 30px;
+        }
+
+        span {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 27.28px;
+        }
+    }
+}

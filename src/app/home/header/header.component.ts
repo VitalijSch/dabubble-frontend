@@ -15,8 +15,6 @@ import { AccountsApiService } from '../../services/accounts-api/accounts-api.ser
 export class HeaderComponent {
   @ViewChild('search') searchField!: ElementRef;
 
-  id: string | null = null;
-
   userService: UserService = inject(UserService);
   profileService: ProfileService = inject(ProfileService);
   private accountsApiService: AccountsApiService = inject(AccountsApiService);
@@ -28,19 +26,13 @@ export class HeaderComponent {
   }
 
   checkAuth(): void {
-    this.fetchIdFromRoute();
-    if (this.id) {
-      this.accountsApiService.refreshAccessToken(this.id).subscribe({
-        next: (response) => this.setUserData(response),
-        error: (error) => this.handleCheckLoggedError(error),
-      });
-    }
-  }
-
-  private fetchIdFromRoute(): void {
-    this.route.paramMap.subscribe(params => {
-      this.id = params.get('id');
-    });
+      const id = this.route.snapshot.paramMap.get('userId');
+      if (id) {
+        this.accountsApiService.refreshAccessToken(id).subscribe({
+          next: (response) => this.setUserData(response),
+          error: (error) => this.handleCheckLoggedError(error),
+        });
+      }
   }
 
   private setUserData(response: any): void {

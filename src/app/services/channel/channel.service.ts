@@ -8,10 +8,11 @@ export class ChannelService {
   channels: Channel[] = [];
 
   channel: Channel = {
+    id: 0,
     name: '',
     members: [],
     creator: 0,
-    membersPk: []
+    membersPk: [],
   }
 
   showChannel: boolean = false;
@@ -28,5 +29,9 @@ export class ChannelService {
 
   toggleShowAddMember(): void {
     this.showAddMember = !this.showAddMember;
+  }
+
+  getSelectedChannel(id: string): void {
+    this.channel = this.channels.filter(channel => channel.id.toString() === id)[0];
   }
 }

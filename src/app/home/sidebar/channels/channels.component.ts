@@ -2,22 +2,39 @@ import { Component, inject } from '@angular/core';
 import { CreateChannelComponent } from "./create-channel/create-channel.component";
 import { ChannelService } from '../../../services/channel/channel.service';
 import { ChannelsApiService } from '../../../services/channels-api/channels-api.service';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-channels',
   standalone: true,
-  imports: [CreateChannelComponent],
+  imports: [CreateChannelComponent, RouterModule],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.scss'
 })
 export class ChannelsComponent {
   isChannelHidden: boolean = false;
+  channelId: string | null = null;
 
   channelService: ChannelService = inject(ChannelService);
   private channelsApiService: ChannelsApiService = inject(ChannelsApiService);
+  private route: ActivatedRoute = inject(ActivatedRoute);
+  private router: Router = inject(Router);
 
   ngOnInit(): void {
+    this.resetChannelIdIfNoChannelInUrl();
     this.getAllChannel();
+    this.fetchChannelIdFromRoute();
+  }
+
+  private resetChannelIdIfNoChannelInUrl(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      if (!this.router.url.includes('channel')) {
+        this.channelId = null;
+      }
+    });
   }
 
   private getAllChannel(): void {
@@ -27,7 +44,24 @@ export class ChannelsComponent {
     })
   }
 
+  private fetchChannelIdFromRoute(): void {
+    this.channelId = this.route.firstChild?.snapshot.paramMap.get('channelId') ?? null;
+  }
+
   toggleIsChannelHidden(): void {
     this.isChannelHidden = !this.isChannelHidden;
+  }
+
+  openChannel(id: number): void {
+    this.setChannel(id);
+    this.loadChannelData(id);
+  }
+  
+  private setChannel(id: number): void {
+    this.channelId = id.toString();
+  }
+  
+  private loadChannelData(id: number): void {
+    this.channelService.getSelectedChannel(id.toString());
   }
 }

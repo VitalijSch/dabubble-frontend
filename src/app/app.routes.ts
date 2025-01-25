@@ -28,13 +28,13 @@ export const routes: Routes = [
             { path: 'privacy-policy', component: PrivacyPolicyComponent },
         ],
     },
-    { path: 'home/:id', redirectTo: 'home/:id/new-message', pathMatch: 'full' },
+    { path: 'home/:userId', redirectTo: 'home/:userId/new-message', pathMatch: 'full' },
     {
-        path: 'home/:id',
+        path: 'home/:userId',
         component: HomeComponent,
         children: [
             { path: 'new-message', component: NewMessageComponent },
-            { path: 'channel', component: ChannelComponent },
+            { path: 'channel/:channelId', component: ChannelComponent },
             { path: 'message', component: MessageComponent },
         ]
     },

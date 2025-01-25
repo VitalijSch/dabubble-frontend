@@ -160,7 +160,6 @@ export class AddMemberComponent {
     this.getChannels(response);
     this.toggleShowChannel();
     this.resetChannelMembers();
-    console.log(this.channelService.channels)
   }
 
   private getChannels(response: Channel[]): void {

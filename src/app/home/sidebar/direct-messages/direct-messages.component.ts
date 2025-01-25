@@ -25,9 +25,7 @@ export class DirectMessagesComponent {
   }
 
   private fetchIdFromRoute(): void {
-    this.route.paramMap.subscribe(params => {
-      this.id = Number(params.get('id'));
-    });
+    this.id = Number(this.route.snapshot.paramMap.get('userId'));
   }
 
   private userList(): void {
