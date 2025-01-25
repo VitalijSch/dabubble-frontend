@@ -49,7 +49,7 @@ export class AddMemberComponent {
   }
 
   private resetChannelMembers(): void {
-    this.channelService.channel.members = [];
+    this.channelService.newChannel.members = [];
   }
 
   isInvalidSelection(): boolean {
@@ -65,7 +65,7 @@ export class AddMemberComponent {
   }
 
   private isMembersInChannelEmpty(): boolean {
-    return this.channelService.channel.members.length === 0;
+    return this.channelService.newChannel.members.length === 0;
   }
 
   isSearchFieldEmpty(): boolean {
@@ -105,20 +105,20 @@ export class AddMemberComponent {
 
   private addMember(member: User): void {
     if (this.isMemberExists(member)) return;
-    this.channelService.channel.members?.push(member);
+    this.channelService.newChannel.members?.push(member);
   }
 
   private isMemberExists(member: User): boolean {
-    return this.channelService.channel.members?.some(existingMember => existingMember.id === member.id);
+    return this.channelService.newChannel.members?.some(existingMember => existingMember.id === member.id);
   }
 
   private addMembersIdsToMembersPk(): void {
-    this.channelService.channel.membersPk = this.channelService.channel.members.map(member => member.id);
+    this.channelService.newChannel.membersPk = this.channelService.newChannel.members.map(member => member.id);
   }
 
   private addCurrentUserToMembersPk(): void {
-    const index = this.channelService.channel.membersPk.findIndex(members => members === this.userService.user.id);
-    if (index === -1) this.channelService.channel.membersPk.push(this.userService.user.id);
+    const index = this.channelService.newChannel.membersPk.findIndex(members => members === this.userService.user.id);
+    if (index === -1) this.channelService.newChannel.membersPk.push(this.userService.user.id);
   }
 
   private resetSearchField(): void {
@@ -143,22 +143,32 @@ export class AddMemberComponent {
   }
 
   private removeMember(member: User): void {
-    const index = this.channelService.channel.members.findIndex(channelMember => channelMember.id === member.id);
+    const index = this.channelService.newChannel.members.findIndex(channelMember => channelMember.id === member.id);
     if (index === -1) return;
-    this.channelService.channel.members.splice(index, 1);
+    this.channelService.newChannel.members.splice(index, 1);
   }
 
-  createChannel(): void {
+  handleCreateChannel(): void {
     this.addAllUsersToChannel();
-    this.channelsApiService.createChannel(this.channelService.channel).subscribe({
+    this.createChannel();
+    this.resetNewChannel();
+  }
+
+  private addAllUsersToChannel(): void {
+    if (this.isChooseMembersSelected()) return;
+    this.channelService.newChannel.membersPk = this.userService.users.map(user => user.id);
+  }
+
+  private createChannel(): void {
+    console.log(this.channelService.newChannel)
+    this.channelsApiService.createChannel(this.channelService.newChannel).subscribe({
       next: (response) => this.handleCreateChannelSuccess(response),
       error: (error) => console.error(error),
     })
   }
 
-  private addAllUsersToChannel(): void {
-    if (this.isChooseMembersSelected()) return;
-    this.channelService.channel.membersPk = this.userService.users.map(user => user.id);
+  private resetNewChannel(): void {
+    this.channelService.resetNewChannel();
   }
 
   private handleCreateChannelSuccess(response: Channel[]): void {

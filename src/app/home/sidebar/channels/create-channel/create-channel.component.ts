@@ -44,7 +44,7 @@ export class CreateChannelComponent {
   }
 
   private updateChannelName(): void {
-    this.channelService.channel.name = this.channelForm.get('name')?.value;
+    this.channelService.newChannel.name = this.channelForm.get('name')?.value;
   }
 
   private updateChannelDescriptionIfNotEmpty(): void {
@@ -56,10 +56,10 @@ export class CreateChannelComponent {
   }
 
   private updateChannelDescription(): void {
-    this.channelService.channel.description = this.channelForm.get('description')?.value;
+    this.channelService.newChannel.description = this.channelForm.get('description')?.value;
   }
 
   private updateChannelCreator(): void {
-    this.channelService.channel.creator = this.userService.user.id;
+    this.channelService.newChannel.creator = this.userService.user.id;
   }
 }

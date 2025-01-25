@@ -57,15 +57,15 @@ export class ChannelsComponent {
   openChannel(id: number): void {
     this.setChannel(id);
     this.loadChannelData(id);
-this.loadMembersFromUserService();
+    this.loadMembersFromUserService();
   }
-  
+
   private setChannel(id: number): void {
     this.channelId = id.toString();
   }
-  
+
   private loadChannelData(id: number): void {
-    this.channelService.getSelectedChannel(id.toString());
+    this.channelService.channel = this.channelService.getSelectedChannel(id.toString());
   }
 
   private loadMembersFromUserService(): void {

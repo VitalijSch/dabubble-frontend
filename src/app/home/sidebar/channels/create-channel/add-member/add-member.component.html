@@ -17,10 +17,10 @@
     </div>
 </header>
 
-<form [formGroup]="memberSelectionForm" (ngSubmit)="createChannel()">
+<form [formGroup]="memberSelectionForm" (ngSubmit)="handleCreateChannel()">
     <div class="input-container">
         <input value="allMembers" formControlName="selectedOption" type="radio" name="selectedOption" id="allMembers">
-        <label for="allMembers">Alle Mitglieder von <span>{{channelService.channel.name}}</span> hinzufügen</label>
+        <label for="allMembers">Alle Mitglieder von <span>{{channelService.newChannel.name}}</span> hinzufügen</label>
     </div>
 
     <div class="input-container">
@@ -49,9 +49,9 @@
         </div>
         }
 
-        @if(channelService.channel.members.length > 0) {
+        @if(channelService.newChannel.members.length > 0) {
         <div [class.d-none]="isSearchInputFocused()" (click)="focusSearchField()" class="selected-members-container">
-            @for (member of channelService.channel.members; track $index) {
+            @for (member of channelService.newChannel.members; track $index) {
             <div class="member-flex-container">
                 <img src="{{userService.getAvatar(member)}}" alt="avatar">
 

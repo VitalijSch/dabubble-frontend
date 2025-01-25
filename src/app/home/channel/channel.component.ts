@@ -43,7 +43,7 @@ export class ChannelComponent {
   private loadSelectedChannel(): void {
     const channelId = this.route.snapshot.paramMap.get('channelId');
     if (!channelId) return;
-    this.channelService.getSelectedChannel(channelId);
+    this.channelService.channel =  this.channelService.getSelectedChannel(channelId);
     this.loadMembersFromUserService();
   }
 
