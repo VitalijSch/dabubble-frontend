@@ -31,7 +31,7 @@
 
     @if(isChooseMembersSelected()) {
     <div class="search-container">
-        <input #searchInput (input)="selectMembers()" formControlName="search" placeholder="Name eingeben" type="text"
+        <input #searchInput (input)="selectMembers()" formControlName="search" autocomplete="off" placeholder="Name eingeben" type="text"
             name="search" id="search">
 
         @if(foundMembers.length > 0) {

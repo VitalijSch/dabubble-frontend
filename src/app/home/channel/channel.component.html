@@ -16,9 +16,14 @@
     </div>
 
     <div class="right-container">
-        <img src="" alt="">
+        <div [ngStyle]="{'width': (channelService.channel.members.length * 30 + 55) + 'px'}" class="members-container">
+            @for (member of channelService.channel.members; track $index) {
+            <img [ngStyle]="{'right': ($index * 30) + 35 + 'px', 'z-index': (channelService.channel.members.length - 1 - $index)}"
+                src="{{getAvatar(member)}}" alt="avatar">
+            }
 
-        <span>{{channelService.channel.membersPk.length}}</span>
+            <span>{{channelService.channel.membersPk.length}}</span>
+        </div>
 
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="40" height="40" rx="20" fill="#ECEEFE" />

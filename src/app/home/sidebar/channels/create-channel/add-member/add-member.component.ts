@@ -104,7 +104,12 @@ export class AddMemberComponent {
   }
 
   private addMember(member: User): void {
+    if (this.isMemberExists(member)) return;
     this.channelService.channel.members?.push(member);
+  }
+
+  private isMemberExists(member: User): boolean {
+    return this.channelService.channel.members?.some(existingMember => existingMember.id === member.id);
   }
 
   private addMembersIdsToMembersPk(): void {

@@ -4,6 +4,7 @@ import { ChannelService } from '../../../services/channel/channel.service';
 import { ChannelsApiService } from '../../../services/channels-api/channels-api.service';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-channels',
@@ -18,6 +19,7 @@ export class ChannelsComponent {
 
   channelService: ChannelService = inject(ChannelService);
   private channelsApiService: ChannelsApiService = inject(ChannelsApiService);
+  private userService: UserService = inject(UserService);
   private route: ActivatedRoute = inject(ActivatedRoute);
   private router: Router = inject(Router);
 
@@ -55,6 +57,7 @@ export class ChannelsComponent {
   openChannel(id: number): void {
     this.setChannel(id);
     this.loadChannelData(id);
+this.loadMembersFromUserService();
   }
   
   private setChannel(id: number): void {
@@ -63,5 +66,11 @@ export class ChannelsComponent {
   
   private loadChannelData(id: number): void {
     this.channelService.getSelectedChannel(id.toString());
+  }
+
+  private loadMembersFromUserService(): void {
+    this.channelService.channel.members = this.userService.users.filter(user =>
+      this.channelService.channel.membersPk.includes(user.id)
+    );
   }
 }
