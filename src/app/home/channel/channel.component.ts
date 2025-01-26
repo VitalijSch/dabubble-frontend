@@ -6,11 +6,12 @@ import { Channel } from '../../interfaces/channel';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../interfaces/user';
 import { CommonModule } from '@angular/common';
+import { ChannelUpdateComponent } from "./channel-update/channel-update.component";
 
 @Component({
   selector: 'app-channel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChannelUpdateComponent],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss'
 })
