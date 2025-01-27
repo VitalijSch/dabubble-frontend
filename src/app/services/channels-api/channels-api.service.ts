@@ -18,4 +18,8 @@ export class ChannelsApiService {
   getAllChannels(): Observable<any> {
     return this.http.get(`${this.apiUrl}/get-all-channels/`, { withCredentials: true });
   }
+
+  updateChannel(data: Channel): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update-channel/`, data, { withCredentials: true });
+  }
 }

@@ -68,6 +68,7 @@
 <div [class.d-none]="isChannelHidden" class="flex-channels">
     <div class="channels-container">
         @for (channel of channelService.channels; track $index) {
+        @if(isUserMemberInChannel(channel)) {
         <div (click)="openChannel(channel.id)" [routerLink]="['channel', channel.id]"
             [class.active-channel]="channel.id.toString() === channelId" class="flex-container">
             <div class="icon-container">
@@ -80,6 +81,7 @@
 
             <span>{{channel.name}}</span>
         </div>
+        }
         }
     </div>
 

@@ -5,6 +5,7 @@ import { ChannelsApiService } from '../../../services/channels-api/channels-api.
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { UserService } from '../../../services/user/user.service';
+import { Channel } from '../../../interfaces/channel';
 
 @Component({
   selector: 'app-channels',
@@ -48,6 +49,10 @@ export class ChannelsComponent {
 
   private fetchChannelIdFromRoute(): void {
     this.channelId = this.route.firstChild?.snapshot.paramMap.get('channelId') ?? null;
+  }
+
+  isUserMemberInChannel(channel: Channel): boolean {
+    return channel.membersPk.includes(this.userService.user.id);
   }
 
   toggleIsChannelHidden(): void {

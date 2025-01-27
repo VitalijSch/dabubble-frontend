@@ -25,6 +25,7 @@ export class ChannelService {
 
   showChannel: boolean = false;
   showAddMember: boolean = false;
+  showUpdatChannel: boolean = false;
 
   toggleShowChannel(): void {
     this.showChannel = !this.showChannel;
@@ -37,6 +38,10 @@ export class ChannelService {
 
   toggleShowAddMember(): void {
     this.showAddMember = !this.showAddMember;
+  }
+
+  toggleShowUpdateChannel(): void {
+    this.showUpdatChannel = !this.showUpdatChannel;
   }
 
   getSelectedChannel(id: string): Channel {

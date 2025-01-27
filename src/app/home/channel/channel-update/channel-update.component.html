@@ -1,6 +1,6 @@
 <div class="wrapper">
-    <div [ngStyle]="{'left': !sidebarToggleService.isSidebarHidden ? '451px' : '45px'}"
-        class="channel-update-container">
+    <div (click)="$event.stopPropagation()"
+        [ngStyle]="{'left': !sidebarToggleService.isSidebarHidden ? '451px' : '45px'}" class="channel-update-container">
         <header>
             <div class="left-container">
                 <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,8 +12,8 @@
                 <span>{{channelService.channel.name}}</span>
             </div>
 
-            <svg class="close-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg (click)="channelService.toggleShowUpdateChannel()" class="close-icon" width="40" height="40"
+                viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_395_4944" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
                     <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -26,13 +26,14 @@
             </svg>
         </header>
 
-        <div class="channel-name-container">
+        <div [class.inputfield-style]="showNameInputField" class="channel-name-container">
             <div class="flex-container">
                 <span>Channel-Name</span>
 
-                <span>Bearbeiten</span>
+                <span (click)="updateChannelName()">{{showSaveOrEditName()}}</span>
             </div>
 
+            @if(!showNameInputField) {
             <div class="name-container">
                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_108433_5983" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
@@ -48,26 +49,48 @@
 
                 <span>{{channelService.channel.name}}</span>
             </div>
+            } @else {
+            <div class="name-input-container">
+                <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <mask id="mask0_108651_3724" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
+                        width="23" height="24">
+                        <rect y="0.5" width="23" height="23" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_108651_3724)">
+                        <path
+                            d="M6.94787 19.6667C6.64439 19.6667 6.39683 19.5469 6.20516 19.3073C6.01349 19.0677 5.95759 18.8042 6.03745 18.5167L6.70828 15.8333H4.57599C4.25655 15.8333 4.00099 15.7097 3.80933 15.4625C3.61766 15.2146 3.56176 14.9389 3.64162 14.6354C3.68953 14.4118 3.80134 14.2361 3.97703 14.1083C4.15273 13.9805 4.35238 13.9167 4.57599 13.9167H7.18745L8.14578 10.0833H5.53433C5.21488 10.0833 4.95933 9.9597 4.76766 9.71245C4.57599 9.46456 4.52009 9.18888 4.59995 8.88541C4.64787 8.6618 4.75967 8.48611 4.93537 8.35833C5.11106 8.23055 5.31071 8.16666 5.53433 8.16666H8.62495L9.41558 5.02812C9.46349 4.82048 9.56731 4.65277 9.72703 4.52499C9.88676 4.39722 10.0784 4.33333 10.302 4.33333C10.6055 4.33333 10.8531 4.45312 11.0447 4.6927C11.2364 4.93229 11.2923 5.19583 11.2125 5.48333L10.5416 8.16666H14.375L15.1656 5.02812C15.2135 4.82048 15.3173 4.65277 15.477 4.52499C15.6368 4.39722 15.8284 4.33333 16.052 4.33333C16.3555 4.33333 16.6031 4.45312 16.7947 4.6927C16.9864 4.93229 17.0423 5.19583 16.9625 5.48333L16.2916 8.16666H18.4239C18.7434 8.16666 18.9989 8.29029 19.1906 8.53754C19.3822 8.78543 19.4381 9.06111 19.3583 9.36458C19.3104 9.58819 19.1986 9.76388 19.0229 9.89166C18.8472 10.0194 18.6475 10.0833 18.4239 10.0833H15.8125L14.8541 13.9167H17.4656C17.785 13.9167 18.0406 14.0403 18.2322 14.2875C18.4239 14.5354 18.4798 14.8111 18.4 15.1146C18.352 15.3382 18.2402 15.5139 18.0645 15.6417C17.8888 15.7694 17.6892 15.8333 17.4656 15.8333H14.375L13.5843 18.9719C13.5364 19.1795 13.4326 19.3472 13.2729 19.475C13.1131 19.6028 12.9215 19.6667 12.6979 19.6667C12.3944 19.6667 12.1468 19.5469 11.9552 19.3073C11.7635 19.0677 11.7076 18.8042 11.7875 18.5167L12.4583 15.8333H8.62495L7.83433 18.9719C7.78641 19.1795 7.68259 19.3472 7.52287 19.475C7.36314 19.6028 7.17148 19.6667 6.94787 19.6667ZM9.10412 13.9167H12.9375L13.8958 10.0833H10.0625L9.10412 13.9167Z"
+                            fill="black" />
+                    </g>
+                </svg>
+
+                <input  [(ngModel)]="name" placeholder="{{channelService.channel.name}}" type="text" name="name" id="name">
+            </div>
+            }
         </div>
 
-        <div class="channel-description-container">
+        <div [class.inputfield-style]="showDescriptionInputField" class="channel-description-container">
             <div class="flex-container">
                 <span>Beschreibung</span>
 
-                <span>Bearbeiten</span>
+                <span (click)="updateChannelDescription()">{{showSaveOrEditDescription()}}</span>
             </div>
 
+            @if(!showDescriptionInputField) {
             <p>{{channelService.channel.description}}</p>
-
+            } @else {
+            <input [(ngModel)]="description" placeholder="Dein Text hier" type="text" name="description" id="description">
+            }
             <div class="line-container"></div>
 
             <div class="creator-container">
                 <span>Erstellt von</span>
 
-                <span>{{channelService.channel.creator}}</span>
+                @if(getCreator(channelService.channel.creator)) {
+                <span>{{getCreator(channelService.channel.creator).username}}</span>
+                }
             </div>
         </div>
 
-        <button>Channel verlassen</button>
+        <button (click)="leaveChannel()" type="button">Channel verlassen</button>
     </div>
 </div>
