@@ -5,5 +5,12 @@
 }
 
 body {
+  height: 100dvh;
+  width: 100dvw;
+  background-color: #eceefe;
   font-family: "Nunito";
+}
+
+.figtree {
+  font-family: "Figtree";
 }

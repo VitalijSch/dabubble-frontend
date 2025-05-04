@@ -1,9 +1,5 @@
-import Intro from "@/components/Intro";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div>
-      <Intro />
-    </div>
-  );
+  redirect("/login");
 }
