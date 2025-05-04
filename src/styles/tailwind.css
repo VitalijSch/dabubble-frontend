@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@theme {
+  --animate-moveLeft: moveLeft 0.3s ease-in-out forwards 1s;
+  --animate-moveRight: moveRight 1s ease-in-out forwards 1.4s;
+  --animate-fadeOut: fadeOut 1s ease-in-out forwards 2.6s;
+
+  @keyframes moveLeft {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-226.98px);
+    }
+  }
+
+  @keyframes moveRight {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(470px);
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}
