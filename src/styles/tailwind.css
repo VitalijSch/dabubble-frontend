@@ -3,9 +3,8 @@
 @theme {
   --animate-moveLeft: moveLeft 0.3s ease-in-out forwards 1s;
   --animate-moveRight: moveRight 1s ease-in-out forwards 1.4s;
-  --animate-fadeOut: fadeOut 0.4s ease-in-out forwards 2.6s;
-  --animate-introMoveToTopLeft: introMoveToTopLeft 0.3s ease-in-out forwards 2.4s;
-  --animate-logoMoveToTopLeft: logoMoveToTopLeft 1s ease-in-out forwards 2.3s;
+  --animate-fadeOut: fadeOut 1s ease-in-out forwards 2.6s;
+  --animate-moveToTopLeft: moveToTopLeft 1s ease-in-out forwards 2.3s;
 
   @keyframes moveLeft {
     0% {
@@ -35,16 +34,7 @@
     }
   }
 
-  @keyframes introMoveToTopLeft {
-    0% {
-      transform: translate(0, 0);
-    }
-    100% {
-      transform: translate(-100%, -100%);
-    }
-  }
-
-  @keyframes logoMoveToTopLeft {
+  @keyframes moveToTopLeft {
     0% {
       transform: translate(calc(50vw - 50%), calc(50vh - 50%));
     }

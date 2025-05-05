@@ -1,3 +1,4 @@
+import AuthFooter from "@/components/auth/AuthFooter";
 import AuthHeader from "@/components/auth/AuthHeader";
 import AuthIntro from "@/components/auth/AuthIntro";
 
@@ -7,10 +8,11 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div>
+    <div className="max-w-[1920px] w-full h-full flex flex-col justify-between pt-[75px] pb-[48px] px-[75px] mx-auto">
       <AuthIntro />
       <AuthHeader />
       {children}
+      <AuthFooter />
     </div>
   );
 }
