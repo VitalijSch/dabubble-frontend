@@ -23,7 +23,7 @@ export default function FormInput({
           name={name}
           id={id}
         />
-        <Icon className="absolute top-1/2 left-[32px] -translate-y-1/2 text-[#686868] peer-focus:text-[#000000] transition-colors duration-300" />
+        <Icon className="absolute top-1/2 left-[32px] -translate-y-1/2 text-[#686868] peer-focus:text-[#000000] transition-colors duration-300 ease-in-out" />
       </div>
       <span className="text-[14px] text-[#ED1E79]">
         *Diese E-Mail-Adresse ist leider ungültig.
