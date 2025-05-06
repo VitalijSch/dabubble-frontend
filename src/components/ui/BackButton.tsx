@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 interface BackButtonProps {
-  className: string;
+  className?: string;
 }
 
 export default function BackButton({ className }: BackButtonProps) {
@@ -12,7 +12,7 @@ export default function BackButton({ className }: BackButtonProps) {
   return (
     <div
       onClick={() => router.back()}
-      className={`group rounded-full cursor-pointer hover:bg-[#ECEEFE] transition-colors duration-300 ease-in-out ${className}`}
+      className={`group w-fit rounded-full cursor-pointer hover:bg-[#ECEEFE] transition-colors duration-300 ease-in-out ${className}`}
     >
       <svg
         width="41"

@@ -14,3 +14,7 @@ body {
 .figtree {
   font-family: "Figtree";
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
