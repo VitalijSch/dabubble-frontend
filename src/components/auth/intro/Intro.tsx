@@ -1,6 +1,21 @@
-import Image from "next/image";
+"use client";
 
-export default function AuthIntro() {
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export default function Intro() {
+  const [show, setShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    const played = sessionStorage.getItem('introPlayed');
+    if (!played) {
+      setShow(true);
+      sessionStorage.setItem('introPlayed', 'true');
+    }
+  }, []);
+
+  if (!show) return null;
+
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 z-10 flex justify-center items-center bg-gradient-to-b from-[#797EF3] to-[#313AE5] animate-fadeOut">
       <div className="max-w-[470px] min-w-[187px] w-fit h-[184px] flex justify-center items-center relative">

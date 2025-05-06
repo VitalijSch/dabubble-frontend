@@ -41,7 +41,11 @@ export default function SignIn() {
           <SignInCheckbox />
         </div>
         <div className="self-end flex justify-center items-center gap-[30px]">
-          <BackgroundButton type="button" name="Weiter" />
+          <BackgroundButton
+            type="button"
+            className="bg-[#686868] text-[#FFFFFF] pointer-events-none"
+            name="Weiter"
+          />
         </div>
       </form>
     </div>

@@ -3,14 +3,21 @@
 import Image from "next/image";
 import LinkButton from "../ui/LinkButton";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AuthHeader() {
   const pathname = usePathname();
+  const [show, setShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    const played = sessionStorage.getItem("introPlayed");
+    if (!played) setShow(true);
+  }, []);
 
   return (
     <div className="max-h-[70px] w-full h-full flex justify-between items-center">
       <Image
-        className="animate-moveToTopLeft"
+        className={show ? "animate-moveToTopLeft" : ""}
         src="/images/auth/auth-header/logo-animation.svg"
         alt="logo animation icon"
         width={242.11}
