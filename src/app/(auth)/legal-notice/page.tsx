@@ -1,4 +1,4 @@
-import BackButton from "@/components/ui/BackButton";
+import BackButton from "@/components/BackButton";
 
 export default function LegalNotice() {
   return (
@@ -13,7 +13,7 @@ export default function LegalNotice() {
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <h2 className="text-[32px] text-[#444DF2] font-[700]">Contact:</h2>
+        <h2 className="text-[32px] text-[#444DF2] font-[700]">Kontakt:</h2>
         <span className="text-[20px]">E-Mail: schwab.vitalij@gmail.com</span>
       </div>
     </div>

@@ -3,6 +3,6 @@
 import dynamic from 'next/dynamic';
 
 export default dynamic(
-  () => import('@/components/auth/intro/Intro'),
+  () => import('@/features/auth/components/Intro'),
   { ssr: false }
 );

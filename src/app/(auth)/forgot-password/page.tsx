@@ -1,7 +1,7 @@
 import EmailIcon from "@/components/icons/EmailIcon";
-import BackButton from "@/components/ui/BackButton";
-import BackgroundButton from "@/components/ui/BackgroundButton";
-import FormInput from "@/components/ui/FormInput";
+import BackButton from "@/components/BackButton";
+import BackgroundButton from "@/components/BackgroundButton";
+import FormInput from "@/components/FormInput";
 
 export default function ForgotPassword() {
   return (

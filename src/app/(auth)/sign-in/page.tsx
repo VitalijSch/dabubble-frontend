@@ -1,10 +1,10 @@
-import SignInCheckbox from "@/components/auth/sign-in/SignInCheckbox";
+import Checkbox from "@/features/sign-in/components/Checkbox";
 import EmailIcon from "@/components/icons/EmailIcon";
 import LockIcon from "@/components/icons/LookIcon";
 import PersonIcon from "@/components/icons/PersonIcon";
-import BackButton from "@/components/ui/BackButton";
-import BackgroundButton from "@/components/ui/BackgroundButton";
-import FormInput from "@/components/ui/FormInput";
+import BackButton from "@/components/BackButton";
+import BackgroundButton from "@/components/BackgroundButton";
+import FormInput from "@/components/FormInput";
 
 export default function SignIn() {
   return (
@@ -38,7 +38,7 @@ export default function SignIn() {
           Icon={LockIcon}
         />
         <div>
-          <SignInCheckbox />
+          <Checkbox />
         </div>
         <div className="self-end flex justify-center items-center gap-[30px]">
           <BackgroundButton

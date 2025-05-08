@@ -1,8 +1,8 @@
 import EmailIcon from "@/components/icons/EmailIcon";
 import LockIcon from "@/components/icons/LookIcon";
-import BackgroundButton from "@/components/ui/BackgroundButton";
-import BorderButton from "@/components/ui/BorderButton";
-import FormInput from "@/components/ui/FormInput";
+import BackgroundButton from "@/components/BackgroundButton";
+import BorderButton from "@/components/BorderButton";
+import FormInput from "@/components/FormInput";
 import Image from "next/image";
 import Link from "next/link";
 

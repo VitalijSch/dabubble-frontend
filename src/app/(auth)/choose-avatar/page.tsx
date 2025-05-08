@@ -1,5 +1,5 @@
-import BackButton from "@/components/ui/BackButton";
-import BackgroundButton from "@/components/ui/BackgroundButton";
+import BackButton from "@/components/BackButton";
+import BackgroundButton from "@/components/BackgroundButton";
 import { avatars } from "@/data/avatars";
 import Image from "next/image";
 

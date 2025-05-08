@@ -1,11 +1,11 @@
 "use client";
 
+import LinkButton from "@/components/LinkButton";
 import Image from "next/image";
-import LinkButton from "../ui/LinkButton";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function AuthHeader() {
+export default function Header() {
   const pathname = usePathname();
   const [show, setShow] = useState<boolean>(false);
 

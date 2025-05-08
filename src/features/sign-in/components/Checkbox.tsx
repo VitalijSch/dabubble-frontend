@@ -5,7 +5,7 @@ import CheckIcon from "@/components/icons/CheckIcon";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function SignInCheckbox() {
+export default function Checkbox() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
