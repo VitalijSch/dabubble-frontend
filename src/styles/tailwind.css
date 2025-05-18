@@ -5,6 +5,7 @@
   --animate-moveRight: moveRight 1s ease-in-out forwards 1.4s;
   --animate-fadeOut: fadeOut 1s ease-in-out forwards 2.6s;
   --animate-moveToTopLeft: moveToTopLeft 1s ease-in-out forwards 2.3s;
+  --animate-moveToBottomRight: moveToBottomRight 0.3s ease-in-out forwards;
 
   @keyframes moveLeft {
     0% {
@@ -40,6 +41,15 @@
     }
     100% {
       transform: translate(0, 0);
+    }
+  }
+
+  @keyframes moveToBottomRight {
+    0% {
+      transform: translateX(470px);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 }

@@ -1,10 +1,5 @@
-import Checkbox from "@/features/sign-in/components/Checkbox";
-import EmailIcon from "@/components/icons/EmailIcon";
-import LockIcon from "@/components/icons/LookIcon";
-import PersonIcon from "@/components/icons/PersonIcon";
 import BackButton from "@/components/BackButton";
-import BackgroundButton from "@/components/BackgroundButton";
-import FormInput from "@/components/FormInput";
+import SigninForm from "@/features/sign-in/components/SigninForm";
 
 export default function SignIn() {
   return (
@@ -15,39 +10,7 @@ export default function SignIn() {
         Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues
         DABubble-Konto.
       </p>
-      <form className="w-full h-full flex flex-col justify-between">
-        <FormInput
-          placeholder="Name und Nachname"
-          type="text"
-          name="name"
-          id="name"
-          Icon={PersonIcon}
-        />
-        <FormInput
-          placeholder="beispielname@email.com"
-          type="email"
-          name="email"
-          id="email"
-          Icon={EmailIcon}
-        />
-        <FormInput
-          placeholder="Passwort"
-          type="password"
-          name="password"
-          id="password"
-          Icon={LockIcon}
-        />
-        <div>
-          <Checkbox />
-        </div>
-        <div className="self-end flex justify-center items-center gap-[30px]">
-          <BackgroundButton
-            type="button"
-            className="bg-[#686868] text-[#FFFFFF] pointer-events-none"
-            name="Weiter"
-          />
-        </div>
-      </form>
+      <SigninForm />
     </div>
   );
 }
