@@ -1,11 +1,11 @@
 "use client";
 
+import { createUser } from "@/api/user.api";
 import BackButton from "@/components/BackButton";
 import BackgroundButton from "@/components/BackgroundButton";
 import ToastMessage from "@/components/ToastMessage";
-import { avatars } from "@/data/avatars";
-import { createUser } from "@/features/choose-avatar/api/createUser";
-import { useUserStore } from "@/stores/useUserStore";
+import { avatars } from "@/data/avatars.data";
+import { userStore } from "@/stores/user.store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,25 +18,28 @@ export default function ChooseAvatar() {
 
   const router = useRouter();
 
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
-  const resetUser = useUserStore((state) => state.resetUser);
+  const user = userStore((state) => state.user);
+  const setUser = userStore((state) => state.setUser);
+  const resetUser = userStore((state) => state.resetUser);
+
+  function handleToastMessage() {
+    setShowToastMessage(true);
+    setTimeout(() => {
+      setShowToastMessage(false);
+      resetUser();
+      router.push("login");
+    }, 3000);
+  }
 
   async function handleCreateUser() {
     const updatedUser = {
       ...user!,
-      avatar: avatar,
+      avatar,
     };
     setUser(updatedUser);
     if (!user) return;
-    await createUser(updatedUser).then(() => {
-      setShowToastMessage(true);
-      setTimeout(() => {
-        setShowToastMessage(false);
-        resetUser();
-        router.push("login");
-      }, 3000);
-    });
+    await createUser(updatedUser);
+    handleToastMessage();
   }
 
   return (
@@ -57,15 +60,13 @@ export default function ChooseAvatar() {
         <div className="w-full flex flex-col gap-[16px]">
           <span className="text-[20px]">Aus der Liste wählen</span>
           <div className="w-full flex justify-between items-center">
-            {avatars.map((avatar) => (
+            {avatars.map((avatar, index) => (
               <Image
                 key={avatar}
-                onClick={() =>
-                  setAvatar(`/images/auth/choose-avatar/${avatar}.svg`)
-                }
+                onClick={() => setAvatar(avatar)}
                 className="border-[4px] rounded-full cursor-pointer hover:border-[#E6E6E6] transition-colors duration-300 ease-in-out"
-                src={`/images/auth/choose-avatar/${avatar}.svg`}
-                alt={avatar}
+                src={avatar}
+                alt={`avatar ${index}`}
                 width={64}
                 height={64}
               />

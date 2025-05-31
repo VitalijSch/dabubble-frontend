@@ -3,7 +3,7 @@ import * as yup from "yup";
 const djangoEmailRegex =
   /^([\-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[\-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*|"([^"\r\\]|\\.)+")@([A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$/i;
 
-export const createUserSchema = yup
+export const signinSchema = yup
   .object({
     username: yup.string().required("Bitte schreiben Sie einen Namen."),
     email: yup
@@ -17,4 +17,4 @@ export const createUserSchema = yup
   })
   .required();
 
-export type FormData = yup.InferType<typeof createUserSchema>;
+export type FormData = yup.InferType<typeof signinSchema>;

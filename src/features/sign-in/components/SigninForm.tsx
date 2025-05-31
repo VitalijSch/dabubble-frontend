@@ -8,13 +8,12 @@ import Checkbox from "./Checkbox";
 import BackgroundButton from "@/components/BackgroundButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createUserSchema, FormData } from "../schemas/createUser";
-import { useSigninStore } from "../stores/useSigninStore";
+import { signinSchema, FormData } from "../schemas/signin.schema";
+import { signinStore } from "../stores/signin.store";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/stores/useUserStore";
-import { getUsers } from "../api/getUsers";
-import { User } from "@/interfaces/user";
 import { useState } from "react";
+import { checkIfUserExists } from "@/utils/user.util";
+import { userStore } from "@/stores/user.store";
 
 export default function SigninForm() {
   const [existUsernameMessage, setExistUsernameMessage] = useState<string>("");
@@ -22,42 +21,33 @@ export default function SigninForm() {
 
   const router = useRouter();
 
-  const isChecked = useSigninStore((state) => state.isChecked);
-  const setIsChecked = useSigninStore((state) => state.setIsChecked);
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
+  const isChecked = signinStore((state) => state.isChecked);
+  const setIsChecked = signinStore((state) => state.setIsChecked);
+  const user = userStore((state) => state.user);
+  const setUser = userStore((state) => state.setUser);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<FormData>({
-    resolver: yupResolver(createUserSchema),
+    resolver: yupResolver(signinSchema),
   });
-
-  async function checkIfValueExists(
-    key: "username" | "email",
-    value: string
-  ): Promise<boolean> {
-    const users = await getUsers();
-    return users.some(
-      (user: User) => user[key].toLowerCase() === value.toLowerCase()
-    );
-  }
 
   function checkIfUsernameAndEmailExist(): boolean {
     return existUsernameMessage === "" && existEmailMessage === "";
   }
 
-  async function onSubmit(data: FormData) {
-    if (!isChecked) {
-      setIsChecked(false);
-      return;
-    }
+  function handleSetUser(data: FormData) {
     if (checkIfUsernameAndEmailExist()) {
       setUser(data);
       router.push("choose-avatar");
     }
+  }
+
+  function onSubmit(data: FormData) {
+    if (!isChecked) setIsChecked(false);
+    if (isChecked) handleSetUser(data);
   }
 
   return (
@@ -73,7 +63,9 @@ export default function SigninForm() {
         {...register("username", {
           onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
             setExistUsernameMessage(
-              await checkIfValueExists("username", e.target.value) ? "Der Benutzername ist bereits vergeben." : ""
+              (await checkIfUserExists("username", e.target.value))
+                ? "Der Benutzername ist bereits vergeben."
+                : ""
             );
           },
         })}
@@ -88,7 +80,7 @@ export default function SigninForm() {
         {...register("email", {
           onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
             setExistEmailMessage(
-              (await checkIfValueExists("email", e.target.value))
+              (await checkIfUserExists("email", e.target.value))
                 ? "Die E-Mail ist bereits vergeben."
                 : ""
             );

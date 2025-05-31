@@ -3,13 +3,14 @@
 import CheckedIcon from "@/components/icons/CheckedIcon";
 import CheckIcon from "@/components/icons/CheckIcon";
 import Link from "next/link";
-import { useSigninStore } from "../stores/useSigninStore";
+import { signinStore } from "../stores/signin.store";
 import { useEffect } from "react";
+import { userStore } from "@/stores/user.store";
 
 export default function Checkbox() {
-  const isChecked = useSigninStore((state) => state.isChecked);
-  const setIsChecked = useSigninStore((state) => state.setIsChecked);
-  const user = useSigninStore((state) => state.user);
+  const isChecked = signinStore((state) => state.isChecked);
+  const setIsChecked = signinStore((state) => state.setIsChecked);
+  const user = userStore((state) => state.user);
 
   useEffect(() => {
     if (user) {
