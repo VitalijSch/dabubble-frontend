@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DABubble
 
-## Getting Started
+Team chat app in the style of Slack — channels, threads and direct messages. Built with Next.js.
 
-First, run the development server:
+## Requirements
+
+- **Node.js 26** (current LTS — see `.nvmrc`)
+- **pnpm 12** via corepack (Node 25+ no longer ships corepack, so install it once)
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+npm install -g corepack
+corepack enable pnpm
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script                         | What it does                                                           |
+| ------------------------------ | ---------------------------------------------------------------------- |
+| `pnpm dev`                     | Dev server with hot reload                                             |
+| `pnpm build`                   | Production build (standalone output)                                   |
+| `pnpm start`                   | Serve the production build                                             |
+| `pnpm check`                   | Typecheck + lint + format check + unit tests — run before every commit |
+| `pnpm typecheck`               | Generate route types and run `tsc --noEmit`                            |
+| `pnpm lint`                    | ESLint, zero warnings allowed                                          |
+| `pnpm format` / `format:check` | Format with Prettier / verify formatting                               |
+| `pnpm test` / `test:watch`     | Vitest unit tests (once / watch mode)                                  |
+| `pnpm test:e2e`                | Playwright E2E tests against a production build                        |
 
-## Learn More
+First E2E run: `pnpm exec playwright install chromium`.
 
-To learn more about Next.js, take a look at the following resources:
+## Docker
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker build -t dabubble-frontend --build-arg NEXT_PUBLIC_APP_URL=https://chat.example.com .
+docker run -p 3000:3000 dabubble-frontend
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Health check: `GET /api/health` → `{ "status": "ok" }`.
 
-## Deploy on Vercel
+## Folder map
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/app/          Routes: pages, layouts, error/404/loading, API route handlers
+src/features/     One folder per feature (chat, auth, …) with a public index.ts
+src/lib/          Shared framework-free helpers
+src/env.ts        Validated environment variables (the only place reading process.env)
+e2e/              Playwright tests
+docs/             ARCHITECTURE.md and architecture decision records (adr/)
+.claude/          Shared Claude Code settings and hooks
+```
