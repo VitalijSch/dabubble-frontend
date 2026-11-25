@@ -1,0 +1,54 @@
+/*
+ * Intro animation, imported by src/app/globals.css.
+ *
+ * Timeline (pure CSS, no JavaScript):
+ *   0 – 500ms      logo alone in the centre
+ *   500 – 1300ms   logo slides left
+ *   650 – 1450ms   wordmark slides out from under the logo; its strip is clipped at the
+ *                  logo's right edge, so it never shows through the gaps in the logo
+ *   1450 – 2250ms  logo + wordmark rest in the centre
+ *   2250 – 2750ms  intro fades out and stops covering the page
+ *
+ * Elements are styled at their END position; the keyframes start from the first frame,
+ * and `both` holds that frame during the delay.
+ */
+@theme {
+  --animate-intro-logo: intro-logo 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms both;
+  --animate-intro-reveal: intro-reveal 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms both;
+  --animate-intro-name: intro-name 800ms cubic-bezier(0.65, 0, 0.35, 1) 650ms both;
+  --animate-intro-out: intro-out 500ms ease-in 2250ms forwards;
+
+  /* Figma start frame: logo at 37.26% of the 696px box = 138.68% of its own width. */
+  @keyframes intro-logo {
+    from {
+      transform: translateX(138.68%);
+    }
+  }
+
+  /*
+   * Same timing and easing as intro-logo, so the clip edge travels with the logo.
+   * The strip starts at 224px of the 696px box; the logo's right edge starts at 446px,
+   * i.e. 222px = 47.03% into the 472px strip, and ends left of the strip (no clip).
+   */
+  @keyframes intro-reveal {
+    from {
+      clip-path: inset(0 0 0 47.03%);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes intro-name {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes intro-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}
