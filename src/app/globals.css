@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../features/intro/intro.css";
 
 /* Base colours used by error.tsx, loading.tsx and not-found.tsx. Replace with the DABubble design tokens. */
 :root {
