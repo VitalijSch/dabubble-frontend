@@ -102,10 +102,13 @@ test("the card matches the Figma positions at 1920 × 1080", async ({ page }) =>
     y: 45,
   });
   expect(await inCard(page.getByRole("heading").boundingBox())).toMatchObject({ y: 40 });
-  expect(await inCard(page.getByRole("button", { name: "Weiter" }).boundingBox())).toEqual({
-    x: 446,
-    y: 580,
-  });
+
+  // The button is right-aligned and its width follows the text, which renders a few px
+  // wider on Linux than on macOS. So check its right edge (Figma: 446 + 107 = 553), not x.
+  const button = (await page.getByRole("button", { name: "Weiter" }).boundingBox())!;
+  expect(Math.round(button.x + button.width - card.x)).toBe(553);
+  expect(Math.round(button.y - card.y)).toBe(580);
+  expect(button.height).toBe(49);
 });
 
 test("the card does not overflow on a phone", async ({ page }) => {
