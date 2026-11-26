@@ -1,13 +1,17 @@
 /*
  * Intro animation, imported by src/app/globals.css.
  *
- * Timeline (pure CSS, no JavaScript):
+ * Timeline:
  *   0 – 500ms      logo alone in the centre
  *   500 – 1300ms   logo slides left
  *   650 – 1450ms   wordmark slides out from under the logo; its strip is clipped at the
  *                  logo's right edge, so it never shows through the gaps in the logo
  *   1450 – 2250ms  logo + wordmark rest in the centre
- *   2250 – 2750ms  intro fades out and stops covering the page
+ *   2250 – 3050ms  background fades out while logo + wordmark fly to the header logo of the
+ *                  page and shrink to its size; the wordmark turns from white to black.
+ *                  The flight needs the header's position, so it runs in IntroScreen.tsx
+ *                  (Web Animations API) on the same clock as these CSS animations.
+ *   3050ms         the real header logo appears under the landed one; 1ms later the intro is gone
  *
  * Elements are styled at their END position; the keyframes start from the first frame,
  * and `both` holds that frame during the delay.
@@ -16,7 +20,8 @@
   --animate-intro-logo: intro-logo 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms both;
   --animate-intro-reveal: intro-reveal 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms both;
   --animate-intro-name: intro-name 800ms cubic-bezier(0.65, 0, 0.35, 1) 650ms both;
-  --animate-intro-out: intro-out 500ms ease-in 2250ms forwards;
+  --animate-intro-bg-out: intro-bg-out 800ms cubic-bezier(0.65, 0, 0.35, 1) 2250ms forwards;
+  --animate-intro-hide: intro-hide 1ms linear 3051ms forwards;
 
   /* Figma start frame: logo at 37.26% of the 696px box = 138.68% of its own width. */
   @keyframes intro-logo {
@@ -45,10 +50,36 @@
     }
   }
 
-  @keyframes intro-out {
+  @keyframes intro-bg-out {
     to {
       opacity: 0;
+    }
+  }
+
+  /* Hidden in every keyframe: with only `to`, rounding can stop just short of it and `visible` wins. */
+  @keyframes intro-hide {
+    from,
+    to {
       visibility: hidden;
     }
+  }
+}
+
+/* The intro plays once per tab (see played.ts); afterwards it is never shown again. */
+[data-intro-played] [data-intro] {
+  display: none;
+}
+
+/*
+ * While the intro plays, the page's own logo (marked data-intro-target) stays hidden, so it
+ * doesn't show through the fading background. It appears the moment the flying logo lands on it.
+ */
+:root:not([data-intro-played]) body:has([data-intro]) [data-intro-target] {
+  animation: intro-target-show 1ms linear 3050ms backwards;
+}
+
+@keyframes intro-target-show {
+  from {
+    visibility: hidden;
   }
 }
