@@ -11,9 +11,10 @@ export const SESSION_COOKIE = "dabubble_session";
 
 export const LOGIN_PATH = "/login";
 export const HOME_PATH = "/";
+export const REGISTER_PATH = "/register";
 
 /** Pages only for logged-out users. Add sign-up, choose avatar, reset password … as they are built. */
-const GUEST_ONLY_PATHS = [LOGIN_PATH, "/register"];
+const GUEST_ONLY_PATHS = [LOGIN_PATH, REGISTER_PATH];
 
 /** Pages for everyone, logged in or not. */
 const PUBLIC_PATHS = ["/impressum", "/datenschutz"];
