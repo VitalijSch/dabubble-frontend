@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Nunito } from "next/font/google";
+import { Figtree, Nunito, Open_Sans } from "next/font/google";
 
 import { introPlayedScript } from "@/features/intro";
 
@@ -8,6 +8,7 @@ import "./globals.css";
 // Self-hosted at build time by next/font; no requests to Google at runtime.
 const nunito = Nunito({ subsets: ["latin"], variable: "--next-font-nunito" });
 const figtree = Figtree({ subsets: ["latin"], variable: "--next-font-figtree" });
+const openSans = Open_Sans({ subsets: ["latin"], variable: "--next-font-open-sans" });
 
 export const metadata: Metadata = {
   title: "DABubble",
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // suppressHydrationWarning: the inline script below may add an attribute to <html>.
     <html
       lang="de"
-      className={`${nunito.variable} ${figtree.variable} h-full antialiased`}
+      className={`${nunito.variable} ${figtree.variable} ${openSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
