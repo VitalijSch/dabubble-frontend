@@ -10,6 +10,21 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Fonts loaded by next/font in src/app/layout.tsx. Nunito is the default; Figtree is used for text links. */
+  --font-sans: var(--next-font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-figtree: var(--next-font-figtree), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* DABubble design tokens (names follow the Figma styles). */
+@theme {
+  --color-surface: #eceefe; /* Bg color */
+  --color-purple-1: #444df2; /* Purple 1 */
+  --color-purple-2: #797ef3; /* Purple 2 */
+  --color-line: #adb0d9; /* Light purple (lines) */
+  --color-muted: #686868; /* Text gray */
+  --color-error: #ed1e79; /* Rosa error */
+  --color-online: #92c83e; /* Online green */
 }
 
 @media (prefers-color-scheme: dark) {
