@@ -30,7 +30,7 @@ export async function mockValidate(
 export async function fillSignUp(page: Page, name = "Frederik Beck") {
   await page.getByLabel("Name und Nachname").fill(name);
   await page.getByLabel("E-Mail-Adresse").fill("frederik@beispiel.de");
-  await page.getByLabel("Passwort").fill("geheim123");
+  await page.getByLabel("Passwort", { exact: true }).fill("geheim123");
   await page.getByTestId("privacy-box").click();
 }
 

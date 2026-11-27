@@ -22,7 +22,7 @@ test("a reload on the avatar step starts the sign-up again", async ({ page }) =>
   await page.reload();
 
   await expect(page).toHaveURL(/\/register$/);
-  await expect(page.getByLabel("Passwort")).toHaveValue("");
+  await expect(page.getByLabel("Passwort", { exact: true })).toHaveValue("");
 });
 
 test("details changed after going back must be checked again", async ({ page }) => {

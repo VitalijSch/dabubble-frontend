@@ -2,7 +2,16 @@ import { describe, expect, it } from "vitest";
 
 import { createApi } from "@/lib/api";
 
-import { isSignUpFilled, SIGN_UP_FAILED, toRegisterDetails, validateSignUp } from "./signUp";
+import {
+  checkSignUpDetails,
+  checkSignUpField,
+  EMAIL_INVALID,
+  PASSWORD_TOO_SHORT,
+  REQUIRED,
+  SIGN_UP_FAILED,
+  toRegisterDetails,
+  validateSignUp,
+} from "./signUp";
 
 function form(fields: Record<string, string>): FormData {
   const data = new FormData();
@@ -16,29 +25,6 @@ const filled = {
   password: "geheim123",
   privacy: "on",
 };
-
-describe("isSignUpFilled", () => {
-  it("is true when every field has a value and the privacy box is ticked", () => {
-    expect(isSignUpFilled(form(filled))).toBe(true);
-  });
-
-  it("is false for an empty form", () => {
-    expect(isSignUpFilled(form({}))).toBe(false);
-  });
-
-  it.each(["name", "email", "password"])("is false while %s is empty", (field) => {
-    expect(isSignUpFilled(form({ ...filled, [field]: "" }))).toBe(false);
-  });
-
-  it.each(["name", "email"])("is false while %s has only spaces", (field) => {
-    expect(isSignUpFilled(form({ ...filled, [field]: "   " }))).toBe(false);
-  });
-
-  it("is false while the privacy box is not ticked", () => {
-    const { privacy: _, ...rest } = filled;
-    expect(isSignUpFilled(form(rest))).toBe(false);
-  });
-});
 
 describe("toRegisterDetails", () => {
   it("maps the form to the API body, trimming name and email but not the password", () => {
@@ -62,6 +48,73 @@ describe("toRegisterDetails", () => {
   it("sends accept_privacy_policy false while the box is not ticked", () => {
     const { privacy: _, ...rest } = filled;
     expect(toRegisterDetails(form(rest)).accept_privacy_policy).toBe(false);
+  });
+});
+
+describe("checkSignUpField", () => {
+  it.each(["frederik@beispiel.de", "f.beck+dabubble@mail.example.com", "a_b@beispiel.de"])(
+    "accepts the email %s",
+    (email) => {
+      expect(checkSignUpField("email", email)).toBeUndefined();
+    },
+  );
+
+  it.each([
+    "frederik",
+    "frederik@",
+    "@beispiel.de",
+    "frederik beck@beispiel.de",
+    "frederik@@beispiel.de",
+  ])("rejects the email %s", (email) => {
+    expect(checkSignUpField("email", email)).toBe(EMAIL_INVALID);
+  });
+
+  it("accepts a password of 8 characters and rejects one of 7", () => {
+    expect(checkSignUpField("password", "12345678")).toBeUndefined();
+    expect(checkSignUpField("password", "1234567")).toBe(PASSWORD_TOO_SHORT);
+  });
+
+  it("uses the backend's wording, so a message reads the same wherever it comes from", () => {
+    expect(PASSWORD_TOO_SHORT).toBe(
+      "Dieses Passwort ist zu kurz. Es muss mindestens 8 Zeichen enthalten.",
+    );
+  });
+
+  it.each(["email", "password"] as const)("says nothing about an empty %s", (field) => {
+    // An empty field is not a mistake yet: only "Weiter" asks for what's missing.
+    expect(checkSignUpField(field, "")).toBeUndefined();
+  });
+});
+
+describe("checkSignUpDetails", () => {
+  const details = {
+    full_name: "Frederik Beck",
+    email: "frederik@beispiel.de",
+    password: "geheim123",
+    accept_privacy_policy: true,
+  };
+
+  it("finds nothing in valid details", () => {
+    expect(checkSignUpDetails(details)).toEqual({});
+  });
+
+  it("asks for every missing field, the privacy box included", () => {
+    expect(
+      checkSignUpDetails({ full_name: "", email: "", password: "", accept_privacy_policy: false }),
+    ).toEqual({
+      full_name: "Bitte gib deinen Namen und Nachnamen ein.",
+      email: "Bitte gib deine E-Mail-Adresse ein.",
+      password: "Bitte gib ein Passwort ein.",
+      accept_privacy_policy: "Bitte stimme der Datenschutzerklärung zu.",
+    });
+    expect(REQUIRED.full_name).toBe("Bitte gib deinen Namen und Nachnamen ein.");
+  });
+
+  it("returns a message for each field that breaks a rule", () => {
+    expect(checkSignUpDetails({ ...details, email: "frederik", password: "kurz" })).toEqual({
+      email: EMAIL_INVALID,
+      password: PASSWORD_TOO_SHORT,
+    });
   });
 });
 
@@ -113,7 +166,7 @@ describe("validateSignUp", () => {
     });
   });
 
-  it("shows the first privacy or non-field error as the form message", async () => {
+  it("returns the privacy box's message as its field, the non-field one for the form", async () => {
     const { api } = apiAnswering(() =>
       json(
         {
@@ -128,8 +181,10 @@ describe("validateSignUp", () => {
 
     expect(await validateSignUp(api, details)).toEqual({
       ok: false,
-      fieldErrors: {},
-      formError: "Bitte bestätige, dass du die Datenschutzerklärung gelesen hast.",
+      fieldErrors: {
+        accept_privacy_policy: "Bitte bestätige, dass du die Datenschutzerklärung gelesen hast.",
+      },
+      formError: "Etwas stimmt nicht.",
     });
   });
 
