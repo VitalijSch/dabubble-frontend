@@ -75,10 +75,37 @@ test("the header does not offer to create an account on the sign-up page", async
   await expect(page.getByRole("link", { name: "Konto erstellen" })).toHaveCount(0);
 });
 
+test("Weiter is enabled only while every field is filled and the privacy box is ticked", async ({
+  page,
+}) => {
+  await page.goto("/register");
+  const weiter = page.getByRole("button", { name: "Weiter" });
+  await expect(weiter).toBeDisabled();
+
+  await page.getByLabel("Name und Nachname").fill("Frederik Beck");
+  await page.getByLabel("E-Mail-Adresse").fill("frederik@beispiel.de");
+  await page.getByLabel("Passwort").fill("geheim123");
+  await expect(weiter).toBeDisabled();
+
+  await page.getByTestId("privacy-box").click();
+  await expect(weiter).toBeEnabled();
+
+  await page.getByLabel("E-Mail-Adresse").fill("");
+  await expect(weiter).toBeDisabled();
+  await page.getByLabel("E-Mail-Adresse").fill("frederik@beispiel.de");
+  await expect(weiter).toBeEnabled();
+
+  await page.getByTestId("privacy-box").click();
+  await expect(weiter).toBeDisabled();
+});
+
 test("submitting stays on the page and never puts the password in the URL", async ({ page }) => {
   await page.goto("/register");
 
+  await page.getByLabel("Name und Nachname").fill("Frederik Beck");
+  await page.getByLabel("E-Mail-Adresse").fill("frederik@beispiel.de");
   await page.getByLabel("Passwort").fill("geheim123");
+  await page.getByTestId("privacy-box").click();
   await page.getByRole("button", { name: "Weiter" }).click();
 
   await expect(page).toHaveURL(/\/register$/);
