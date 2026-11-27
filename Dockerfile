@@ -24,6 +24,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # NEXT_PUBLIC_* values are inlined at build time — pass them as build args.
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN pnpm build
 
 # ---- runtime: only the standalone server, as a non-root user ----
