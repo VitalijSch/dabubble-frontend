@@ -5,15 +5,16 @@ import { ArrowBackIcon } from "./icons";
 
 type AuthCardProps = {
   title: string;
-  description: ReactNode;
+  /** Text under the title. Without it the body starts right under the title and sets its own spacing. */
+  description?: ReactNode;
   /** Shows the round "go back" arrow top left (Figma "13. Go back") linking here. */
   backHref?: string;
   children: ReactNode;
 };
 
 /**
- * The white card in the middle of every auth page: purple title, short description,
- * then the page's form. Sized like Figma (606 px wide, 53 px side padding).
+ * The white card in the middle of every auth page: purple title, optional short
+ * description, then the page's form. Sized like Figma (606 px wide, 53 px side padding).
  */
 export function AuthCard({ title, description, backHref, children }: AuthCardProps) {
   return (
@@ -38,11 +39,11 @@ export function AuthCard({ title, description, backHref, children }: AuthCardPro
         >
           {title}
         </h1>
-        <p className="text-xl leading-[1.2]">{description}</p>
+        {description && <p className="text-xl leading-[1.2]">{description}</p>}
       </header>
 
       {/* Figma: the form starts 216 px from the top (header frame is 136 px, 1 px taller than its text). */}
-      <div className="mt-[41px]">{children}</div>
+      <div className={description ? "mt-[41px]" : undefined}>{children}</div>
     </section>
   );
 }

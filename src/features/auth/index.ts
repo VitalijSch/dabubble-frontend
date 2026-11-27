@@ -4,5 +4,14 @@
  */
 export { AuthCard } from "./AuthCard";
 export { AuthLayout } from "./AuthLayout";
-export { getAuthRedirect, HOME_PATH, LOGIN_PATH, REGISTER_PATH, SESSION_COOKIE } from "./routing";
+export { AVATARS, type AvatarId } from "./avatars";
+export { AvatarPicker } from "./AvatarPicker";
+export {
+  AVATAR_PATH,
+  getAuthRedirect,
+  HOME_PATH,
+  LOGIN_PATH,
+  REGISTER_PATH,
+  SESSION_COOKIE,
+} from "./routing";
 export { SignUpForm } from "./SignUpForm";

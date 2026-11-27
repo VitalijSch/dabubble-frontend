@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+
+import { primaryButton } from "./buttons";
+import { isSignUpFilled } from "./signUp";
 import { CheckBoxBlankIcon, CheckBoxIcon, LockIcon, MailIcon, PersonIcon } from "./icons";
 import { TextField } from "./TextField";
 
@@ -9,12 +13,20 @@ const squareIcon =
   "text-purple-2 group-hover:text-purple-1 group-has-[a:hover]:text-purple-2 relative size-6 transition-colors";
 
 /**
- * Fields of the "Konto erstellen" card. UI only for now: submitting does nothing
+ * Fields of the "Konto erstellen" card. "Weiter" stays disabled until every field is
+ * filled and the privacy box is ticked. UI only for now: submitting does nothing
  * (validation and the next step, choosing an avatar, come later).
  */
 export function SignUpForm() {
+  const [filled, setFilled] = useState(false);
+
   return (
-    <form noValidate onSubmit={(event) => event.preventDefault()}>
+    <form
+      noValidate
+      // React's onChange fires on every keystroke, tick and browser autofill in the form.
+      onChange={(event) => setFilled(isSignUpFilled(new FormData(event.currentTarget)))}
+      onSubmit={(event) => event.preventDefault()}
+    >
       <div className="flex flex-col gap-[15px]">
         <TextField
           label="Name und Nachname"
@@ -71,10 +83,7 @@ export function SignUpForm() {
       </div>
 
       <div className="mt-10 flex justify-end">
-        <button
-          type="submit"
-          className="bg-purple-1 hover:bg-purple-2 focus-visible:outline-purple-1 h-[49px] rounded-[25px] px-[25px] text-lg leading-[25px] font-bold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
+        <button type="submit" disabled={!filled} className={primaryButton}>
           Weiter
         </button>
       </div>
