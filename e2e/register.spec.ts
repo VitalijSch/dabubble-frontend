@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { fillSignUp, mockValidate } from "./signUpSteps";
+
 test("the sign-up card shows the fields, the privacy check and the way back", async ({ page }) => {
   await page.goto("/register");
 
@@ -99,15 +101,130 @@ test("Weiter is enabled only while every field is filled and the privacy box is 
   await expect(weiter).toBeDisabled();
 });
 
-test("submitting stays on the page and never puts the password in the URL", async ({ page }) => {
+test("the password field says how long the password must be before anything is sent", async ({
+  page,
+}) => {
   await page.goto("/register");
 
-  await page.getByLabel("Name und Nachname").fill("Frederik Beck");
-  await page.getByLabel("E-Mail-Adresse").fill("frederik@beispiel.de");
-  await page.getByLabel("Passwort").fill("geheim123");
-  await page.getByTestId("privacy-box").click();
+  const password = page.getByLabel("Passwort");
+  await expect(password).toHaveAccessibleDescription("Mindestens 8 Zeichen");
+  await expect(password).not.toHaveAttribute("aria-invalid");
+});
+
+test("Weiter checks the details with the backend and goes on to the avatar step", async ({
+  page,
+}) => {
+  const requests = await mockValidate(page, 204);
+  await page.goto("/register");
+
+  await fillSignUp(page);
   await page.getByRole("button", { name: "Weiter" }).click();
 
+  await expect(page).toHaveURL(/\/register\/avatar$/);
+  await expect(page.getByRole("heading", { name: "Wähle deinen Avatar" })).toBeVisible();
+  expect(requests).toEqual([
+    {
+      full_name: "Frederik Beck",
+      email: "frederik@beispiel.de",
+      password: "geheim123",
+      accept_privacy_policy: true,
+    },
+  ]);
+});
+
+test("Weiter is disabled while the backend checks, so it is sent only once", async ({ page }) => {
+  let answer = () => {};
+  const answered = new Promise<void>((resolve) => (answer = resolve));
+  const requests = await mockValidate(page, 204, undefined, answered);
+  await page.goto("/register");
+  await fillSignUp(page);
+
+  const weiter = page.getByRole("button", { name: "Weiter" });
+  await weiter.click();
+  await expect(weiter).toBeDisabled();
+  await weiter.press("Enter").catch(() => {});
+
+  answer();
+  await expect(page).toHaveURL(/\/register\/avatar$/);
+  expect(requests).toHaveLength(1);
+});
+
+test.describe("coming back from the avatar step", () => {
+  for (const [how, goBack] of [
+    ["with Zurück", (page: Page) => page.getByRole("link", { name: "Zurück" }).click()],
+    ["with the browser's back button", (page: Page) => page.goBack()],
+  ] as const) {
+    test(`keeps the values and Weiter enabled ${how}`, async ({ page }) => {
+      await mockValidate(page, 204);
+      await page.goto("/register");
+      await fillSignUp(page);
+      await page.getByRole("button", { name: "Weiter" }).click();
+      await expect(page).toHaveURL(/\/register\/avatar$/);
+
+      await goBack(page);
+
+      await expect(page).toHaveURL(/\/register$/);
+      await expect(page.getByLabel("Name und Nachname")).toHaveValue("Frederik Beck");
+      await expect(page.getByLabel("E-Mail-Adresse")).toHaveValue("frederik@beispiel.de");
+      await expect(page.getByRole("button", { name: "Weiter" })).toBeEnabled();
+    });
+  }
+});
+
+test("the backend's messages show under the inputs and clear when the input is edited", async ({
+  page,
+}) => {
+  await mockValidate(page, 400, {
+    email: ["Diese E-Mail-Adresse wird bereits verwendet."],
+    password: [
+      "Dieses Passwort ist zu kurz. Es muss mindestens 8 Zeichen enthalten.",
+      "Dieses Passwort ist zu üblich.",
+      "Dieses Passwort ist komplett numerisch.",
+    ],
+  });
+  await page.goto("/register");
+
+  await fillSignUp(page);
+  await page.getByRole("button", { name: "Weiter" }).click();
+
+  const email = page.getByLabel("E-Mail-Adresse");
+  const password = page.getByLabel("Passwort");
+  await expect(email).toHaveAccessibleDescription("Diese E-Mail-Adresse wird bereits verwendet.");
+  await expect(email).toHaveAttribute("aria-invalid", "true");
+  await expect(password).toHaveAccessibleDescription(
+    "Dieses Passwort ist zu kurz. Es muss mindestens 8 Zeichen enthalten.",
+  );
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(page.getByRole("button", { name: "Weiter" })).toBeEnabled();
+
+  await email.fill("frederik@neu.de");
+  await expect(email).not.toHaveAttribute("aria-invalid");
+  await expect(password).toHaveAccessibleDescription(
+    "Dieses Passwort ist zu kurz. Es muss mindestens 8 Zeichen enthalten.",
+  );
+});
+
+test("a message for the whole form shows above Weiter", async ({ page }) => {
+  await mockValidate(page, 429, { detail: "Zu viele Anfragen. Bitte warte kurz." });
+  await page.goto("/register");
+
+  await fillSignUp(page);
+  await page.getByRole("button", { name: "Weiter" }).click();
+
+  const card = page.getByRole("region", { name: "Konto erstellen" });
+  await expect(card.getByRole("alert")).toHaveText("Zu viele Anfragen. Bitte warte kurz.");
+  await expect(page).toHaveURL(/\/register$/);
+});
+
+test("submitting never puts the password in the URL", async ({ page }) => {
+  await mockValidate(page, 400, { email: ["Diese E-Mail-Adresse wird bereits verwendet."] });
+  await page.goto("/register");
+
+  await fillSignUp(page);
+  await page.getByRole("button", { name: "Weiter" }).click();
+
+  await expect(page.getByLabel("E-Mail-Adresse")).toHaveAttribute("aria-invalid", "true");
+  expect(page.url()).not.toContain("geheim123");
   await expect(page).toHaveURL(/\/register$/);
 });
 

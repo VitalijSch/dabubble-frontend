@@ -1,9 +1,50 @@
 import { expect, test } from "@playwright/test";
 
+import { reachAvatarStep } from "./signUpSteps";
+
+test("the avatar step shows the name entered on the sign-up card", async ({ page }) => {
+  await reachAvatarStep(page, "Ada Lovelace");
+
+  await expect(page).toHaveURL(/\/register\/avatar$/);
+  await expect(page.getByText("Ada Lovelace", { exact: true })).toBeVisible();
+});
+
+test("opening the avatar step directly sends you to the sign-up card", async ({ page }) => {
+  await page.goto("/register/avatar");
+
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(page.getByRole("heading", { name: "Konto erstellen" })).toBeVisible();
+});
+
+test("a reload on the avatar step starts the sign-up again", async ({ page }) => {
+  await reachAvatarStep(page);
+
+  await page.reload();
+
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(page.getByLabel("Passwort")).toHaveValue("");
+});
+
+test("details changed after going back must be checked again", async ({ page }) => {
+  await reachAvatarStep(page);
+  await page.goBack();
+  await expect(page.getByRole("heading", { name: "Konto erstellen" })).toBeVisible();
+
+  await page.getByLabel("Name und Nachname").fill("Ada Lovelace");
+  await page.goForward();
+
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(page.getByLabel("Name und Nachname")).toHaveValue("Ada Lovelace");
+
+  // Weiter checks them and shows the new name.
+  await page.getByRole("button", { name: "Weiter" }).click();
+  await expect(page.getByText("Ada Lovelace", { exact: true })).toBeVisible();
+});
+
 test("the avatar card shows the empty preview, the six avatars and the way back", async ({
   page,
 }) => {
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   await expect(page).toHaveTitle("Avatar wählen · DABubble");
   await expect(page.getByRole("heading", { name: "Wähle deinen Avatar" })).toBeVisible();
@@ -16,7 +57,7 @@ test("the avatar card shows the empty preview, the six avatars and the way back"
 });
 
 test("picking an avatar shows it in the preview and enables Weiter", async ({ page }) => {
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   await page.getByRole("img", { name: "Avatar 4" }).click();
   await expect(page.getByRole("radio", { name: "Avatar 4" })).toBeChecked();
@@ -36,7 +77,7 @@ test("picking an avatar shows it in the preview and enables Weiter", async ({ pa
 });
 
 test("the avatars can be picked with the keyboard", async ({ page }) => {
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   await page.getByRole("radio", { name: "Avatar 1" }).focus();
   await page.keyboard.press("Space");
@@ -45,7 +86,7 @@ test("the avatars can be picked with the keyboard", async ({ page }) => {
 });
 
 test("the header does not offer to create an account while signing up", async ({ page }) => {
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   await expect(page.getByRole("heading", { name: "Wähle deinen Avatar" })).toBeVisible();
   await expect(page.getByText("Neu bei DABubble?")).toHaveCount(0);
@@ -53,7 +94,7 @@ test("the header does not offer to create an account while signing up", async ({
 
 test("the card matches the Figma positions at 1920 × 1080", async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   const card = (await page.getByRole("region", { name: "Wähle deinen Avatar" }).boundingBox())!;
   expect(card.width).toBe(606);
@@ -84,7 +125,7 @@ test("the card matches the Figma positions at 1920 × 1080", async ({ page }) =>
 
 test("the card does not overflow on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
-  await page.goto("/register/avatar");
+  await reachAvatarStep(page);
 
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(scrollWidth).toBeLessThanOrEqual(375);

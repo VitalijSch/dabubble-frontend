@@ -6,11 +6,14 @@ type TextFieldProps = Omit<ComponentProps<"input">, "className"> & {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   /** Pink message under the field (Figma "Rosa error"). Its line is always reserved, so nothing jumps. */
   error?: string;
+  /** Grey note in the same line while there is no error, e.g. a rule the user can't guess. */
+  hint?: string;
 };
 
 /** Rounded input with a leading icon, as in Figma ("Name input", "Email Input Box", "PW input"). */
-export function TextField({ label, icon: Icon, error, ...inputProps }: TextFieldProps) {
-  const errorId = useId();
+export function TextField({ label, icon: Icon, error, hint, ...inputProps }: TextFieldProps) {
+  const noteId = useId();
+  const note = error ?? hint;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -24,12 +27,15 @@ export function TextField({ label, icon: Icon, error, ...inputProps }: TextField
         <input
           className="placeholder:text-muted w-0 flex-1 bg-transparent text-lg leading-[1.2] font-medium text-black outline-none"
           aria-invalid={error ? true : undefined}
-          aria-describedby={error ? errorId : undefined}
+          aria-describedby={note ? noteId : undefined}
           {...inputProps}
         />
       </label>
-      <p id={errorId} className="text-error min-h-[19px] text-sm leading-[19px]">
-        {error}
+      <p
+        id={noteId}
+        className={`min-h-[19px] text-sm leading-[19px] ${error ? "text-error" : "text-muted"}`}
+      >
+        {note}
       </p>
     </div>
   );

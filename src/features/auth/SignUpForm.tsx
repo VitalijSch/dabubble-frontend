@@ -1,10 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { type FormEvent, useState, useTransition } from "react";
+
+import { api } from "@/lib/api";
 
 import { primaryButton } from "./buttons";
-import { isSignUpFilled } from "./signUp";
+import { AVATAR_PATH } from "./routing";
+import { useSignUp } from "./SignUpContext";
+import {
+  isSignUpFilled,
+  PASSWORD_HINT,
+  type SignUpField,
+  type SignUpResult,
+  toRegisterDetails,
+  validateSignUp,
+} from "./signUp";
 import { CheckBoxBlankIcon, CheckBoxIcon, LockIcon, MailIcon, PersonIcon } from "./icons";
 import { TextField } from "./TextField";
 
@@ -12,20 +24,65 @@ import { TextField } from "./TextField";
 const squareIcon =
   "text-purple-2 group-hover:text-purple-1 group-has-[a:hover]:text-purple-2 relative size-6 transition-colors";
 
+/** Input `name` → the API field its errors come back under. */
+const API_FIELD: Record<string, SignUpField> = {
+  name: "full_name",
+  email: "email",
+  password: "password",
+};
+
+type Errors = Omit<Extract<SignUpResult, { ok: false }>, "ok">;
+const NO_ERRORS: Errors = { fieldErrors: {} };
+
 /**
  * Fields of the "Konto erstellen" card. "Weiter" stays disabled until every field is
- * filled and the privacy box is ticked. UI only for now: submitting does nothing
- * (validation and the next step, choosing an avatar, come later).
+ * filled and the privacy box is ticked. On "Weiter" the backend checks the details; its
+ * messages appear under the inputs, and if all is well the details go to the avatar step.
  */
 export function SignUpForm() {
+  const router = useRouter();
+  const { setDetails } = useSignUp();
   const [filled, setFilled] = useState(false);
+  // A transition, not a flag: it ends by itself once the avatar page is shown. Next.js keeps
+  // this page alive (hidden) for the way back, so a flag left `true` would disable "Weiter".
+  const [pending, startTransition] = useTransition();
+  const [errors, setErrors] = useState<Errors>(NO_ERRORS);
+
+  function handleChange(event: FormEvent<HTMLFormElement>) {
+    setFilled(isSignUpFilled(new FormData(event.currentTarget)));
+    // Changed details must be checked again before the avatar step accepts them.
+    setDetails(null);
+    // Editing an input clears its message; the form message goes with any edit.
+    const target = event.target;
+    const field = target instanceof HTMLInputElement ? API_FIELD[target.name] : undefined;
+    setErrors(({ fieldErrors }) => ({
+      fieldErrors: field ? { ...fieldErrors, [field]: undefined } : fieldErrors,
+    }));
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    const details = toRegisterDetails(new FormData(event.currentTarget));
+    // `pending` covers the check and the navigation after it.
+    startTransition(async () => {
+      const result = await validateSignUp(api, details);
+      // Updates after an `await` need their own startTransition to stay in the transition.
+      startTransition(() => {
+        if (result.ok) {
+          setDetails(details);
+          router.push(AVATAR_PATH);
+        } else setErrors(result);
+      });
+    });
+  }
 
   return (
     <form
       noValidate
       // React's onChange fires on every keystroke, tick and browser autofill in the form.
-      onChange={(event) => setFilled(isSignUpFilled(new FormData(event.currentTarget)))}
-      onSubmit={(event) => event.preventDefault()}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
     >
       <div className="flex flex-col gap-[15px]">
         <TextField
@@ -34,6 +91,7 @@ export function SignUpForm() {
           name="name"
           autoComplete="name"
           placeholder="Name und Nachname"
+          error={errors.fieldErrors.full_name}
         />
         <TextField
           label="E-Mail-Adresse"
@@ -42,6 +100,7 @@ export function SignUpForm() {
           name="email"
           autoComplete="email"
           placeholder="beispielname@email.com"
+          error={errors.fieldErrors.email}
         />
         <TextField
           label="Passwort"
@@ -50,6 +109,8 @@ export function SignUpForm() {
           name="password"
           autoComplete="new-password"
           placeholder="Passwort"
+          error={errors.fieldErrors.password}
+          hint={PASSWORD_HINT}
         />
       </div>
 
@@ -82,8 +143,13 @@ export function SignUpForm() {
         </label>
       </div>
 
-      <div className="mt-10 flex justify-end">
-        <button type="submit" disabled={!filled} className={primaryButton}>
+      {/* The 40 px gap above "Weiter" holds the form message, so nothing jumps when it appears. */}
+      <p role="alert" className="text-error flex min-h-10 items-center text-sm leading-[19px]">
+        {errors.formError}
+      </p>
+
+      <div className="flex justify-end">
+        <button type="submit" disabled={!filled || pending} className={primaryButton}>
           Weiter
         </button>
       </div>

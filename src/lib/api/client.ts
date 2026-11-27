@@ -54,3 +54,6 @@ export function createApi({ baseUrl, fetch, getCookies = browserCookies }: ApiOp
   client.use(csrfMiddleware(getCookies));
   return client;
 }
+
+/** The type of a client made by `createApi`, for code that takes one as a parameter (tests). */
+export type Api = ReturnType<typeof createApi>;

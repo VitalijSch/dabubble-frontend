@@ -5,7 +5,7 @@
 export { AuthCard } from "./AuthCard";
 export { AuthLayout } from "./AuthLayout";
 export { AVATARS, type AvatarId } from "./avatars";
-export { AvatarPicker } from "./AvatarPicker";
+export { AvatarStep } from "./AvatarStep";
 export {
   AVATAR_PATH,
   getAuthRedirect,
@@ -14,4 +14,5 @@ export {
   REGISTER_PATH,
   SESSION_COOKIE,
 } from "./routing";
+export { SignUpProvider } from "./SignUpContext";
 export { SignUpForm } from "./SignUpForm";
