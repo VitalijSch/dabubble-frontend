@@ -10,6 +10,7 @@ DABubble is a team chat app (channels, threads, direct messages) in the style of
 | Language   | TypeScript (strict + `noUncheckedIndexedAccess`)  | Catch nulls and typos before runtime                               |
 | Styling    | Tailwind CSS 4                                    | Utility classes, no separate CSS architecture to maintain          |
 | Validation | Zod 4                                             | One schema for env vars, forms and API input                       |
+| API        | openapi-fetch + types from the backend's OpenAPI  | Backend contract checked at compile time; see ADR 0002             |
 | Tests      | Vitest (unit), Playwright (E2E)                   | Fast unit loop; E2E against a production build                     |
 | Hosting    | Self-hosted Docker image (`output: "standalone"`) | Runs on any VPS / container platform                               |
 

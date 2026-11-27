@@ -11,6 +11,7 @@ Next.js 16.4 (App Router, Cache Components), React 19.3, TypeScript 5.9 (strict)
 - `pnpm check` — typecheck + lint + format check + unit tests. **Run before saying you're done.**
 - `pnpm vitest run path/to/file.test.ts` — run one test file
 - `pnpm test:e2e` — Playwright against a production build (port 3100)
+- `pnpm api:generate` — regenerate API types from `../dabubble-backend/openapi.yaml`
 
 ## Rules
 
@@ -19,6 +20,7 @@ Next.js 16.4 (App Router, Cache Components), React 19.3, TypeScript 5.9 (strict)
 - Feature code lives in `src/features/<name>/`; import other features only via their `index.ts`.
 - Tests live next to the code. Every bug fix starts with a failing test.
 - Ask before adding a new dependency.
+- Call the backend only through `api` from `@/lib/api` (typed from the backend's `openapi.yaml`). Never hand-write API types; use `Schema<"Name">`. `src/lib/api/schema.d.ts` is generated: after a backend API change run `pnpm api:generate`, never edit it.
 
 ## Gotchas
 
