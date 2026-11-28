@@ -130,3 +130,76 @@ test("the card does not overflow on a phone", async ({ page }) => {
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(scrollWidth).toBeLessThanOrEqual(375);
 });
+
+/** A real 1 × 1 PNG, so the preview can actually render it. */
+const TINY_PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "base64",
+);
+
+test("the big preview says it can be clicked to upload an own picture", async ({ page }) => {
+  await reachAvatarStep(page);
+
+  const upload = page.getByLabel("Eigenes Bild hochladen");
+  await expect(upload).toHaveAttribute("type", "file");
+  await expect(upload).toHaveAttribute(
+    "accept",
+    ".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp",
+  );
+  await expect(upload).toHaveAccessibleDescription("JPG, PNG oder WEBP max. 2 MB");
+
+  // Clicking the picture itself opens the file picker.
+  const chooser = page.waitForEvent("filechooser");
+  await page.getByRole("img", { name: "Noch kein Avatar gewählt" }).click();
+  await chooser;
+
+  await page.getByRole("img", { name: "Noch kein Avatar gewählt" }).hover();
+  await expect(page.getByText("Bild hochladen", { exact: true })).toBeVisible();
+});
+
+test("uploading a picture shows it in the preview and enables Weiter", async ({ page }) => {
+  await reachAvatarStep(page);
+  await page.getByRole("img", { name: "Avatar 3" }).click();
+
+  await page
+    .getByLabel("Eigenes Bild hochladen")
+    .setInputFiles({ name: "ich.png", mimeType: "image/png", buffer: TINY_PNG });
+
+  await expect(page.getByRole("img", { name: "Hochgeladenes Bild" })).toHaveAttribute(
+    "src",
+    /^blob:/,
+  );
+  await expect(page.getByRole("radio", { name: "Avatar 3" })).not.toBeChecked();
+  await expect(page.getByRole("button", { name: "Weiter" })).toBeEnabled();
+
+  // A built-in avatar replaces the upload again.
+  await page.getByRole("img", { name: "Avatar 5" }).click();
+  await expect(page.getByRole("img", { name: "Hochgeladenes Bild" })).toHaveCount(0);
+  await expect(page.getByRole("img", { name: "Gewählter Avatar" })).toHaveAttribute(
+    "src",
+    /avatar_5\.png/,
+  );
+});
+
+test("a wrong file is refused with a message and changes nothing", async ({ page }) => {
+  await reachAvatarStep(page);
+  const upload = page.getByLabel("Eigenes Bild hochladen");
+  // Scoped to the card: Next's route announcer is an alert too.
+  const message = page.getByRole("main").getByRole("alert");
+
+  await upload.setInputFiles({ name: "anim.gif", mimeType: "image/gif", buffer: TINY_PNG });
+  await expect(message).toHaveText("Bitte wähle ein Bild im Format JPG, PNG oder WEBP.");
+
+  await upload.setInputFiles({
+    name: "riesig.jpg",
+    mimeType: "image/jpeg",
+    buffer: Buffer.alloc(2 * 1024 * 1024 + 1),
+  });
+  await expect(message).toHaveText("Das Bild ist zu groß (max. 2 MB).");
+  await expect(page.getByRole("img", { name: "Noch kein Avatar gewählt" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Weiter" })).toBeDisabled();
+
+  // Picking a built-in avatar clears the message.
+  await page.getByRole("img", { name: "Avatar 1" }).click();
+  await expect(message).toHaveCount(0);
+});
