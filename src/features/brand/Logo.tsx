@@ -1,6 +1,5 @@
 import type { SVGProps } from "react";
 
-/** The DABubble logo: four speech bubbles in the brand colours. */
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 187 184" fill="none" aria-hidden="true" {...props}>

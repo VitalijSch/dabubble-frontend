@@ -3,10 +3,6 @@ import type { ComponentProps } from "react";
 import { Logo } from "./Logo";
 import { LogoName } from "./LogoName";
 
-/**
- * Logo + black "DABubble" wordmark side by side, at the Figma size (242 × 70).
- * The parts are marked `data-brand="logo"` / `data-brand="name"` so the intro can fly onto them.
- */
 export function LogoLockup({ className = "", ...props }: ComponentProps<"div">) {
   return (
     <div

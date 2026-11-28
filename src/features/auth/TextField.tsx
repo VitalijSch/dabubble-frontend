@@ -7,19 +7,14 @@ import {
 } from "react";
 
 export type TextFieldProps = Omit<ComponentProps<"input">, "className"> & {
-  /** Accessible name of the input (not shown; the placeholder is what users see). */
   label: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
-  /** Pink message under the field (Figma "Rosa error"). Its line is always reserved, so nothing jumps. */
   error?: string;
-  /**
-   * A 40 px round button shown instead of the icon, centred on the icon's place, e.g. the
-   * password's eye. Its own icon should be 24 px like the field's.
-   */
   iconAction?: ReactNode;
 };
 
-/** Rounded input with a leading icon, as in Figma ("Name input", "Email Input Box", "PW input"). */
+const HIDE_EDGE_PASSWORD_EYE = "[&::-ms-reveal]:hidden";
+
 export function TextField({ label, icon: Icon, error, iconAction, ...inputProps }: TextFieldProps) {
   const errorId = useId();
 
@@ -31,25 +26,19 @@ export function TextField({ label, icon: Icon, error, iconAction, ...inputProps 
             error ? "border-error" : "border-transparent"
           }`}
         >
-          {/* With an action, an empty 24 px slot keeps the input where it is. */}
           {iconAction ? (
-            <span className="size-6 shrink-0" />
+            <SpaceKeptForIconAction />
           ) : (
             <Icon className="text-muted size-6 shrink-0" />
           )}
           <span className="sr-only">{label}</span>
           <input
-            // Edge draws its own eye in password inputs; the password field has its own.
-            className="placeholder:text-muted w-0 flex-1 bg-transparent text-lg leading-[1.2] font-medium text-black outline-none [&::-ms-reveal]:hidden"
+            className={`placeholder:text-muted w-0 flex-1 bg-transparent text-lg leading-[1.2] font-medium text-black outline-none ${HIDE_EDGE_PASSWORD_EYE}`}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? errorId : undefined}
             {...inputProps}
           />
         </label>
-        {/*
-          Outside the label, so the button doesn't end up in the input's accessible name, and
-          laid over the icon's slot: 1 px border + padding + 12 px (half the icon) − 20 px.
-        */}
         {iconAction && (
           <div className="absolute top-1/2 left-[17px] -translate-y-1/2 sm:left-6">
             {iconAction}
@@ -61,4 +50,8 @@ export function TextField({ label, icon: Icon, error, iconAction, ...inputProps 
       </p>
     </div>
   );
+}
+
+function SpaceKeptForIconAction() {
+  return <span className="size-6 shrink-0" />;
 }

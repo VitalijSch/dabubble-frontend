@@ -1,9 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
-import { createApi, readCookie } from "./client";
+import { type Api, createApi, readCookie, type Schema } from "./client";
 
-/** A fake `fetch` that records every request and answers with `response`. */
-function fakeFetch(response: () => Response) {
+function fakeFetchThatRecordsRequests(response: () => Response) {
   const requests: Request[] = [];
   const fetch = async (request: Request) => {
     requests.push(request);
@@ -24,6 +23,10 @@ describe("readCookie", () => {
     expect(readCookie("csrftoken=a%20b", "csrftoken")).toBe("a b");
   });
 
+  it("keeps an equals sign that is part of the value", () => {
+    expect(readCookie("csrftoken=a=b==", "csrftoken")).toBe("a=b==");
+  });
+
   it("returns undefined when the cookie is missing", () => {
     expect(readCookie("sessionid=abc", "csrftoken")).toBeUndefined();
     expect(readCookie("", "csrftoken")).toBeUndefined();
@@ -32,7 +35,9 @@ describe("readCookie", () => {
 
 describe("createApi", () => {
   it("calls the backend under the base URL and sends the session cookie", async () => {
-    const { fetch, requests } = fakeFetch(() => new Response(null, { status: 204 }));
+    const { fetch, requests } = fakeFetchThatRecordsRequests(
+      () => new Response(null, { status: 204 }),
+    );
     const api = createApi({ baseUrl: "http://api.test", fetch, getCookies: () => "" });
 
     await api.POST("/api/v1/auth/register/validate/", {
@@ -49,7 +54,9 @@ describe("createApi", () => {
   });
 
   it("sends the CSRF token from the cookie on unsafe methods", async () => {
-    const { fetch, requests } = fakeFetch(() => new Response(null, { status: 204 }));
+    const { fetch, requests } = fakeFetchThatRecordsRequests(
+      () => new Response(null, { status: 204 }),
+    );
     const api = createApi({
       baseUrl: "http://api.test",
       fetch,
@@ -62,7 +69,7 @@ describe("createApi", () => {
   });
 
   it("doesn't send a CSRF token on safe methods", async () => {
-    const { fetch, requests } = fakeFetch(() => json({}));
+    const { fetch, requests } = fakeFetchThatRecordsRequests(() => json({}));
     const api = createApi({ baseUrl: "http://api.test", fetch, getCookies: () => "csrftoken=x" });
 
     await api.GET("/api/v1/me/");
@@ -71,7 +78,7 @@ describe("createApi", () => {
   });
 
   it("returns field errors typed from the schema", async () => {
-    const { fetch } = fakeFetch(() =>
+    const { fetch } = fakeFetchThatRecordsRequests(() =>
       json({ email: ["Diese E-Mail-Adresse wird bereits verwendet."] }, 400),
     );
     const api = createApi({ baseUrl: "http://api.test", fetch, getCookies: () => "" });
@@ -91,15 +98,18 @@ describe("createApi", () => {
     ]);
   });
 
-  it("rejects unknown endpoints and wrong bodies at compile time", async () => {
-    const { fetch } = fakeFetch(() => new Response(null, { status: 204 }));
-    const api = createApi({ baseUrl: "http://api.test", fetch, getCookies: () => "" });
+  it("knows only the endpoints the backend has", () => {
+    type GetPath = Parameters<Api["GET"]>[0];
 
-    // @ts-expect-error -- not an endpoint of the backend
-    await api.GET("/api/v1/does-not-exist/");
-    await api.POST("/api/v1/auth/register/validate/", {
-      // @ts-expect-error -- `accept_privacy_policy` is missing
-      body: { full_name: "Ada", email: "ada@example.com", password: "secret" },
-    });
+    expectTypeOf<"/api/v1/me/">().toExtend<GetPath>();
+    expectTypeOf<"/api/v1/does-not-exist/">().not.toExtend<GetPath>();
+  });
+
+  it("asks for every field the backend requires in a request body", () => {
+    type SignUpDetails = Schema<"RegisterDetailsRequest">;
+    const details = { full_name: "Ada", email: "ada@example.com", password: "secret" };
+
+    expectTypeOf({ ...details, accept_privacy_policy: true }).toExtend<SignUpDetails>();
+    expectTypeOf(details).not.toExtend<SignUpDetails>();
   });
 });

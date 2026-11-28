@@ -3,6 +3,10 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettier from "eslint-config-prettier/flat";
 
+const NEXT_BUILD_OUTPUT = [".next/**", "out/**", "build/**", "next-env.d.ts"];
+const TEST_REPORTS = ["coverage/**", "playwright-report/**", "test-results/**"];
+const prettierMustComeLast = prettier;
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -14,20 +18,8 @@ const eslintConfig = defineConfig([
       ],
     },
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    // Test artifacts:
-    "coverage/**",
-    "playwright-report/**",
-    "test-results/**",
-  ]),
-  // Must stay last: turns off rules that conflict with Prettier.
-  prettier,
+  globalIgnores([...NEXT_BUILD_OUTPUT, ...TEST_REPORTS]),
+  prettierMustComeLast,
 ]);
 
 export default eslintConfig;

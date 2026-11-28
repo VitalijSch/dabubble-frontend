@@ -4,7 +4,6 @@ import { AvatarStep } from "@/features/auth";
 
 export const metadata: Metadata = { title: "Avatar wählen · DABubble" };
 
-/** Second sign-up step: choose an avatar. */
-export default function AvatarPage() {
+export default function ChooseAvatarPage() {
   return <AvatarStep />;
 }

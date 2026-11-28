@@ -1,34 +1,66 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent, useState, useTransition } from "react";
 
+import { CONFIRMATION_BOX_VISIBLE_MS, AccountCreatedOverlay } from "./AccountCreatedOverlay";
 import { AuthCard } from "./AuthCard";
 import { AvatarPicker } from "./AvatarPicker";
-import { REGISTER_PATH } from "./routing";
+import { LOGIN_PATH, REGISTER_PATH } from "./routing";
 import { useSignUp } from "./SignUpContext";
+import type { RegisterDetails } from "./signUpChecks";
 
-/**
- * Second sign-up step: choose an avatar. It needs the checked details from the first step, so
- * without them (URL opened directly, page reloaded, details changed after going back) it sends
- * the user to the first step. `replace`, so the back button doesn't lead here again.
- *
- * Only a convenience: the backend checks everything again when the account is created.
- */
+type CreatedAccount = { details: RegisterDetails; confirmationSentTo: string };
+
 export function AvatarStep() {
-  const { details } = useSignUp();
-  const router = useRouter();
+  const { details, finishSignUp } = useSignUp();
+  const [created, setCreated] = useState<CreatedAccount | null>(null);
+  const signsUpAgain = created !== null && details !== null && created.details !== details;
+  if (signsUpAgain) setCreated(null);
 
-  useEffect(() => {
-    if (!details) router.replace(REGISTER_PATH);
-  }, [details, router]);
+  useSendBackToFirstStep(details === null && created === null);
+  useGoToLoginAfterConfirmation(created !== null, () => {
+    finishSignUp();
+    setCreated(null);
+  });
 
-  // Nothing until there are details, so the card doesn't flash before the redirect.
   if (!details) return null;
 
   return (
-    <AuthCard title="Wähle deinen Avatar" backHref={REGISTER_PATH}>
-      <AvatarPicker name={details.full_name} />
-    </AuthCard>
+    <>
+      <div inert={created !== null} className="contents">
+        <AuthCard title="Wähle deinen Avatar" backHref={REGISTER_PATH}>
+          <AvatarPicker
+            details={details}
+            onCreated={(confirmationSentTo) => setCreated({ details, confirmationSentTo })}
+          />
+        </AuthCard>
+      </div>
+      {created && <AccountCreatedOverlay email={created.confirmationSentTo} />}
+    </>
   );
+}
+
+function useSendBackToFirstStep(hasNoDetails: boolean) {
+  const router = useRouter();
+  useEffect(() => {
+    if (hasNoDetails) router.replace(REGISTER_PATH);
+  }, [hasNoDetails, router]);
+}
+
+function useGoToLoginAfterConfirmation(isShowingConfirmation: boolean, forgetSignUp: () => void) {
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const leaveForLoginWhileForgettingSignUp = useEffectEvent(() =>
+    startTransition(() => {
+      router.replace(LOGIN_PATH);
+      forgetSignUp();
+    }),
+  );
+
+  useEffect(() => {
+    if (!isShowingConfirmation) return;
+    const timer = setTimeout(leaveForLoginWhileForgettingSignUp, CONFIRMATION_BOX_VISIBLE_MS);
+    return () => clearTimeout(timer);
+  }, [isShowingConfirmation]);
 }

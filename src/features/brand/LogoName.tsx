@@ -1,6 +1,5 @@
 import type { SVGProps } from "react";
 
-/** The "DABubble" wordmark. Inherits its colour from `currentColor` (white in the design). */
 export function LogoName(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="-2 16.5693 472 72" fill="currentColor" aria-hidden="true" {...props}>

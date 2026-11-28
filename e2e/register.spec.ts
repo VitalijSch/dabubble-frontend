@@ -26,20 +26,19 @@ test("the sign-up card shows the fields, the privacy check and the way back", as
 test.describe("privacy checkbox", () => {
   const checkbox = (page: Page) =>
     page.getByRole("checkbox", { name: "Ich stimme der Datenschutzerklärung zu." });
-  /** The drawn square (the icon that is currently visible). */
-  const square = (page: Page) => page.getByTestId("privacy-box").locator("svg:visible");
+  const visibleSquareIcon = (page: Page) => page.getByTestId("privacy-box").locator("svg:visible");
 
   test("toggles when clicking around the square, in the gap and on the text", async ({ page }) => {
     await page.goto("/register");
     const box = (await page.getByTestId("privacy-box").boundingBox())!;
     const midY = box.y + box.height / 2;
 
-    for (const [x, y] of [
-      [box.x - 6, midY], // left of the square
-      [box.x + box.width / 2, box.y - 6], // above it
-      [box.x + box.width + 4, midY], // gap between square and text
-      [box.x + box.width + 30, midY], // "Ich stimme der"
-    ] as const) {
+    const leftOfSquare = [box.x - 6, midY] as const;
+    const aboveSquare = [box.x + box.width / 2, box.y - 6] as const;
+    const gapBeforeText = [box.x + box.width + 4, midY] as const;
+    const onText = [box.x + box.width + 30, midY] as const;
+
+    for (const [x, y] of [leftOfSquare, aboveSquare, gapBeforeText, onText]) {
       const before = await checkbox(page).isChecked();
       await page.mouse.click(x, y);
       await expect(checkbox(page)).toBeChecked({ checked: !before });
@@ -59,12 +58,12 @@ test.describe("privacy checkbox", () => {
     const purple2 = "rgb(121, 126, 243)";
     const purple1 = "rgb(68, 77, 242)";
 
-    await expect(square(page)).toHaveCSS("color", purple2);
+    await expect(visibleSquareIcon(page)).toHaveCSS("color", purple2);
     for (const x of [box.x - 6, box.x + box.width + 4, box.x + box.width + 30]) {
       await page.mouse.move(0, 0);
-      await expect(square(page)).toHaveCSS("color", purple2);
+      await expect(visibleSquareIcon(page)).toHaveCSS("color", purple2);
       await page.mouse.move(x, midY);
-      await expect(square(page)).toHaveCSS("color", purple1);
+      await expect(visibleSquareIcon(page)).toHaveCSS("color", purple1);
     }
   });
 });
@@ -123,7 +122,6 @@ test.describe("showing the password", () => {
     await show(page).click();
     await expect(password(page)).toHaveAttribute("type", "text");
     await expect(password(page)).toHaveValue("kurz");
-    // The click doesn't take the focus, so it doesn't count as leaving the field.
     await expect(password(page)).toBeFocused();
     await expect(password(page)).not.toHaveAttribute("aria-invalid");
 
@@ -186,7 +184,6 @@ test.describe("Weiter on an incomplete form", () => {
     await expect(privacy(page)).toHaveAttribute("aria-invalid", "true");
     expect(requests).toHaveLength(0);
 
-    // Each message goes as soon as its field is filled in.
     await name.pressSequentially("Frederik Beck");
     await expect(name).not.toHaveAttribute("aria-invalid");
     await page.getByTestId("privacy-box").click();
@@ -229,7 +226,6 @@ test.describe("checks while filling in", () => {
     await expect(email).toHaveAttribute("aria-invalid", "true");
     await expect(email).toHaveAccessibleDescription(EMAIL_INVALID);
 
-    // Once there is a message, it goes away as soon as the address is fixed, while typing.
     await email.pressSequentially("@beispiel.de");
     await expect(email).toBeFocused();
     await expect(email).not.toHaveAttribute("aria-invalid");
@@ -252,7 +248,6 @@ test.describe("checks while filling in", () => {
     await page.goto("/register");
     const password = page.getByLabel("Passwort", { exact: true });
 
-    // No rule under the field up front, and none while typing.
     await expect(password).toHaveAccessibleDescription("");
     await password.pressSequentially("kurz");
     await expect(password).not.toHaveAttribute("aria-invalid");
@@ -268,12 +263,11 @@ test.describe("checks while filling in", () => {
     await expect(password).toHaveAccessibleDescription("");
   });
 
-  test("Weiter doesn't ask the backend while a rule is broken", async ({ page }) => {
+  test("pressing Enter while a rule is broken doesn't ask the backend", async ({ page }) => {
     const requests = await mockValidate(page, 204);
     await page.goto("/register");
     await fillSignUp(page);
 
-    // Enter in the field submits without leaving it, so only the check on submit can catch it.
     const email = page.getByLabel("E-Mail-Adresse");
     await email.fill("frederik");
     await email.press("Enter");
@@ -436,10 +430,9 @@ test("the card matches the Figma positions at 1920 × 1080", async ({ page }) =>
   });
   expect(await inCard(page.getByRole("heading").boundingBox())).toMatchObject({ y: 40 });
 
-  // The button is right-aligned and its width follows the text, which renders a few px
-  // wider on Linux than on macOS. So check its right edge (Figma: 446 + 107 = 553), not x.
   const button = (await page.getByRole("button", { name: "Weiter" }).boundingBox())!;
-  expect(Math.round(button.x + button.width - card.x)).toBe(553);
+  const buttonRightEdge = button.x + button.width;
+  expect(Math.round(buttonRightEdge - card.x)).toBe(553);
   expect(Math.round(button.y - card.y)).toBe(580);
   expect(button.height).toBe(49);
 });
