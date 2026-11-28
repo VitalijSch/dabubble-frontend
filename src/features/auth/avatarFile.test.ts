@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   AVATAR_ACCEPT,
-  AVATAR_MAX_BYTES,
+  BACKEND_AVATAR_MAX_BYTES,
   AVATAR_TOO_LARGE,
   AVATAR_WRONG_FORMAT,
   checkAvatarFile,
@@ -25,9 +25,9 @@ describe("checkAvatarFile", () => {
   });
 
   it("accepts an image of exactly 2 MB and rejects one byte more", () => {
-    expect(AVATAR_MAX_BYTES).toBe(2 * 1024 * 1024);
-    expect(checkAvatarFile(file("me.png", AVATAR_MAX_BYTES))).toBeUndefined();
-    expect(checkAvatarFile(file("me.png", AVATAR_MAX_BYTES + 1))).toBe(AVATAR_TOO_LARGE);
+    expect(BACKEND_AVATAR_MAX_BYTES).toBe(2 * 1024 * 1024);
+    expect(checkAvatarFile(file("me.png", BACKEND_AVATAR_MAX_BYTES))).toBeUndefined();
+    expect(checkAvatarFile(file("me.png", BACKEND_AVATAR_MAX_BYTES + 1))).toBe(AVATAR_TOO_LARGE);
   });
 
   it("uses the backend's wording for a file that is too large", () => {
@@ -35,7 +35,7 @@ describe("checkAvatarFile", () => {
   });
 
   it("reports the wrong format before the size", () => {
-    expect(checkAvatarFile(file("me.gif", AVATAR_MAX_BYTES + 1))).toBe(AVATAR_WRONG_FORMAT);
+    expect(checkAvatarFile(file("me.gif", BACKEND_AVATAR_MAX_BYTES + 1))).toBe(AVATAR_WRONG_FORMAT);
   });
 });
 

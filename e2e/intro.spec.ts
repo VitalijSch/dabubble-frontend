@@ -5,7 +5,6 @@ test("the login page starts with the intro, which then fades out", async ({ page
   const intro = page.getByTestId("intro");
 
   await expect(intro).toBeVisible();
-  // The whole animation takes 2.75s; afterwards the intro no longer covers the page.
   await expect(intro).toBeHidden({ timeout: 5_000 });
 });
 
@@ -23,15 +22,14 @@ test("the name is never visible over or left of the logo while it slides out", a
       const [name, logo] = intro.querySelectorAll("svg");
       const strip = name!.parentElement!;
       const stripBox = strip.getBoundingClientRect();
-      // Left edge of the strip's visible area, including a clip-path inset if there is one.
-      const inset = /inset\(\S+ \S+ \S+ ([\d.]+)(%|px)\)/.exec(getComputedStyle(strip).clipPath);
-      const insetPx = inset
-        ? inset[2] === "%"
-          ? (Number(inset[1]) / 100) * stripBox.width
-          : Number(inset[1])
+      const leftClip = /inset\(\S+ \S+ \S+ ([\d.]+)(%|px)\)/.exec(getComputedStyle(strip).clipPath);
+      const leftClipPx = leftClip
+        ? leftClip[2] === "%"
+          ? (Number(leftClip[1]) / 100) * stripBox.width
+          : Number(leftClip[1])
         : 0;
       return {
-        visibleLeft: stripBox.left + insetPx,
+        visibleLeft: stripBox.left + leftClipPx,
         nameRight: name!.getBoundingClientRect().right,
         logoRight: logo!.getBoundingClientRect().right,
       };
@@ -54,8 +52,8 @@ for (const viewport of [
   test(`at ${viewport.width}px the logo lands exactly on the header logo`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/login");
-    // The flight is set up once the page is interactive.
-    await expect(page.locator('[data-intro][data-flight="ready"]')).toBeAttached();
+    const flightIsReady = page.locator('[data-intro][data-flight="ready"]');
+    await expect(flightIsReady).toBeAttached();
 
     const frameAt = (time: number) =>
       page.evaluate((t) => {

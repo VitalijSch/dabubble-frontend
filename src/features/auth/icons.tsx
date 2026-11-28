@@ -1,10 +1,6 @@
 import type { SVGProps } from "react";
 
-/**
- * Material Symbols (outlined, weight 400) used by the auth cards, as in Figma.
- * 24 × 24, drawn in `currentColor`, hidden from screen readers.
- */
-function Icon({ d, ...props }: SVGProps<SVGSVGElement> & { d: string }) {
+function MaterialSymbol({ d, ...props }: SVGProps<SVGSVGElement> & { d: string }) {
   return (
     <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" {...props}>
       <path d={d} />
@@ -15,60 +11,60 @@ function Icon({ d, ...props }: SVGProps<SVGSVGElement> & { d: string }) {
 type IconProps = SVGProps<SVGSVGElement>;
 
 export const PersonIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"
   />
 );
 
 export const MailIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"
   />
 );
 
 export const LockIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"
   />
 );
 
 export const AddPhotoIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M440-440ZM120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h126l74-80h240v80H355l-73 80H120v480h640v-360h80v360q0 33-23.5 56.5T760-120H120Zm640-560v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM440-260q75 0 127.5-52.5T620-440q0-75-52.5-127.5T440-620q-75 0-127.5 52.5T260-440q0 75 52.5 127.5T440-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Z"
   />
 );
 
 export const ArrowBackIcon = (props: IconProps) => (
-  <Icon {...props} d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+  <MaterialSymbol {...props} d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
 );
 
 export const CheckBoxBlankIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"
   />
 );
 
 export const CheckBoxIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"
   />
 );
 
 export const VisibilityIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
   />
 );
 
 export const VisibilityOffIcon = (props: IconProps) => (
-  <Icon
+  <MaterialSymbol
     {...props}
     d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"
   />

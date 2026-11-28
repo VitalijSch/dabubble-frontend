@@ -1,28 +1,32 @@
 "use client";
 
-import { createContext, type ReactNode, use, useState } from "react";
+import { createContext, type ReactNode, use, useCallback, useState } from "react";
 
-import type { RegisterDetails } from "./signUp";
+import type { RegisterDetails } from "./signUpChecks";
 
 type SignUpState = {
-  /** The first step's details, once the backend has checked them; `null` until then. */
   details: RegisterDetails | null;
   setDetails: (details: RegisterDetails | null) => void;
+  signUpRun: number;
+  finishSignUp: () => void;
 };
 
 const SignUpContext = createContext<SignUpState | null>(null);
 
-/**
- * Carries the sign-up details from the "Konto erstellen" card to the avatar step. Wraps every
- * /register page from their shared layout, which stays mounted while the user moves between
- * the steps.
- *
- * Kept in memory only, never in storage: it holds the password. A reload loses it, and the
- * avatar step then sends the user back to the first step.
- */
 export function SignUpProvider({ children }: { children: ReactNode }) {
   const [details, setDetails] = useState<RegisterDetails | null>(null);
-  return <SignUpContext value={{ details, setDetails }}>{children}</SignUpContext>;
+  const [signUpRun, setSignUpRun] = useState(0);
+
+  const finishSignUp = useCallback(() => {
+    setDetails(null);
+    setSignUpRun((run) => run + 1);
+  }, []);
+
+  return (
+    <SignUpContext value={{ details, setDetails, signUpRun, finishSignUp }}>
+      {children}
+    </SignUpContext>
+  );
 }
 
 export function useSignUp(): SignUpState {

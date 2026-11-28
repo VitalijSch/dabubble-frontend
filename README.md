@@ -19,6 +19,16 @@ pnpm dev
 
 Open http://localhost:3000.
 
+## Environment variables
+
+Copy `.env.example` to `.env.local` (git-ignored) and fill in real values. Every variable is
+validated in `src/env.ts`, so a missing or wrong one stops the build and the server start.
+
+| Variable              | What it is                                                             |
+| --------------------- | ---------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL` | Public URL of this app (absolute links, metadata, redirects)           |
+| `NEXT_PUBLIC_API_URL` | Origin of the Django backend; the API client sends every request there |
+
 ## Scripts
 
 | Script                         | What it does                                                             |
@@ -57,7 +67,8 @@ import { api, type Schema } from "@/lib/api";
 const { data, error, response } = await api.POST("/api/v1/auth/register/validate/", {
   body: { full_name, email, password, accept_privacy_policy: true },
 });
-if (response.status === 400) showFieldErrors(error); // { email?: string[], password?: string[], ... }
+const isRefused = response.status === 400;
+if (isRefused) showFieldErrors(error);
 
 type User = Schema<"User">;
 ```
@@ -76,6 +87,9 @@ docker build -t dabubble-frontend \
   --build-arg NEXT_PUBLIC_API_URL=https://api.chat.example.com .
 docker run -p 3000:3000 dabubble-frontend
 ```
+
+`NEXT_PUBLIC_*` values are baked into the build, so pass them as build args, not at `docker run`.
+The Node major in the `Dockerfile` (`NODE_VERSION`) must match `.nvmrc`.
 
 Health check: `GET /api/health` → `{ "status": "ok" }`.
 

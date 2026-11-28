@@ -1,34 +1,28 @@
 # syntax=docker/dockerfile:1
 
-# Keep the Node major in sync with .nvmrc.
 ARG NODE_VERSION=26
 
-# ---- base: Node + pnpm (Node 25+ no longer bundles corepack, so install it) ----
 FROM node:${NODE_VERSION}-alpine AS base
 RUN apk add --no-cache libc6-compat \
   && npm install -g corepack@latest \
   && corepack enable pnpm
 WORKDIR /app
 
-# ---- deps: install from the lockfile only (cached unless it changes) ----
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
   pnpm install --frozen-lockfile
 
-# ---- build ----
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# NEXT_PUBLIC_* values are inlined at build time — pass them as build args.
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN pnpm build
 
-# ---- runtime: only the standalone server, as a non-root user ----
 FROM node:${NODE_VERSION}-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production \

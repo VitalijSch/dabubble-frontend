@@ -6,7 +6,6 @@ test("home page loads", async ({ page }) => {
 });
 
 test("unknown route shows the 404 page to a logged-in user", async ({ page, context, baseURL }) => {
-  // Guests are sent to the login page instead (see auth-redirect.spec.ts).
   await context.addCookies([{ name: "dabubble_session", value: "test", url: baseURL! }]);
   const response = await page.goto("/this-page-does-not-exist");
   expect(response?.status()).toBe(404);
